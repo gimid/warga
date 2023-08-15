@@ -21,7 +21,7 @@ module.exports = async function (req, res) {
   let queries = [];
   queries.push(sdk.Query.limit(25));
 
-  queries.push(sdk.Query.orderDesc("updatedTime"))
+  // queries.push(sdk.Query.orderDesc("updatedTime"))
 
 
   if (req.payload) {
