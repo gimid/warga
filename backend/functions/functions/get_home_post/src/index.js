@@ -42,13 +42,14 @@ module.exports = async function (req, res) {
 
   let detailArr = [];
 
-  await Promise.all(
-    homepageResult.documents.map(async (element) => {
-      let post = await database.getDocument(
-        process.env.DATABASE_ID, 
-        process.env.POSTS_COLLECTION_ID, 
-        element.post_id);
-  
+  for  (let i = 0; i < homepageResult.documents.length; i++) {
+    let element = homepageResult.documents[i];
+
+    let post = await database.getDocument(
+      process.env.DATABASE_ID, 
+      process.env.POSTS_COLLECTION_ID, 
+      element.post_id);
+
       let previewData = {
         "$id" : post.$id,
         post_id: post.$id,
@@ -63,9 +64,7 @@ module.exports = async function (req, res) {
       detailArr.push(previewData);    
       
       element.preview = previewData;
-
-    })
-  )
+  }
 
   let resultArr = [];
   for (let i = 0; i < homepageResult.documents.length; i++) resultArr.push({});
