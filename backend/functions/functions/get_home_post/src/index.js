@@ -20,8 +20,7 @@ module.exports = async function (req, res) {
 
   let queries = [];
   queries.push(sdk.Query.limit(25));
-
-  // queries.push(sdk.Query.orderDesc("updatedTime"))
+  queries.push(sdk.Query.orderDesc("$createdAt"));
 
 
   if (req.payload) {
@@ -41,7 +40,7 @@ module.exports = async function (req, res) {
 
 
 
-  let postArr = [];
+  let detailArr = [];
 
   await Promise.all(
     homepageResult.documents.map(async (element) => {
@@ -61,16 +60,27 @@ module.exports = async function (req, res) {
         cover_image: post.cover_image
       }
   
-      postArr.push(previewData);      
+      detailArr.push(previewData);    
+      
+      element.preview = previewData;
+
     })
   )
+
+  let resultArr = [];
+  for (let i = 0; i < homepageResult.documents.length; i++) resultArr.push({});
+
+  for (let i = 0; i < homepageResult.documents.length; i++) {
+    let detailIndex = detailArr.findIndex(x => x.$id == homepageResult.documents[i].$id);
+    resultArr[i] = detailArr[detailIndex];
+  }
   
   let homePost = {
-    posts: postArr
+    posts: resultArr
   }
 
 
-   res.json(homePost);
+  res.json(homePost);
 
 
 
