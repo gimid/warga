@@ -1,2 +1,6 @@
 /data
 /letsencrypt
+node_modules
+.env
+.env.*
+!.env.example

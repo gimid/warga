@@ -1,0 +1,18 @@
+version: '3'
+services:
+  traefik:
+    command:
+      - --accessLog=true
+      - --providers.file.directory=/storage/config
+      - --providers.file.watch=true
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.constraints=Label(`traefik.constraint-label-stack`,`appwrite`)
+      - --entrypoints.appwrite_web.address=:80
+      - --entrypoints.appwrite_websecure.address=:443
+      - --entrypoints.appwrite_web.forwardedHeaders.trustedIPs=${_NPM_IP_ADDRESS}
+      - --entrypoints.appwrite_websecure.forwardedHeaders.trustedIPs=${_NPM_IP_ADDRESS}
+networks:
+  gateway:
+    name: npm_gateway
+    external: true
