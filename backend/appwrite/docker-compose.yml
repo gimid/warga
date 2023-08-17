@@ -19,10 +19,12 @@ services:
       - --providers.docker.constraints=Label(`traefik.constraint-label-stack`,`appwrite`)
       - --entrypoints.appwrite_web.address=:80
       - --entrypoints.appwrite_websecure.address=:443
+      - --entrypoints.appwrite_web.forwardedHeaders.trustedIPs=${_NPM_IP_ADDRESS}
+      - --entrypoints.appwrite_websecure.forwardedHeaders.trustedIPs=${_NPM_IP_ADDRESS}
     restart: unless-stopped
     ports:
-      - 80:80
-      - 443:443
+      - 8080:80
+      - 8443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - appwrite-config:/storage/config:ro
@@ -658,6 +660,8 @@ services:
 
 networks:
   gateway:
+    name: npm_gateway
+    external: true
   appwrite:
   runtimes:
 
