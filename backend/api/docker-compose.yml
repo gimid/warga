@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nodejs:
-    container_name: warga_post_api
+    container_name: warga-post-api
     build:
       context: .
       dockerfile: Dockerfile
