@@ -6,7 +6,7 @@ const sdk = require("node-appwrite")
 const cors = require('cors');
 const bodyParser = require('body-parser')
 
-const PORT = 2525
+const PORT = 443
 const HOST = '0.0.0.0';
 
 
