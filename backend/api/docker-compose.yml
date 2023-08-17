@@ -9,44 +9,26 @@ services:
     ports:
       - "5000:2525"
     restart: unless-stopped
-    networks:
-      - app-network
-  webserver:
-    image: nginx:mainline-alpine
-    container_name: webserver
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
     ports:
-      - "85:80"
-    volumes:
-      - web-root:/var/www/html
-      - ./nginx-conf:/etc/nginx/conf.d
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-    depends_on:
-      - nodejs
-    networks:
-      - app-network
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
-    depends_on:
-      - webserver
-    command: certonly --webroot --webroot-path=/var/www/html --email ${LETS_ENCRYPT_EMAIL} --agree-tos --no-eff-email --staging -d ${LETS_ENCRYPT_DOMAIN}
+      # These ports are in format <host-port>:<container-port>
+      - '90:80' # Public HTTP Port
+      - '943:443' # Public HTTPS Port
+      - '91:81' # Admin Web Port
+      # Add any other Stream port you want to expose
+      # - '21:21' # FTP
 
-volumes:
-  certbot-etc:
-  certbot-var:
-  web-root:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/warga/api/views/
-      o: bind
+    # Uncomment the next line if you uncomment anything in the section
+    # environment:
+      # Uncomment this if you want to change the location of
+      # the SQLite DB file within the container
+      # DB_SQLITE_FILE: "/data/database.sqlite"
 
-networks:
-  app-network:
-    driver: bridge
+      # Uncomment this if IPv6 is not enabled on your host
+      # DISABLE_IPV6: 'true'
+
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
