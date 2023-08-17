@@ -9,3 +9,11 @@ services:
     ports:
       - "5000:2525"
     restart: unless-stopped
+    networks:
+      - gateway    
+
+
+networks:
+  gateway:
+    name: npm_gateway
+    external: true
