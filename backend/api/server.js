@@ -188,3 +188,86 @@ function returnPost(res, payload, document) {
   }
 
 }
+
+// get series
+app.post('/series', async (req, res) => {
+
+
+  if (!req.body)
+  {
+    res.json({
+      "error": "please provide payload"
+    })
+    return;  
+  }
+  
+  let payload = req.body;
+
+  if (payload.series_id) {
+
+    let document = await database.getDocument(
+                          process.env.DATABASE_ID, 
+                          process.env.SERIES_COLLECTION_ID, 
+                          payload.series_id);
+
+
+    if (document != null) {
+
+      let seriesTitle = document.title;
+      let fetchedSeriesId = document.$id;
+
+      let fetchPosts = await database.listDocuments(
+                        process.env.DATABASE_ID,
+                        process.env.POSTS_COLLECTION_ID,
+                        [
+                          sdk.Query.equal("series_id", fetchedSeriesId)
+                        ]
+                      );
+
+      let postMembers = [];
+
+      for (let i = 0; i < fetchPosts.documents.length; i++) {
+        let postDocument = fetchPosts.documents[i];
+
+
+
+        // writer
+        let fetchProfile = await database.getDocument(
+          process.env.DATABASE_ID,
+          process.env.PROFILES_COLLECTION_ID,
+          postDocument.user_id
+        );
+
+        let url = "/" + "@" + fetchProfile.handle + "/" + postDocument.$id;
+
+        let postData = {
+          title: postDocument.title,
+          id: postDocument.$id,
+          url: url
+        }
+
+        postMembers.push(postData);
+      }
+
+
+      let returnData = {
+        title: seriesTitle,
+        series_id: fetchedSeriesId,
+        posts: postMembers
+      }
+
+      res.json(returnData);
+
+
+    }else{
+      res.json({
+        "error": "document is null"
+      })
+    }
+
+  }else{
+    res.json({
+      "error": "please provide series_id"
+    })
+  }
+});

@@ -1,5 +1,6 @@
 import {client, databases, functions} from "./Backend"
 import {ID, Permission, Role, Account, Query, AppwriteException} from "appwrite"
+import axios from "axios"
 
 const account = new Account(client);
 
@@ -87,9 +88,17 @@ export default class SeriesService {
       };
 
       // fetch all post with this series
-      let response = this.loopCallFunction(functions.createExecution(process.env.GET_SERIES_FUNCTION_ID, JSON.stringify(requestData)));
-      return response;
+      // let response = this.loopCallFunction(functions.createExecution(process.env.GET_SERIES_FUNCTION_ID, JSON.stringify(requestData)));
+      // return response;
 
+      let axiosConfig = {
+        headers: {
+          'Content-Type' : 'application/json;charset=UTF-8'
+        }
+      }
+
+      let result = await axios.post(process.env.WARGA_ENDPOINT+'/series',requestData,axiosConfig);
+      return result.data;
     }catch (e) {
       console.log(e);
       throw(e);
