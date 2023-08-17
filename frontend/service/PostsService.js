@@ -2,6 +2,7 @@ import { client, databases, functions } from "./Backend"
 import {ID, Permission, Role, Account, Query, AppwriteException} from "appwrite"
 import {v4 as uuidv4} from 'uuid'
 import ProfilesService from "./ProfilesService"
+import axios from "axios"
 
 
 const account = new Account(client);
@@ -336,8 +337,17 @@ export default class PostsService {
         preview_key: preview_key
       };
       
-      let result = await this.loopCallFunction(functions.createExecution(process.env.GET_POST_FUNCTION_ID, JSON.stringify(requestData)));
-      return result;
+      let axiosConfig = {
+        headers: {
+          'Content-Type' : 'application/json;charset=UTF-8'
+        }
+      }
+
+      // let result = await this.loopCallFunction(functions.createExecution(process.env.GET_POST_FUNCTION_ID, JSON.stringify(requestData)));
+
+      let result = await axios.post(process.env.WARGA_ENDPOINT + '/post', requestData, axiosConfig)
+      console.log(result.data);
+      return result.data;
 
 
     } catch (e) {
@@ -357,8 +367,17 @@ export default class PostsService {
       //   );        
       // return result;
 
-      let result = await this.loopCallFunction(functions.createExecution(process.env.GET_HOME_POST_FUNCTION_ID));
-      return result;
+      // let result = await this.loopCallFunction(functions.createExecution(process.env.GET_HOME_POST_FUNCTION_ID));
+      // return result;
+
+      let axiosConfig = {
+        headers: {
+          'Content-Type' : 'application/json;charset=UTF-8'
+        }
+      }
+
+      let result = await axios.post(process.env.WARGA_ENDPOINT+'/home',{},axiosConfig);
+      return result.data;
     }catch (e){ 
       console.log(e);
       throw(e);

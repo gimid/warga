@@ -43,6 +43,7 @@ export default defineNuxtConfig({
       'process.env.SERIES_COLLECTION_ID': JSON.stringify(process.env.SERIES_COLLECTION_ID),
       'process.env.GET_SERIES_FUNCTION_ID': JSON.stringify(process.env.GET_SERIES_FUNCTION_ID),
       'process.env.GET_HOME_POST_FUNCTION_ID' : JSON.stringify(process.env.GET_HOME_POST_FUNCTION_ID),
+      'process.env.WARGA_ENDPOINT' : JSON.stringify(process.env.WARGA_ENDPOINT)
     },
   },
   devtools: { enabled: true },
