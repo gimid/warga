@@ -71,7 +71,7 @@ app.post('/home', async (req, res) => {
   let detailArr = [];
 
   for  (let i = 0; i < homepageResult.documents.length; i++) {
-    let element = homepageResult.documents[i];
+    let post = homepageResult.documents[i];
 
     // try{
     //   let post = await database.getDocument(
@@ -97,7 +97,20 @@ app.post('/home', async (req, res) => {
     // }catch(e){
     //   console.log(e);
     // }
-    detailArr.push(element);
+
+    let previewData = {
+      "$id" : post.$id,
+      post_id: post.$id,
+      series_id : post.series_id,
+      user_id: post.user_id,
+      published: post.published,
+      tags: post.tags,
+      title: post.title,
+      cover_image: post.cover_image
+    }
+
+
+    detailArr.push(previewData);
   };
   res.json(detailArr);
 
