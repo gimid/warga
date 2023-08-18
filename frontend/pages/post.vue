@@ -1,4 +1,42 @@
 
+
+
+<template>
+
+  <div class="page">
+    <Header></Header>
+
+    <v-container class="page-width">
+      <v-row>
+
+        <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
+        </v-col>
+
+        <v-col :cols="windowWidth > 600?6:12">
+          <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
+        </v-col>
+
+        <!-- <v-col cols="12" class="d-md-none">
+          <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
+        </v-col> -->
+
+
+        <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
+        </v-col>
+      </v-row>
+    </v-container>
+
+
+    
+    <Footer></Footer>
+
+    <ClientOnly>
+      <PostActionButton :currentRoute="route" :data="currentPost"></PostActionButton>
+    </ClientOnly>
+  </div>
+</template>
+
+
 <script setup>
 
 import {useRoute} from 'vue-router'
@@ -19,41 +57,23 @@ const { profile } = storeToRefs(profileStore);
 const {data: currentPost, refresh: refreshCurrentPost} = await useAsyncData('post', async ()=> await postsService.getPostById(route.params.postid, route.query.preview_key))
 const {data: currentWriter, refresh: refreshCurrentWriter} = await useAsyncData('writer', async ()=> await profileService.getProfileFromHandle(route.params.username));
 
+const windowWidth = ref(0);
+
+onMounted(() => {
+  window.addEventListener("resize", onResize);
+  resizeEditorToWindow();
+});
+
+onUnmounted(()=>{
+  window.removeEventListener("resize", onResize);
+});
+
+const onResize = (e) => {
+  resizeEditorToWindow();
+}
+
+const resizeEditorToWindow = () => {
+  windowWidth.value = window.innerWidth;
+}
 
 </script>
-
-
-<template>
-
-  <div class="page">
-    <Header></Header>
-
-    <v-container class="page-width">
-      <v-row>
-        <v-col cols="3" class="d-none d-md-block">          
-        </v-col>
-
-        <v-col cols="6" class="d-none d-md-block">
-          <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
-        </v-col>
-
-        <v-col cols="12" class="d-md-none">
-          <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
-        </v-col>
-
-
-        <v-col cols="3" class="d-none d-md-block">
-          
-        </v-col>
-      </v-row>
-    </v-container>
-
-
-    
-    <Footer></Footer>
-
-    <ClientOnly>
-      <PostActionButton :currentRoute="route" :data="currentPost"></PostActionButton>
-    </ClientOnly>
-  </div>
-</template>

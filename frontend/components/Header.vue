@@ -30,7 +30,7 @@
               </v-btn>
             </div>
 
-            <v-menu v-if="userSession" transition="slide-x-reverse-transition">
+            <v-menu transition="slide-x-reverse-transition">
               <template v-slot:activator="{ props }">
                 <v-btn
                   v-bind="props"
@@ -41,6 +41,7 @@
               </template>
               <v-list class="menu-container pa-0 settings-menu">
 
+            
                 <div v-if="userSession" class="menu-profile pa-2">
                   <div v-if="profile.data.contact_name" class="text-button font-weight-bold">
                     {{ profile.data.contact_name }}
@@ -63,7 +64,7 @@
                             
 
                 
-                <v-btn v-if="!userSession && fetched" to="/enter" prepend-icon="mdi-account" v-cloak block  class="hidden-md-and-up">
+                <v-btn v-if="!userSession && fetched" to="/enter" prepend-icon="mdi-account" v-cloak block>
                   Log in
                 </v-btn>
 
