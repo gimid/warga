@@ -14,7 +14,7 @@
             <b>@{{ userInfo.handle }}</b>
           </div>
           
-          <h1 class="post-title">{{ title }}</h1>
+          <h1 :class="link !== ''?'post-title':'post-title-disabled'">{{ title }}</h1>
           
           <div class="tagscontainer">
             <v-chip
@@ -92,6 +92,11 @@ const getUser = async (userId)=>{
   text-decoration: none;
   font-family: var(--ff-sans-serif);
   color: black;
+}
+
+
+.post-title-disabled {
+  color: #e0e0e0;
 }
 
 .post-title:hover {

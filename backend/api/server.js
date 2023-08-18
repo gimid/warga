@@ -5,6 +5,7 @@ const express = require('express')
 const sdk = require("node-appwrite")
 const cors = require('cors');
 const bodyParser = require('body-parser')
+const axios = require('axios')
 
 const PORT = 443
 const HOST = '0.0.0.0';
@@ -13,11 +14,15 @@ const HOST = '0.0.0.0';
 const client = new sdk.Client();
 const database = new sdk.Databases(client);
 
-client
-  .setEndpoint(process.env.ENDPOINT)
-  .setProject(process.env.PROJECT_ID)
-  .setKey(process.env.API_KEY)
-  .setSelfSigned(true)
+try{
+  client
+    .setEndpoint(process.env.ENDPOINT)
+    .setProject(process.env.PROJECT_ID)
+    .setKey(process.env.API_KEY)
+    .setSelfSigned(true)
+}catch(e){
+  console.log(e);
+}
 
 //App
 const app = express();
@@ -41,9 +46,11 @@ app.listen(PORT, HOST, () => {
 // home
 app.post('/home', async (req, res) => {
 
+
   let queries = [];
   queries.push(sdk.Query.limit(25));
   queries.push(sdk.Query.orderDesc("$createdAt"));
+  queries.push(sdk.Query.equal("published", true));
 
   if (req.body) {
     let payload = req.body;
@@ -55,7 +62,7 @@ app.post('/home', async (req, res) => {
 
   let homepageResult = await database.listDocuments(
     process.env.DATABASE_ID,
-    process.env.POST_HOMEPAGE_COLLECTION_ID,
+    process.env.POSTS_COLLECTION_ID,
     queries
   );
 
@@ -66,46 +73,48 @@ app.post('/home', async (req, res) => {
   for  (let i = 0; i < homepageResult.documents.length; i++) {
     let element = homepageResult.documents[i];
 
-    try{
-      let post = await database.getDocument(
-        process.env.DATABASE_ID, 
-        process.env.POSTS_COLLECTION_ID, 
-        element.post_id);
+    // try{
+    //   let post = await database.getDocument(
+    //     process.env.DATABASE_ID, 
+    //     process.env.POSTS_COLLECTION_ID, 
+    //     element.post_id);
 
   
-        let previewData = {
-          "$id" : post.$id,
-          post_id: post.$id,
-          series_id : post.series_id,
-          user_id: post.user_id,
-          published: post.published,
-          tags: post.tags,
-          title: post.title,
-          cover_image: post.cover_image
-        }
+    //     let previewData = {
+    //       "$id" : post.$id,
+    //       post_id: post.$id,
+    //       series_id : post.series_id,
+    //       user_id: post.user_id,
+    //       published: post.published,
+    //       tags: post.tags,
+    //       title: post.title,
+    //       cover_image: post.cover_image
+    //     }
     
-        detailArr.push(previewData);    
+    //     detailArr.push(previewData);    
         
-        element.preview = previewData;
-    }catch(e){
-      console.log(e);
-    }
-  }
+    //     element.preview = previewData;
+    // }catch(e){
+    //   console.log(e);
+    // }
+    detailArr.push(element);
+  };
+  res.json(detailArr);
 
-  let resultArr = [];
-  for (let i = 0; i < homepageResult.documents.length; i++) resultArr.push({});
+  // let resultArr = [];
+  // for (let i = 0; i < homepageResult.documents.length; i++) resultArr.push({});
 
-  for (let i = 0; i < homepageResult.documents.length; i++) {
-    let detailIndex = detailArr.findIndex(x => x.$id == homepageResult.documents[i].$id);
-    resultArr[i] = detailArr[detailIndex];
-  }
+  // for (let i = 0; i < homepageResult.documents.length; i++) {
+  //   let detailIndex = detailArr.findIndex(x => x.$id == homepageResult.documents[i].$id);
+  //   resultArr[i] = detailArr[detailIndex];
+  // }
   
-  let homePost = {
-    posts: resultArr
-  }
+  // let homePost = {
+  //   posts: resultArr
+  // }
 
 
-  res.json(homePost);
+  // res.json(homePost);
 });
 
 
@@ -210,6 +219,9 @@ app.post('/series', async (req, res) => {
                           process.env.SERIES_COLLECTION_ID, 
                           payload.series_id);
 
+
+    res.json(document)
+                          return;
 
     if (document != null) {
 

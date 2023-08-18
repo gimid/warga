@@ -7,7 +7,6 @@
           <v-col cols="3" class="d-none d-sm-block">
           </v-col>
           <v-col>
-            
             <div v-for="userPost in posts">
               <PostPreview :data="userPost"></PostPreview>
             </div>
@@ -42,7 +41,7 @@ onMounted(async () => {
   let homepagePosts = await postsService.getHomepagePosts();
   
   if (homepagePosts) {
-    posts.value = homepagePosts.posts;
+    posts.value = homepagePosts;
   }
 
 });
