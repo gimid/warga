@@ -15,7 +15,6 @@ jobs:
         username: ${{secrets.SSH_USERNAME}}
 
         script: |
-          cd ~
-          mkdir test
-          cd test
-          echo "Hehehe"
+          cd ~/warga/backend/api
+          docker compose up --build -d
+          echo "apii build"
