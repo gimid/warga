@@ -346,7 +346,6 @@ export default class PostsService {
       // let result = await this.loopCallFunction(functions.createExecution(process.env.GET_POST_FUNCTION_ID, JSON.stringify(requestData)));
 
       let result = await axios.post(process.env.WARGA_ENDPOINT + '/post', requestData, axiosConfig)
-      console.log(result.data);
       return result.data;
 
 

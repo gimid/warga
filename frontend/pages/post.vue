@@ -24,6 +24,33 @@
         <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
         </v-col>
       </v-row>
+
+      <ClientOnly>
+
+        <v-row>
+          <hr/>
+        </v-row>
+        <v-row>
+          <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
+          </v-col>
+          <v-col rounded="lg" :cols="windowWidth > 600?6:12">
+
+            <div v-if="!commenting" id="pre-comment-editor-container" class="pa-2 comment-container">
+              <div style="outline: solid 1px #e0e0e0; height: 50px;" class="pa-2 text-grey" @click="commenting=true">
+                Gabung diskusi
+              </div>
+            </div>
+
+            <div v-if="commenting" id="comment-editor-container" class="pa-2 comment-container">
+              <WMDEditor ref="editorRef" v-model:edit-text-model-value="editText" :edit-text-model="editText" :resize-editor-to-window="false" :show-preview="false" height="200"></WMDEditor>
+
+              <v-btn class="" color="var(--gim-teal)">Post</v-btn>
+              <v-btn v-if="isEditMode" class="ma-3" variant="outlined" color="grey" @click="showPreviewMode">Pratinjau</v-btn>
+              <v-btn v-if="!isEditMode" class="ma-3" variant="outlined" color="grey" @click="showEditMode">Edit</v-btn>
+            </div>
+          </v-col>
+        </v-row>
+      </ClientOnly>
     </v-container>
 
 
@@ -51,6 +78,8 @@ const route = useRoute();
 const postsService = new PostsService();
 const profileService = new ProfilesService();
 
+const editorRef = ref();
+
 const profileStore = useProfileStore();
 const { profile } = storeToRefs(profileStore);
 
@@ -58,6 +87,9 @@ const {data: currentPost, refresh: refreshCurrentPost} = await useAsyncData('pos
 const {data: currentWriter, refresh: refreshCurrentWriter} = await useAsyncData('writer', async ()=> await profileService.getProfileFromHandle(route.params.username));
 
 const windowWidth = ref(0);
+const editText = ref("")
+const commenting = ref(false);
+const isEditMode = ref(true);
 
 onMounted(() => {
   window.addEventListener("resize", onResize);
@@ -76,4 +108,23 @@ const resizeEditorToWindow = () => {
   windowWidth.value = window.innerWidth;
 }
 
+const showPreviewMode = () => {
+  editorRef.value?.showPreviewMode();
+  isEditMode.value = false;
+}
+
+const showEditMode = () => {
+  editorRef.value?.showEditMode();
+  isEditMode.value = true;
+}
+
 </script>
+
+<style>
+
+.comment-container{
+  background-color: white;
+  border-radius: 5px;
+}
+
+</style>

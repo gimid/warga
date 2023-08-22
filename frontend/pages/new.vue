@@ -22,10 +22,7 @@
           </v-col>
         </v-row>
 
-      
-
         <v-spacer></v-spacer>
-
 
       </v-container>
     </v-app-bar>
@@ -34,8 +31,6 @@
 
       <v-container class="fill-height">
         <v-row class="fill-height w-100">
-
-
 
           <v-col style="max-width: 800px;">
 
@@ -128,86 +123,8 @@
                   <v-row>
                     <v-col >
                       <!--  -->
-                      <div id="dropzonefull" style="visibility: hidden; opacity: 0;">
-                        <v-container
-                          class="fill-height"
-                          fluid
-                        >
-                          <v-row
-                            justify="center"
-                          >
-                            <v-col
-                              cols="12"
-                              sm="8"
-                              md="4"
-                            >
-                              <div class="text-center" id="upload-text">
-                                <h2>Lepas buat mengunggah file!</h2>
-                                <div>
-                                  Lepas file yang kamu seret ke sini buat diunggah
-                                </div>
-                              </div>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </div>
-
-                      <MdEditor 
-                        ref="editorRef"
-                        placeholder="Tulis konten kamu di sini..."
-                        v-model="editText"
-                        :preview="false"
-                        :toolbars="mdeditorToolbars"
-                        @on-upload-img="handleUploadImage"
-                        language="en-US"
-                        noIconFont
-
-                        :style="{height: windowHeight + 'px'}"
-                        >
-                        <template #defToolbars>
-                          <NormalToolbar title="bold" @onClick="boldButtonHandler">
-                            <template #trigger>
-                              <v-icon icon="mdi-format-bold"></v-icon>
-                            </template>
-                          </NormalToolbar>
-                          <NormalToolbar title="link" @onClick="linkButtonHandler">
-                            <template #trigger>
-                              <v-icon icon="mdi-link"></v-icon>
-                            </template>
-                          </NormalToolbar>
-                          <NormalToolbar title="heading" @onClick="headingButtonHandler">
-                            <template #trigger>
-                              <v-icon icon="mdi-format-header-pound"></v-icon>
-                            </template>
-                          </NormalToolbar>
-                          <NormalToolbar title="quote" @onClick="quoteButtonHandler">
-                            <template #trigger>
-                              <v-icon icon="mdi-format-quote-close"></v-icon>
-                            </template>
-                          </NormalToolbar>
-                          <NormalToolbar title="image" @onClick="imageButtonHandler">
-                            <template #trigger>
-                              <v-icon icon="mdi-image"></v-icon>
-                            </template>
-                          </NormalToolbar>
-                          <NormalToolbar title="code" @onClick="codeButtonHandler">
-                            <template #trigger>
-                              <v-icon icon="mdi-code-braces"></v-icon>
-                            </template>
-                          </NormalToolbar>
-                          <NormalToolbar title="strikethrough" @onClick="strikethroughButtonHandler">
-                            <template #trigger>
-                              <v-icon icon="mdi-format-strikethrough"></v-icon>
-                            </template>
-                          </NormalToolbar>
-                          <NormalToolbar title="mark" @onClick="embedButtonHandler">
-                            <template #trigger>
-                              <v-icon icon="mdi-sack-percent"></v-icon>
-                            </template>
-                          </NormalToolbar>
-                        </template>
-
-                      </MdEditor>
+                      
+                      <WMDEditor v-model:edit-text-model-value="editText"  :edit-text-model="editText" resize-editor-to-window="true"></WMDEditor>
 
                     </v-col>
                   </v-row>
@@ -270,7 +187,7 @@
         class="align-center justify-center"
         persistent
       >
-        <v-card  v-if="uploadErrorMessage" title="Terjadi kesalahan" width="300">
+        <v-card v-if="uploadErrorMessage" title="Terjadi kesalahan" width="300">
           <v-container>
             <v-row justify="center">
               <div>                
@@ -288,6 +205,7 @@
                 :model-value="uploadPercentage"
                 color="green"
                 style="margin: auto;"
+                indeterminate
               ></v-progress-circular>
             </v-row>
           </v-container>
@@ -454,8 +372,7 @@ import {markedEmojiBoldPatch} from '../libraries/markedEmojiBoldPatch.js'
 import { useRouter } from 'vue-router';
 import {marked} from '../libraries/marked.js'
 
-import {NormalToolbar, MdEditor} from 'md-editor-v3';
-import 'md-editor-v3/lib/style.css';
+
 
 import PostsService from '~/service/PostsService';
 import ImageBucketService from '~/service/ImageBucketService';
@@ -483,43 +400,17 @@ const editorclass = ref("");
 
 const seriesoverlay = ref(false);
 const loadingoverlay = ref(false)
-const editorRef = ref();
+
 const previewPost = ref({});
 const writer = ref({});
 
 const uploadPercentage = ref(0);
-const uploadErrorMessage = ref("asd");
+const uploadErrorMessage = ref("");
 
 const postsService = new PostsService();
 const imageBucketService = new ImageBucketService();
 const profilesService = new ProfilesService();
 const seriesService = new SeriesService();
-
-const windowHeight = ref(700);
-
-const isMdAndUp = computed(() => $vuetify.breakpoint.mdAndUp);
-
-const mdeditorToolbars = ref([
-                              // 'bold',
-                              // 'link',
-                              // 'orderedList',
-                              // 'unorderedList',
-                              // 'title',
-                              // 'quote',
-                              // 'image',
-                              // 'code',
-                              // 'strikeThrough',
-                              0,
-                              1,
-                              2,
-                              3,
-                              4,
-                              5,
-                              6,
-                              7,
-                              8])
-
-var lastTarget = null;
 
 const profileStore = useProfileStore();
 const seriesStore = useSeriesStore();
@@ -540,11 +431,7 @@ const seriesLoading = ref(false);
 
 onMounted(async ()=>{
   
-  window.addEventListener("dragenter", onDragEnter);
-  window.addEventListener("dragleave", onDragLeave)
-  window.addEventListener("dragover", onDragOver);
-  window.addEventListener("drop", onDrop, false)
-  window.addEventListener("resize", onResize);
+  
 
   // editText.value = "";
   let currentRoute = router.currentRoute.value;
@@ -563,27 +450,12 @@ onMounted(async ()=>{
     editText.value = "";
   }
 
-  resizeEditorToWindow();
-
 });
 
 onUnmounted(()=>{
-  window.removeEventListener("dragenter", onDragEnter);
-  window.removeEventListener("dragleave", onDragLeave)
-  window.removeEventListener("dragover", onDragOver);
-  window.removeEventListener("drop", onDrop, false)
-  window.removeEventListener("resize", onResize);
 })
 
-function hideDrop() {
-  document.querySelector("#dropzonefull").style.visibility = "hidden";
-  document.querySelector("#dropzonefull").style.opacity = 0;
-}
 
-function showDrop() {
-  document.querySelector("#dropzonefull").style.visibility = "";
-  document.querySelector("#dropzonefull").style.opacity = 1;
-}
 
 const fetchPost = async (postId) => {
 
@@ -646,6 +518,9 @@ const handleMouseUp = () => {
 }
 
 const showPreviewMode = async () => {
+
+  console.log(editText.value)
+
   isEditMode.value = false;
 
   let previewData = null;
@@ -681,123 +556,7 @@ function wait(milliseconds){
   });
 }
 
-const handleUploadImage = async (files, callback) => {
-  // Get the files and upload them to the file server, then insert the corresponding content into the editor
-  await wait(2000)
 
-
-  callback(['https://lh3.googleusercontent.com/ogw/AOLn63F0qEEEWc3OXY1d01BqM8Z7nJYz0WaJQaDPp4LM=s32-c-mo']);
-}
-
-const embedButtonHandler = () => {
-  editorRef.value?.insert((selectedText) => {
-    return {
-      targetValue: `{% embed ${selectedText} %}`,
-      select: true,
-      deviationStart: 0,
-      deviationEnd: 0
-    }
-  })
-}
-
-const boldButtonHandler = () => {
-  editorRef.value?.insert((selectedText) => {
-    return {
-      targetValue: `**${selectedText}**`,
-      select: true,
-      deviationStart: 0,
-      deviationEnd: 0
-    }
-  })
-}
-
-const linkButtonHandler = () => {
-  editorRef.value?.insert((selectedText) => {
-    return {
-      targetValue: `[${selectedText}](${selectedText})`,
-      select: true,
-      deviationStart: 0,
-      deviationEnd: 0
-    }
-  })
-}
-
-const headingButtonHandler = () => {
-  editorRef.value?.insert((selectedText) => {
-
-    let returnText = '';
-    if (selectedText[0] == '#')  {
-      returnText = `#${selectedText}`;
-    }else{
-      returnText = `# ${selectedText}`;
-    }
-
-    return {
-      targetValue: returnText,
-      select: true,
-      deviationStart: 0,
-      deviationEnd: 0
-    }
-  })
-}
-
-const quoteButtonHandler = () => {
-  editorRef.value?.insert((selectedText) => {
-
-    let returnText = '';
-    if (selectedText[0] == '>')  {
-      returnText = `>${selectedText}`;
-    }else{
-      returnText = `> ${selectedText}`;
-    }
-
-    return {
-      targetValue: returnText,
-      select: true,
-      deviationStart: 0,
-      deviationEnd: 0
-    }
-  })
-}
-
-const imageButtonHandler = () => {
-  editorRef.value?.insert((selectedText) => {
-
-    return {
-      targetValue: `![${selectedText}](${selectedText})`,
-      select: true,
-      deviationStart: 0,
-      deviationEnd: 0
-    }
-  })
-
-
-
-}
-
-const codeButtonHandler = () => {
-  editorRef.value?.insert((selectedText) => {
-
-    return {
-      targetValue: `\`\`\`\n${selectedText}\n\`\`\``,
-      select: false,
-      deviationStart: 0,
-      deviationEnd: 0
-    }
-  })
-}
-
-const strikethroughButtonHandler = () => {
-  editorRef.value?.insert((selectedText) => {
-
-    return {
-      targetValue: `~~${selectedText}~~`,
-      select: false,
-      deviationStart: 0,
-      deviationEnd: 0
-    }
-  })  
-}
 
 
 const oninputchange = (text, html) => {
@@ -942,77 +701,9 @@ const inputcoverimagechanged = async (event) => {
   currentCoverImageURL.value = coverImageView.href;
 
   await savePost();
-  
-  // preview.onload = function () {
-  //   URL.revokeObjectURL(preview.src);
-  // }
-}
-
-const uploadError = async (file, message, xhr) => {
-  if (message instanceof Object){   // サーバ側でエラーの場合はObjectが来る
-    file.previewElement.querySelectorAll('.dz-error-message span')[0].textContent = message.message
-  }
-}
-
-const uploadFlow = async (file) => {
-  loadingoverlay.value = true;
-
-  try {
-    let uploadedFile = await uploadImage(file);  
-    let imageView = await imageBucketService.getImageView(uploadedFile.$id);
-    // add to editor
-    editorRef.value?.insert((selectedText) => {
-      return {
-        targetValue: `![${selectedText}](${imageView.href})`,
-        select: true,
-        deviationStart: 0,
-        deviationEnd: 0
-      }
-    })
-  }catch(e) {
-    uploadErrorMessage.value = e;
-    console.log(e);
-    // loadingoverlay.value = false;
-  }
-
 
 }
 
-const onDragEnter = (e) => {
-  e.preventDefault();
-  lastTarget = e.target;  
-  showDrop();
-}
-
-const onDragLeave = (e) => {
-  e.preventDefault();
-    if(e.target === lastTarget || e.target === document) {
-      hideDrop();
-    };
-}
-
-const onDragOver = (e) => {
-  e.preventDefault();
-}
-
-const onDrop = (e) => {
-  e.preventDefault();
-
-  if  (e.dataTransfer.files.length == 1) {
-    let dt = e.dataTransfer;
-    let file = dt.files[0];
-    uploadFlow(file);
-  }
-  hideDrop();
-}
-
-const onResize = (e) => {
-  resizeEditorToWindow();
-}
-
-const resizeEditorToWindow = () => {
-  windowHeight.value = window.innerHeight - 340;
-}
 
 const uploadImage = async (imageData) => {
   loadingoverlay.value = true;
@@ -1108,6 +799,14 @@ const confirmRenameSeries = async () => {
   seriesLoading.value = false;
 }
 
+const onUploading = (x) => {
+  loadingoverlay.value = x;
+}
+
+const onUploadError = (x) => {
+  uploadErrorMessage.value = x;
+}
+
 </script>
 
 <style >
@@ -1176,9 +875,7 @@ const confirmRenameSeries = async () => {
   margin-top: 5px;
 }
 
-.md-editor-footer{
-  display: none;
-}
+
 
 .cm-line{
   font-size: 17px;
@@ -1224,23 +921,6 @@ const confirmRenameSeries = async () => {
   margin: 10px 0 10px 0;
 }
 
-#dropzonefull {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999999999999;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(48, 213, 200, 0.7);
-  transition: visibility 175ms,  opacity 175ms;
-  color: white;
-}
-
-#upload-text{
-  border: dashed 1px #fff;
-  padding: 30px;
-  border-radius: 15px;
-}
 
 .showeditor{
 
