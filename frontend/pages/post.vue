@@ -36,13 +36,24 @@
           <v-col rounded="lg" :cols="windowWidth > 600?6:12">
 
             <div v-if="!commenting" id="pre-comment-editor-container" class="pa-2 comment-container">
-              <div style="outline: solid 1px #e0e0e0; height: 50px;" class="pa-2 text-grey" @click="commenting=true">
+              <div style="outline: solid 1px #e0e0e0; height: 50px;" class="pa-2 text-grey" @click="startCommenting">
                 Gabung diskusi
               </div>
             </div>
 
             <div v-if="commenting" id="comment-editor-container" class="pa-2 comment-container">
-              <WMDEditor ref="editorRef" v-model:edit-text-model-value="editText" :edit-text-model="editText" :resize-editor-to-window="false" :show-preview="false" height="200"></WMDEditor>
+              <WMDEditor
+                ref="editorRef"
+                v-model:edit-text-model-value="editText"
+                :edit-text-model="editText"
+                
+                :resize-editor-to-window="false"
+                :show-preview="false"
+                height="200"
+                
+                v-model:is-editing-text-model-value="isEditMode"
+                :is-editing-text-model="isEditMode">
+              </WMDEditor>
 
               <v-btn class="" color="var(--gim-teal)">Post</v-btn>
               <v-btn v-if="isEditMode" class="ma-3" variant="outlined" color="grey" @click="showPreviewMode">Pratinjau</v-btn>
@@ -108,14 +119,26 @@ const resizeEditorToWindow = () => {
   windowWidth.value = window.innerWidth;
 }
 
+const startCommenting = async () => {
+  commenting.value = true;
+
+  await wait(100);
+  editorRef.value?.focus();
+}
+
 const showPreviewMode = () => {
   editorRef.value?.showPreviewMode();
-  isEditMode.value = false;
 }
 
 const showEditMode = () => {
   editorRef.value?.showEditMode();
-  isEditMode.value = true;
+}
+
+
+function wait(milliseconds){
+  return new Promise(resolve => {
+      setTimeout(resolve, milliseconds);
+  });
 }
 
 </script>

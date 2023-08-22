@@ -550,11 +550,7 @@ const showEditMode = () => {
 }
 
 
-function wait(milliseconds){
-  return new Promise(resolve => {
-      setTimeout(resolve, milliseconds);
-  });
-}
+
 
 
 
@@ -831,18 +827,6 @@ const onUploadError = (x) => {
   margin-right: 5px;
 }
 
-.v-md-editor {
-  box-shadow: none;
-}
-/* 
-.v-md-textarea-editor textarea {
-  scale: 1,2;
-} */
-
-.v-md-editor__toolbar-item {
-  font-size: 22px;
-  color: #000;
-}
 
 #tag-input {
   width: 200px;
@@ -856,10 +840,6 @@ const onUploadError = (x) => {
 .v-text-field--plain-underlined {
     --v-field-padding-top--plain-underlined: 2px;
 }
-
-/* .renderedcontainer{
-  padding: 15px;
-} */
 
 .rendered-text{
   margin-top: 5px;
@@ -875,29 +855,11 @@ const onUploadError = (x) => {
   margin-top: 5px;
 }
 
-
-
 .cm-line{
   font-size: 17px;
 }
 
-.md-editor-icon{
-  height: 30px;
-  width: 30px;
-}
 
-.md-editor-toolbar-wrapper{
-  height: 40px;
-}
-
-.md-editor-toolbar-item{
-  height: 40px;
-}
-
-.emoji {
-  font-style: normal;
-  font-weight: normal;
-}
 
 #parsed-text ul{
   padding-left: 1.3em;

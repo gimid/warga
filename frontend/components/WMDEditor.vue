@@ -61,11 +61,11 @@
       </v-container>
     </div>
 
-    <v-container v-if="!isEditMode" class="fill-height pa-0" no-gutters>
+    <v-container  v-if="!isEditMode && showPreview" class="fill-height pa-0" no-gutters>
       <v-row style="background-color: var(--gim-teal);" class="rounded" no-gutters>
         <v-col cols="12" no-gutters>
-          <div class="float-left pt-3 pl-2 text-subtitle-1">PRATINJAU</div>
-          <v-btn @click="showEditMode"  icon="mdi-close" variant="text" class="float-right"></v-btn>
+          <div class="float-left pl-2 text-subtitle-1" style="height: 30px;"></div>
+          <v-btn  @click="showEditMode" icon="mdi-close" variant="text" class="float-right"></v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -138,7 +138,7 @@
   
     </MdEditor>
 
-    <div id="preview" v-if="!isEditMode">
+    <div id="preview" v-if="!isEditMode" style="background-color: #f1f1f1; border-radius: 5px;" class="px-2 py-1 mt-1">
       <div id="parsedtext" v-html="parsedText"></div>
     </div>
 
@@ -154,8 +154,8 @@ import ImageBucketService from '~/service/ImageBucketService';
 import {marked} from '../libraries/marked.js'
 import {markedEmojiBoldPatch} from '../libraries/markedEmojiBoldPatch.js'
 
-const props = defineProps(['editTextModel', 'showPreview', 'resizeEditorToWindow', 'height'])
-const emits = defineEmits(['update:editTextModelValue', 'uploadError'])
+const props = defineProps(['editTextModel', 'showPreview', 'resizeEditorToWindow', 'height', 'isEditingTextModel'])
+const emits = defineEmits(['update:editTextModelValue', 'uploadError', 'update:isEditingTextModelValue'])
 
 
 const windowHeight = ref(700);
@@ -455,20 +455,30 @@ const dismissError = () => {
   loadingoverlay.value = false;
 }
 
-const showPreviewMode = async () => {
-  let parsedMD = await marked.parse(markedEmojiBoldPatch(editText.value));
-  parsedText.value = parsedMD;
-
-  editorclass.value = "hideeditor"
-  isEditMode.value = false;
+const showPreviewMode = async () => {  
+  if (editText.value) {
+    let parsedMD = await marked.parse(markedEmojiBoldPatch(editText.value));
+    parsedText.value = parsedMD;
+  
+    editorclass.value = "hideeditor"
+    isEditMode.value = false;
+  }
+  emits('update:isEditingTextModelValue', isEditMode.value);
 }
 
 const showEditMode = () => {
-  editorclass.value = "showeditor"
-  isEditMode.value = true;
+  if (editText.value) {
+    editorclass.value = "showeditor"
+    isEditMode.value = true;
+  }
+  emits('update:isEditingTextModelValue', isEditMode.value);
 }
 
-defineExpose({showEditMode, showPreviewMode})
+const focus = () => {
+  editorRef.value?.focus('start');
+}
+
+defineExpose({showEditMode, showPreviewMode, focus})
 
 </script>
 
@@ -525,5 +535,33 @@ defineExpose({showEditMode, showPreviewMode})
 .md-editor-content{
   border-radius: 0 0 5px;
 }
+
+.v-md-editor {
+  box-shadow: none;
+}
+
+.v-md-editor__toolbar-item {
+  font-size: 22px;
+  color: #000;
+}
+
+.md-editor-icon{
+  height: 30px;
+  width: 30px;
+}
+
+.md-editor-toolbar-wrapper{
+  height: 40px;
+}
+
+.md-editor-toolbar-item{
+  height: 40px;
+}
+
+.emoji {
+  font-style: normal;
+  font-weight: normal;
+}
+
 
 </style>
