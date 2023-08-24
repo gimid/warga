@@ -50,6 +50,7 @@
 <script setup>
 import {MdPreview, MdCatalog, config} from 'md-editor-v3';
 import {videoplugin} from '~/libraries/markdownitvideo'
+import {iframeplugin} from '~/libraries/markdownitiframe'
 import 'md-editor-v3/lib/style.css';
 
 import { useRoute } from 'vue-router'
@@ -66,9 +67,18 @@ const rawText = ref("");
 const parsedText = ref("");
 const scrollElement = ref(document.documentElement);
 
+const iframeoptions = {
+    allowfullscreen: true,
+    width: '100%',
+    height: 500,
+    frameborder: 1, // default: 0
+    renderIframe: true // default: true
+}
+
 config({
   markdownItConfig: (mdit) => {
     mdit.use(videoplugin);
+    mdit.use(iframeplugin, iframeoptions);
   }
 })
 

@@ -151,10 +151,12 @@
 </template>
 
 <script setup>
-import {NormalToolbar, MdEditor} from 'md-editor-v3';
+import {NormalToolbar, MdEditor, config} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import ImageBucketService from '~/service/ImageBucketService';
 
+import {videoplugin} from '~/libraries/markdownitvideo'
+import {iframeplugin} from '~/libraries/markdownitiframe'
 import {marked} from '../libraries/marked.js'
 import {markedEmojiBoldPatch} from '../libraries/markedEmojiBoldPatch.js'
 
@@ -189,6 +191,21 @@ let isDroppingOnDropzoneFull = false;
 const parsedText = ref("");
 const isEditMode = ref(true);
 const editorclass = ref("");
+
+const iframeoptions = {
+    allowfullscreen: true,
+    width: '100%',
+    height: 500,
+    frameborder: 1, // default: 0
+    renderIframe: true // default: true
+}
+
+config({
+  markdownItConfig: (mdit) => {
+    mdit.use(videoplugin);
+    mdit.use(iframeplugin, iframeoptions);
+  }
+})
 
 onMounted(() => {
   window.addEventListener("resize", onResize);
