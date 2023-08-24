@@ -70,7 +70,7 @@
       </v-row>
     </v-container>
 
-    <MdEditor 
+     <MdEditor 
       ref="editorRef"
       placeholder="Tulis konten kamu di sini..."
       v-model="editText"
@@ -82,8 +82,10 @@
       :style="{height: windowHeight + 'px'}"
       :model-value="editTextModel"
       id="w-md-editor"
+      editor-id="wmd-editor"
       @on-change="onChange"
       :class="editorclass"
+      :scroll-auto="false"
       >
       <template #defToolbars>
         <NormalToolbar title="bold" @onClick="boldButtonHandler">
@@ -137,6 +139,8 @@
       </template>
   
     </MdEditor>
+  
+
 
     <div id="preview" v-if="!isEditMode" style="background-color: #f1f1f1; border-radius: 5px;" class="px-2 py-1 mt-1">
       <div id="parsedtext" v-html="parsedText"></div>
@@ -170,6 +174,7 @@ const mdeditorToolbars = ref([0,
                               6,
                               7,
                               "=",
+                              "preview",
                               8])
 
 const isMdAndUp = computed(() => $vuetify.breakpoint.mdAndUp);
@@ -188,12 +193,12 @@ const editorclass = ref("");
 onMounted(() => {
   window.addEventListener("resize", onResize);
 
-  let wmdEditor = document.getElementById("w-md-editor");
+  // let wmdEditor = document.getElementById("w-md-editor");
 
-  wmdEditor.addEventListener("dragenter", onDragEnter);
-  wmdEditor.addEventListener("dragleave", onDragLeave)
-  wmdEditor.addEventListener("dragover", onDragOver);
-  wmdEditor.addEventListener("drop", onDrop, false)
+  // wmdEditor.addEventListener("dragenter", onDragEnter);
+  // wmdEditor.addEventListener("dragleave", onDragLeave)
+  // wmdEditor.addEventListener("dragover", onDragOver);
+  // wmdEditor.addEventListener("drop", onDrop, false)
 
 
   editText.value = props.editTextModel;
@@ -205,13 +210,13 @@ onMounted(() => {
 onUnmounted(()=>{
   window.removeEventListener("resize", onResize);
 
-  let wmdEditor = document.getElementById("w-md-editor");
-  if(wmdEditor != null) {
-    wmdEditor.removeEventListener("dragenter", onDragEnter);
-    wmdEditor.removeEventListener("dragleave", onDragLeave)
-    wmdEditor.removeEventListener("dragover", onDragOver);
-    wmdEditor.removeEventListener("drop", onDrop, false)
-  }
+  // let wmdEditor = document.getElementById("w-md-editor");
+  // if(wmdEditor != null) {
+  //   wmdEditor.removeEventListener("dragenter", onDragEnter);
+  //   wmdEditor.removeEventListener("dragleave", onDragLeave)
+  //   wmdEditor.removeEventListener("dragover", onDragOver);
+  //   wmdEditor.removeEventListener("drop", onDrop, false)
+  // }
 
 })
 
@@ -530,6 +535,10 @@ defineExpose({showEditMode, showPreviewMode, focus})
 
 .md-editor-footer{
   display: none;
+}
+
+.cm-editor {
+  padding-bottom: 10px;
 }
 
 .md-editor-content{

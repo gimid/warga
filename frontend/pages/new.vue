@@ -33,6 +33,7 @@
         <v-row class="fill-height w-100">
 
           <v-col style="max-width: 800px;">
+          <!-- <v-col> -->
 
             <v-sheet            
               rounded="lg"
@@ -518,8 +519,6 @@ const handleMouseUp = () => {
 }
 
 const showPreviewMode = async () => {
-
-  console.log(editText.value)
 
   isEditMode.value = false;
 

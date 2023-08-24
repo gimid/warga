@@ -9,8 +9,8 @@ import Prism from 'prismjs'
 // import 'prismjs/components/prism-gdscript';
 import 'prismjs/components/prism-csharp';
 
-import 'prismjs/plugins/line-numbers/prism-line-numbers';
-import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
+// import 'prismjs/plugins/line-numbers/prism-line-numbers';
+// import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
 
 Prism.languages.gdscript = Prism.languages.extend('clike', {
   keyword: /\b(?:const|export|onready|tool|var|if|elif|else|while|for|break|continue|pass|match|extends|class|class_name|func|static|return|true|false|null|self|preload|yield|signal|enum|in|not|assert|remote|master|sync|puppet|slave)\b/,

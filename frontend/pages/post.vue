@@ -9,10 +9,14 @@
     <v-container class="page-width">
       <v-row>
 
-        <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
+        <!-- <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
+        </v-col> -->
+
+        <v-col cols="3">
         </v-col>
 
-        <v-col :cols="windowWidth > 600?6:12">
+        <!-- <v-col :cols="windowWidth > 600?6:12" v-cloak> -->
+        <v-col cols="6" v-cloak>
           <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
         </v-col>
 
@@ -58,6 +62,8 @@
               <v-btn class="" color="var(--gim-teal)">Post</v-btn>
               <v-btn v-if="isEditMode" class="ma-3" variant="outlined" color="grey" @click="showPreviewMode">Pratinjau</v-btn>
               <v-btn v-if="!isEditMode" class="ma-3" variant="outlined" color="grey" @click="showEditMode">Edit</v-btn>
+
+              <v-btn class="my-3 float-right" variant="outlined" color="grey" @click="showEditMode">Batal</v-btn>
             </div>
           </v-col>
         </v-row>
@@ -76,6 +82,7 @@
 
 
 <script setup>
+
 
 import {useRoute} from 'vue-router'
 import { ref } from 'vue';
@@ -105,6 +112,9 @@ const isEditMode = ref(true);
 onMounted(() => {
   window.addEventListener("resize", onResize);
   resizeEditorToWindow();
+
+  var elements = document.getElementsByTagName("pre");
+  console.log(elements);
 });
 
 onUnmounted(()=>{
@@ -149,5 +159,7 @@ function wait(milliseconds){
   background-color: white;
   border-radius: 5px;
 }
+
+[v-cloak] { display: none; }
 
 </style>

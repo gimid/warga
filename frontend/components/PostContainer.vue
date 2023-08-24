@@ -38,8 +38,9 @@
         
         <SeriesContainer :seriesId="data.series_id" :currentRoute="currentRoute" :showSeries="showSeries"></SeriesContainer>
 
-        <div id="parsedtext" v-html="parsedText"></div>
-
+        <!-- {{ parsedText }}
+        <hr/> -->
+        <MdPreview :modelValue="rawText" codeTheme="github" language="en-US"></MdPreview>
       </div>
       
 
@@ -47,6 +48,10 @@
 </template>
 
 <script setup>
+import {MdPreview, MdCatalog, config} from 'md-editor-v3';
+import {videoplugin} from '~/libraries/markdownitvideo'
+import 'md-editor-v3/lib/style.css';
+
 import { useRoute } from 'vue-router'
 const props = defineProps(['data', 'writer', 'currentRoute', 'showSeries'])
 
@@ -57,9 +62,18 @@ import {markedEmojiBoldPatch} from '../libraries/markedEmojiBoldPatch.js'
 import { useAsyncData } from 'nuxt/app';
 import DOMPurify from 'isomorphic-dompurify';
 
+const rawText = ref("");
 const parsedText = ref("");
+const scrollElement = ref(document.documentElement);
+
+config({
+  markdownItConfig: (mdit) => {
+    mdit.use(videoplugin);
+  }
+})
 
 useAsyncData(async ()=>{
+  rawText.value = props.data.content;
   let parsedMD = await marked.parse(markedEmojiBoldPatch(props.data.content));
   parsedText.value = parsedMD;
 });
@@ -74,14 +88,6 @@ useAsyncData(async ()=>{
 
 }
 
-pre{
-  background-color: #08090a;
-  padding: 20px;
-  border-radius: 7px;
-  overflow: scroll;
-  border: #08090a solid 20px;
-  margin: 5px;
-}
 
 code{
   color: aliceblue;

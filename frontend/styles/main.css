@@ -66,3 +66,9 @@ hr{
   border: 1px solid var(--gim-teal);
   margin: 5px auto;
 }
+
+
+/* override token prism */
+.token.operator{
+  background-color: transparent;
+}
