@@ -233,9 +233,6 @@ app.post('/series', async (req, res) => {
                           payload.series_id);
 
 
-    res.json(document)
-                          return;
-
     if (document != null) {
 
       let seriesTitle = document.title;

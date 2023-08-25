@@ -1,7 +1,6 @@
 <template>
   <div>
     <div v-if="showSeries">
-
       <div class="series-container" v-if="seriesModel.posts && dataFetched && seriesModel.posts.length > 1">
       <h3>{{ seriesModel.title }} <span class="text-grey">({{ seriesModel.posts.length }} Bagian)</span> </h3>
       <div class="series-item-container">
