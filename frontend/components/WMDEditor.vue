@@ -208,12 +208,12 @@ config({
 onMounted(() => {
   window.addEventListener("resize", onResize);
 
-  // let wmdEditor = document.getElementById("w-md-editor");
+  let wmdEditor = document.getElementById("w-md-editor");
 
-  // wmdEditor.addEventListener("dragenter", onDragEnter);
-  // wmdEditor.addEventListener("dragleave", onDragLeave)
-  // wmdEditor.addEventListener("dragover", onDragOver);
-  // wmdEditor.addEventListener("drop", onDrop, false)
+  wmdEditor.addEventListener("dragenter", onDragEnter);
+  wmdEditor.addEventListener("dragleave", onDragLeave)
+  wmdEditor.addEventListener("dragover", onDragOver);
+  wmdEditor.addEventListener("drop", onDrop, false)
 
 
   editText.value = props.editTextModel;
@@ -225,13 +225,13 @@ onMounted(() => {
 onUnmounted(()=>{
   window.removeEventListener("resize", onResize);
 
-  // let wmdEditor = document.getElementById("w-md-editor");
-  // if(wmdEditor != null) {
-  //   wmdEditor.removeEventListener("dragenter", onDragEnter);
-  //   wmdEditor.removeEventListener("dragleave", onDragLeave)
-  //   wmdEditor.removeEventListener("dragover", onDragOver);
-  //   wmdEditor.removeEventListener("drop", onDrop, false)
-  // }
+  let wmdEditor = document.getElementById("w-md-editor");
+  if(wmdEditor != null) {
+    wmdEditor.removeEventListener("dragenter", onDragEnter);
+    wmdEditor.removeEventListener("dragleave", onDragLeave)
+    wmdEditor.removeEventListener("dragover", onDragOver);
+    wmdEditor.removeEventListener("drop", onDrop, false)
+  }
 
 })
 
@@ -587,5 +587,8 @@ defineExpose({showEditMode, showPreviewMode, focus})
   font-weight: normal;
 }
 
+.cm-line{
+  font-size: 17px;
+}
 
 </style>

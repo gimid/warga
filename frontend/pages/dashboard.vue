@@ -13,15 +13,13 @@
         <v-col cols="6">
           Postingan dari kamu
           {{ fetchingInfo }}
-          <ul v-for="post in posts">
-            <li class="my-3">
-              <v-btn prepend-icon="mdi-pencil" :to="'@'+post.user_handle+'/'+post.$id+'/edit'" variant="tonal" class="mx-1">
-                Edit
-              </v-btn>
 
-              {{ post.title }}              
-            </li>
-          </ul>
+
+          <div v-for="post in posts">
+            <DashboardPostPreview :post="post"></DashboardPostPreview>
+          </div>
+
+
         </v-col>
         <v-col cols="3" class="d-none d-sm-block">
         </v-col>
@@ -110,5 +108,10 @@ const getProfile = async (user_id) => {
   return targetProfile;
 
 }
+
+
+
+
+
 
 </script>

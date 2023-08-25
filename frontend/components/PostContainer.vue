@@ -156,7 +156,8 @@ img{
 
 blockquote{
   border-left: 0.25rem solid #e0e0e0;
-  padding-left: 1rem;
+  padding: 1em 1em 1em 1rem;
+  border-radius: 5px;
 }
 
 .loading-text{

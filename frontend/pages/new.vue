@@ -854,9 +854,6 @@ const onUploadError = (x) => {
   margin-top: 5px;
 }
 
-.cm-line{
-  font-size: 17px;
-}
 
 
 

@@ -15,8 +15,8 @@
         <v-col cols="3">
         </v-col>
 
-        <!-- <v-col :cols="windowWidth > 600?6:12" v-cloak> -->
-        <v-col cols="6" v-cloak>
+        <v-col :cols="windowWidth > 1000?6:12" v-cloak>
+        <!-- <v-col cols="6" v-cloak> -->
           <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
         </v-col>
 
@@ -40,8 +40,8 @@
           <v-col rounded="lg" :cols="windowWidth > 600?6:12">
 
             <div v-if="!commenting" id="pre-comment-editor-container" class="pa-2 comment-container">
-              <div style="outline: solid 1px #e0e0e0; height: 50px;" class="pa-2 text-grey" @click="startCommenting">
-                Gabung diskusi
+              <div style="outline: solid 1px #e0e0e0; height: 80px;" class="pa-3 text-black rounded" @click="startCommenting">
+                Gabung diskusi...
               </div>
             </div>
 
@@ -53,7 +53,7 @@
                 
                 :resize-editor-to-window="false"
                 :show-preview="false"
-                height="200"
+                height="230"
                 
                 v-model:is-editing-text-model-value="isEditMode"
                 :is-editing-text-model="isEditMode">
