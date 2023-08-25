@@ -63,6 +63,10 @@ function videoEmbed(md, options) {
       service = "youtube"
     }else if(videoID.includes("vimeo.com")){
       service = "vimeo"
+    }else if(videoID.includes("github.com")){
+      service = "github"
+    }else{
+      service = "embed";
     }
     
     const serviceLower = service.toLowerCase();
@@ -93,6 +97,7 @@ function videoEmbed(md, options) {
       token.service = service;
       token.url = match[1];
       token.level = theState.level;
+      console.log(token)
     }
 
     theState.pos += theState.src.indexOf('}', theState.pos);
@@ -168,6 +173,11 @@ const videoUrl = (service, videoID, url, options) => {
     //     'landing_sign=1kD6c0N6aYpMUS0wxnQjxzSqZlEB8qNFdxtdjYhwSuI';
     // case 'osf':
     //   return 'https://mfr.osf.io/render?url=https://osf.io/' + videoID + '/?action=download';
+    // default:
+    //   return service;
+    case 'github':
+      console.log(videoID);
+      // return videoID;
     default:
       return service;
   }
@@ -177,6 +187,9 @@ const tokenizeVideo = (md, options) => {
   function tokenizeReturn(tokens, idx) {
     const videoID = md.utils.escapeHtml(tokens[idx].videoID);
     const service = md.utils.escapeHtml(tokens[idx].service).toLowerCase();
+
+    
+
     var checkUrl = /http(?:s?):\/\/(?:www\.)?[a-zA-Z0-9-:.]{1,}\/render(?:\/)?[a-zA-Z0-9.&;?=:%]{1,}url=http(?:s?):\/\/[a-zA-Z0-9 -:.]{1,}\/[a-zA-Z0-9]{1,5}\/\?[a-zA-Z0-9.=:%]{1,}/;
     var num;
 
@@ -192,6 +205,19 @@ const tokenizeVideo = (md, options) => {
         '$(document).ready(function () {new mfr.Render("' + num + '", "https://mfr.osf.io/' +
         'render?url=https://osf.io/' + videoID + '/?action=download%26mode=render");' +
         '    }); </script>';
+    }
+
+
+    if (service === 'github') {
+      // return `<div><iframe 
+      // width="100%"
+      // height="350"    
+      // src="data:text/html;charset=utf-8,
+      // <head><base target='_blank' /></head>
+      // <body><script src='${videoID}.js'></script>
+      // </body>"><div>`
+      return `<script src="${videoID}.js"></script>`
+      // return `<div>test</div>`;
     }
 
     return videoID === '' ? '' :
@@ -212,6 +238,8 @@ const defaults = {
   vine: { width: 600, height: 600, embed: 'simple' },
   prezi: { width: 550, height: 400 },
   osf: { width: '100%', height: '100%' },
+  embed: { width: '100%', height: '100%' },  
+  github: { width: '100%', height: '100%' },
 };
 
 const videoplugin = (md, options) => {
@@ -226,6 +254,8 @@ const videoplugin = (md, options) => {
   } else {
     theOptions = defaults;
   }
+
+
   theMd.renderer.rules.video = tokenizeVideo(theMd, theOptions);
   theMd.inline.ruler.before('emphasis', 'video', videoEmbed(theMd, theOptions));
 };

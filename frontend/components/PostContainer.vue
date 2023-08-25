@@ -64,13 +64,6 @@ import DOMPurify from 'isomorphic-dompurify';
 
 const rawText = ref("");
 const parsedText = ref("");
-const iframeoptions = {
-    allowfullscreen: true,
-    width: '100%',
-    height: 500,
-    frameborder: 1, // default: 0
-    renderIframe: true // default: true
-}
 
 config({
   markdownItConfig: (mdit) => {
