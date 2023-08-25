@@ -156,7 +156,6 @@ import 'md-editor-v3/lib/style.css';
 import ImageBucketService from '~/service/ImageBucketService';
 
 import {videoplugin} from '~/libraries/markdownitvideo'
-import {iframeplugin} from '~/libraries/markdownitiframe'
 import {marked} from '../libraries/marked.js'
 import {markedEmojiBoldPatch} from '../libraries/markedEmojiBoldPatch.js'
 
@@ -203,7 +202,6 @@ const iframeoptions = {
 config({
   markdownItConfig: (mdit) => {
     mdit.use(videoplugin);
-    mdit.use(iframeplugin, iframeoptions);
   }
 })
 
