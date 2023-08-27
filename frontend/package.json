@@ -13,6 +13,8 @@
     "@pinia/nuxt": "^0.4.11",
     "appwrite": "^11.0.0",
     "axios": "^1.4.0",
+    "gist-embed": "github:bvanderhoof/gist-embed",
+    "iframe-resizer": "^4.3.6",
     "isomorphic-dompurify": "^1.7.0",
     "marked": "^5.1.0",
     "marked-highlight": "^2.0.1",

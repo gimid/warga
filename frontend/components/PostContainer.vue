@@ -37,20 +37,33 @@
         <div class="my-4"></div>
         
         <SeriesContainer :seriesId="data.series_id" :currentRoute="currentRoute" :showSeries="showSeries"></SeriesContainer>
-
+        
         <!-- {{ parsedText }}
         <hr/> -->
-        <MdPreview :modelValue="rawText" codeTheme="github" language="en-US"></MdPreview>
+        <MdPreview id="md-content" :modelValue="rawText" codeTheme="github" language="en-US"></MdPreview>
       </div>
       
 
   </v-sheet>
 </template>
 
+
+
 <script setup>
+
+useHead({
+  script: [
+    {
+      src: "https://cdn.jsdelivr.net/npm/gist-embed@1.0.4/dist/gist-embed.min.js"
+    }
+  ]
+})
+
+
 import {MdPreview, MdCatalog, config} from 'md-editor-v3';
 import {videoplugin} from '~/libraries/markdownitvideo'
 import 'md-editor-v3/lib/style.css';
+
 
 import { useRoute } from 'vue-router'
 const props = defineProps(['data', 'writer', 'currentRoute', 'showSeries'])
@@ -61,6 +74,7 @@ import {marked} from '../libraries/marked.js'
 import {markedEmojiBoldPatch} from '../libraries/markedEmojiBoldPatch.js'
 import { useAsyncData } from 'nuxt/app';
 import DOMPurify from 'isomorphic-dompurify';
+import { compileScript } from 'vue/compiler-sfc';
 
 const rawText = ref("");
 const parsedText = ref("");
@@ -73,12 +87,71 @@ config({
 
 useAsyncData(async ()=>{
   rawText.value = props.data.content;
-  let parsedMD = await marked.parse(markedEmojiBoldPatch(props.data.content));
-  parsedText.value = parsedMD;
+  // let parsedMD = await marked.parse(markedEmojiBoldPatch(props.data.content));
+  // parsedText.value = parsedMD;
 });
 
 // const computedContent = computed(()=>props.data.content);
 // let parsedText = await useAsyncData('parsedText', async() => await marked.parse(markedEmojiBoldPatch(computedContent.value)), {initialCache: false}).data;
+
+
+onMounted(()=>{
+  // iFrameResize({ log: true }, '.w-iframe');
+
+
+  // embed regex
+
+  // let EMBED_REGEX = /{% embed[\s]*(.*?)[\s]*%}/im;
+
+  // const match = EMBED_REGEX.exec(rawText.value);
+
+  // console.log("Match value:")
+  // console.log(match);
+
+  // for (let i = 0; i < match.length; i++) {
+  //   document.body.
+  // }
+
+  // if (rawText.value.)
+  // nodeScriptReplace(document.getElementById("md-content"));
+})
+
+function nodeScriptReplace(node) {
+  
+        if ( nodeScriptIs(node) === true ) {
+          console.log("THIS IS SCRIPT");  
+          console.log(node)
+                node.parentNode.replaceChild( nodeScriptClone(node) , node );
+        }
+        else {
+                var i = -1, children = node.childNodes;
+                while ( ++i < children.length ) {
+                      nodeScriptReplace( children[i] );
+                }
+        }
+
+        return node;
+}
+function nodeScriptClone(node){
+        var script  = document.createElement("script");
+        console.log("create script")
+
+        script.text = node.innerHTML;
+        console.log(script)
+        var i = -1, attrs = node.attributes, attr;
+        while ( ++i < attrs.length ) {                                    
+              script.setAttribute( (attr = attrs[i]).name, attr.value );
+        }
+        return script;
+}
+
+function nodeScriptIs(node) {
+  if (node) {
+    return node.tagName === 'SCRIPT';
+  }
+  return false;
+
+}
 </script>
 
 <style>
@@ -157,6 +230,14 @@ blockquote{
   background-color: #e0e0e0;
 }
 
+iframe {
+  width: 1px;
+  min-width: 100%;
+}
 
+code {
+  width: 100% !important;
+  background-color: transparent !important;
+}
 
 </style>

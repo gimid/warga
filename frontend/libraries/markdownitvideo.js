@@ -121,6 +121,9 @@ const extractVideoParameters = (url) => {
   return parameterMap;
 }
 
+
+let itIFrame = 0;
+
 const videoUrl = (service, videoID, url, options) => {
   switch (service) {
     case 'youtube': {
@@ -176,8 +179,9 @@ const videoUrl = (service, videoID, url, options) => {
     // default:
     //   return service;
     case 'github':
-      console.log(videoID);
+      // console.log(videoID);
       // return videoID;
+      return videoID;
     default:
       return service;
   }
@@ -209,15 +213,32 @@ const tokenizeVideo = (md, options) => {
 
 
     if (service === 'github') {
-      // return `<div><iframe 
+      itIFrame++;
+
+      // return `<div><iframe
+      // id="w-iframe"
+      // class="w-iframe"
       // width="100%"
-      // height="350"    
+      // onload=""
       // src="data:text/html;charset=utf-8,
       // <head><base target='_blank' /></head>
       // <body><script src='${videoID}.js'></script>
-      // </body>"><div>`
-      return `<script src="${videoID}.js"></script>`
+      // <script>
+        
+      // </script>
+      // </body>"></iframe><div>`
+      // return `<script src="${videoID}.js"></script>`
       // return `<div>test</div>`;
+
+      let gistregex = /https:\/\/gist.github.com\/(?:.+)\/([^\s]+)/;
+
+      let match = gistregex.exec(videoID);
+      
+
+      if (match && match.length > 0) {
+        return `<code data-gist-id="${match[1]}"></code>`;
+      }
+
     }
 
     return videoID === '' ? '' :
