@@ -72,3 +72,7 @@ hr{
 .token.operator{
   background-color: transparent;
 }
+
+table tr td {
+  border: none !important;
+}

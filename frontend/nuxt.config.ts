@@ -8,6 +8,9 @@ export default defineNuxtConfig({
   //   debug: process.env.NODE_ENV === 'development',
   //   mode: 'init'
   // },  
+  plugins: [
+    {src: '~/plugins/iframe-resize', mode: 'client'}
+  ],
   modules:[
     ['@pinia/nuxt',
       {
