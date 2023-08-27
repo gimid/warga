@@ -143,7 +143,9 @@
 
 
     <div id="preview" v-if="!isEditMode" style="background-color: #f1f1f1; border-radius: 5px;" class="px-2 py-1 mt-1">
-      <div id="parsedtext" v-html="parsedText"></div>
+      <!-- <div id="parsedtext" v-html="parsedText"></div> -->
+
+      <MdPreview id="md-content" :modelValue="editText" codeTheme="github" language="en-US"></MdPreview>
     </div>
 
   </div>
@@ -151,6 +153,15 @@
 </template>
 
 <script setup>
+
+useHead({
+  script: [
+    {
+      src: "https://cdn.jsdelivr.net/npm/gist-embed@1.0.4/dist/gist-embed.min.js"
+    }
+  ]
+})
+
 import {NormalToolbar, MdEditor, config} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import ImageBucketService from '~/service/ImageBucketService';
@@ -484,6 +495,16 @@ const showPreviewMode = async () => {
     isEditMode.value = false;
   }
   emits('update:isEditingTextModelValue', isEditMode.value);
+  
+  
+  await wait(100)
+  GistEmbed.init();
+}
+
+function wait(milliseconds){
+  return new Promise(resolve => {
+      setTimeout(resolve, milliseconds);
+  });
 }
 
 const showEditMode = () => {
