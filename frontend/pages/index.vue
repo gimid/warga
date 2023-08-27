@@ -6,7 +6,7 @@
         <v-row >
           <v-col cols="3" class="d-none d-sm-block">
           </v-col>
-          <v-col>
+          <v-col :cols="windowWidth > 1000?6:12">
             <div v-for="userPost in posts">
               <PostPreview :data="userPost"></PostPreview>
             </div>
@@ -35,9 +35,11 @@ import { storeToRefs } from 'pinia';
 const postsService = new PostsService();
 
 let posts = ref([]);
+const windowWidth = ref(0);
 
 onMounted(async () => {
-  
+  window.addEventListener("resize", onResize);
+  resizeEditorToWindow();
   let homepagePosts = await postsService.getHomepagePosts();
   
   if (homepagePosts) {
@@ -45,5 +47,17 @@ onMounted(async () => {
   }
 
 });
+
+onUnmounted(()=>{
+  window.removeEventListener("resize", onResize);
+});
+
+const onResize = (e) => {
+  resizeEditorToWindow();
+}
+
+const resizeEditorToWindow = () => {
+  windowWidth.value = window.innerWidth;
+}
 
 </script>

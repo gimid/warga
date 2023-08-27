@@ -63,7 +63,7 @@
               <v-btn v-if="isEditMode" class="ma-3" variant="outlined" color="grey" @click="showPreviewMode">Pratinjau</v-btn>
               <v-btn v-if="!isEditMode" class="ma-3" variant="outlined" color="grey" @click="showEditMode">Edit</v-btn>
 
-              <v-btn class="my-3 float-right" variant="outlined" color="grey" @click="showEditMode">Batal</v-btn>
+              <v-btn class="my-3 float-right" variant="outlined" color="grey" @click="commenting = false">Batal</v-btn>
             </div>
           </v-col>
         </v-row>
