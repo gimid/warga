@@ -10,8 +10,7 @@ export default <RouterConfig> {
       path: '/',
       component: () => import('~/pages/index.vue').then(r => r.default || r),
       props: true,
-    },
-    
+    },    
     {
       name: 'admin',
       path: '/admin',
@@ -22,6 +21,11 @@ export default <RouterConfig> {
       name: 'enter',
       path: '/enter',
       component: () => import('~/pages/enter.vue')
+    },    
+    {
+      name: 'enterm',
+      path: '/enterm',
+      component: () => import('~/pages/enterm.vue')
     },
     {
       name: 'register',
@@ -99,6 +103,10 @@ export default <RouterConfig> {
       name: 'page',
       path: '/p/:pageid',
       component: () => import('~/pages/p.vue')
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      component: () => import('~/pages/404.vue')
     }
   ].map(route => withMeta(_routes, route)),
 }
