@@ -37,7 +37,7 @@
         
         <!-- {{ parsedText }}
         <hr/> -->
-        <MdPreview id="md-content" :modelValue="rawText" codeTheme="github" language="en-US"></MdPreview>
+        <MdPreview  :show-code-row-number="true" id="md-content" :modelValue="rawText" codeTheme="github" language="en-US"></MdPreview>
       </div>
       
 
@@ -80,9 +80,6 @@ const parsedText = ref("");
 config({
   markdownItConfig: (mdit) => {
     mdit.use(videoplugin);
-  },
-  codeMirrorExtensions(_theme, extensions) {
-    return [...extensions, lineNumbers()];
   }
 })
 

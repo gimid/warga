@@ -1,6 +1,8 @@
 <template>
   <div v-for="comment in comments">
-    <CommentView :comment-data="comment"></CommentView>
+    <div :class="currentHighlightId == comment.$id?'highlighted':''">
+      <CommentView :comment-data="comment" v-on:start-reply-called="onStartReply" @navigateReplyCalled="onNavigateReplyCalled"></CommentView>
+    </div>
   </div>
 
 </template>
@@ -9,9 +11,12 @@
 import CommentService from '~/service/CommentService';
 
 const props = defineProps(['targetPost', 'targetCommentParent']);
+const emits = defineEmits(['startReplyCalled'])
 const comments = ref({});
 
 const commentService = new CommentService();
+
+const currentHighlightId = ref("");
 
 onMounted(()=>{
   loadComments();
@@ -22,6 +27,33 @@ const loadComments = async() => {
   comments.value = fetchedComments.documents;
 }
 
+const onStartReply = (x) => {
+  emits('startReplyCalled', x);
+}
+
+const onNavigateReplyCalled = (x) => {
+  currentHighlightId.value = x;
+}
+
 
 defineExpose({loadComments})
 </script>
+
+<style>
+
+
+@keyframes pulse {
+  0% {border: solid 4px rgb(43, 255, 0);}
+  50% {border: solid 4px rgb(37, 206, 3);}
+  100% {border: solid 4px rgba(43, 255, 0);}
+}
+
+.highlighted {
+  animation-name: pulse;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+</style>

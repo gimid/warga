@@ -9,20 +9,12 @@
     <v-container class="page-width">
       <v-row>
 
-        <!-- <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
-        </v-col> -->
-
         <v-col cols="3">
         </v-col>
 
         <v-col :cols="windowWidth > 1000?6:12" v-cloak>
-        <!-- <v-col cols="6" v-cloak> -->
           <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
         </v-col>
-
-        <!-- <v-col cols="12" class="d-md-none">
-          <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
-        </v-col> -->
 
 
         <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
@@ -38,15 +30,23 @@
           <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
           </v-col>
           <v-col rounded="lg" :cols="windowWidth > 1000?6:12">
-            <CommentList ref="commentListRef" :target-post="currentPost"></CommentList>
+            <CommentList ref="commentListRef" :target-post="currentPost" @start-reply-called="onStartReply"></CommentList>
           </v-col>
+        </v-row>
+        <v-row>
+          <hr/>
         </v-row>
         <v-row>
           <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
           </v-col>
           <v-col rounded="lg" :cols="windowWidth > 1000?6:12">
-            <CommentEditor :target-post="currentPost" @on-data-updated="onCommentDataUpdated"></CommentEditor>
+            <div v-if="currentTargetReply">
+              <h1>Membalas ke :</h1>
+              <CommentView class="ml-10" :comment-data="currentTargetReply" minimalist="true"></CommentView>
+            </div>
+            <CommentEditor ref="cmEditorRef" :target-comment-parent-id="currentTargetReply?currentTargetReply.$id:''" :target-post="currentPost" @on-data-updated="onCommentDataUpdated" @cancel-edit="onCancelComment"></CommentEditor>
           </v-col>
+          <div id="BottomCommentEditor"></div>
         </v-row>
       </ClientOnly>
     </v-container>
@@ -66,7 +66,6 @@
 
 
 import {useRoute} from 'vue-router'
-import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
 
@@ -77,7 +76,7 @@ const route = useRoute();
 const postsService = new PostsService();
 const profileService = new ProfilesService();
 
-const editorRef = ref();
+const cmEditorRef = ref();
 
 const profileStore = useProfileStore();
 const { profile } = storeToRefs(profileStore);
@@ -90,6 +89,8 @@ const editText = ref("")
 
 const isEditMode = ref(true);
 const commentListRef = ref();
+
+const currentTargetReply = ref(null);
 
 onMounted(() => {
   window.addEventListener("resize", onResize);
@@ -120,7 +121,24 @@ function wait(milliseconds){
 
 const onCommentDataUpdated = async () => {
   console.log("on data updated in post view")
+  currentTargetReply.value = null;
   await commentListRef.value?.loadComments();
+}
+
+const onStartReply = async (x) => {
+  
+  currentTargetReply.value = null;
+  currentTargetReply.value = x;
+  
+  console.log(cmEditorRef.value);
+  cmEditorRef.value?.startNewComment();
+  
+  await wait(200);
+  document.getElementById("BottomCommentEditor").scrollIntoView();
+}
+
+const onCancelComment = () => {
+  currentTargetReply.value = null;
 }
 
 </script>

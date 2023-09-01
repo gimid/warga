@@ -13,7 +13,7 @@
   </div>
 
   <div v-if="!isCommenting" id="pre-comment-editor-container" class="pa-2 comment-container">
-    <div style="outline: solid 1px #e0e0e0; height: 80px;" class="pa-3 text-black rounded" @click="startCommenting">
+    <div style="outline: solid 1px #e0e0e0; height: 80px;" class="pa-3 text-black rounded" @click="startEditComment">
       Gabung diskusi...
     </div>
   </div>
@@ -39,8 +39,37 @@
     <v-btn v-if="isEditMode" class="ma-3" variant="outlined" color="grey" @click="showPreviewMode">Pratinjau</v-btn>
     <v-btn v-if="!isEditMode" class="ma-3" variant="outlined" color="grey" @click="showEditMode">Edit</v-btn>
 
+
+    <v-btn v-if="isEditPreviousCommentMode && isEditMode" class="" variant="elevated" color="red" @click="deleteComment">Hapus</v-btn>
+
     <v-btn class="my-3 float-right" variant="outlined" color="grey" @click="cancelCommenting">Batal</v-btn>
+
   </div>
+
+
+
+  <v-overlay
+        :model-value="confirmDelete"
+        @click:outside="confirmDelete = false"
+        class="align-center justify-center"
+      >
+      <v-card title="Yakin ingin menghapus komentar ini?" subtitle="Komentar ini akan dihapus isinya" width="400">
+        <v-container>
+          <v-row>
+            <v-col>
+              <v-btn color="var(--gim-teal)" @click="confirmDeleteComment">Ya, yakin hapus</v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-btn color="red" @click="confirmDelete = false">Tidak, jangan dihapus</v-btn>
+            </v-col>
+          </v-row>
+          
+        </v-container>
+      </v-card>
+  </v-overlay>
+
 </template>
 <script setup>
 
@@ -50,7 +79,7 @@ import CommentService from '~/service/CommentService';
 
 const commentService = new CommentService();
 
-
+const confirmDelete = ref(false);
 const isCommenting = ref(false);
 const windowWidth = ref(0);
 const editText = ref("")
@@ -59,7 +88,7 @@ const isEditMode = ref(true);
 const isUploading = ref(false);
 const editorRef = ref();
 
-const props = defineProps(['previousCommentData', 'editTextModel','targetPost', 'targetCommentParent','isEditPreviousCommentMode']);
+const props = defineProps(['previousCommentData', 'editTextModel','targetPost', 'targetCommentParentId','isEditPreviousCommentMode']);
 const emits = defineEmits(['update:editTextModelValue', 'cancelEdit', 'onDataUpdated' ])
 
 onMounted(() => {
@@ -99,8 +128,15 @@ const showEditMode = async () => {
   editorRef.value?.showEditMode();
 }
 
-const startCommenting = async () => {
+const startEditComment = async () => {
   editText.value = props.editTextModel;
+  isCommenting.value = true;
+  await wait(100);
+  editorRef.value?.focus();
+}
+
+const startNewComment = async () => {
+  editText.value = "";
   isCommenting.value = true;
   await wait(100);
   editorRef.value?.focus();
@@ -117,8 +153,8 @@ const postComment = async () => {
 
   isUploading.value = true;
 
-  if(props.targetCommentParent != null) {
-    let result = await commentService.createComment(props.targetPost.$id, props.targetCommentParent.$id, editText.value);
+  if(props.targetCommentParentId != null) {
+    let result = await commentService.createComment(props.targetPost.$id, props.targetCommentParentId, editText.value);
     isUploading.value = false;
     onDataUpdated(result);
   }else{
@@ -148,6 +184,21 @@ const onDataUpdated = async (result) => {
   GistEmbed.init();
 }
 
-defineExpose({showEditMode, showPreviewMode, focus, startCommenting})
+const deleteComment = async () => {
+  confirmDelete.value = true;
+}
+
+const confirmDeleteComment = async () => {
+  confirmDelete.value = false;
+  isUploading.value = true;
+
+  let result = await commentService.updateComment(props.previousCommentData.$id, "_dihapus_");
+
+  isUploading.value = false;
+
+  onDataUpdated(result);
+}
+
+defineExpose({showEditMode, showPreviewMode, focus, startEditComment, startNewComment})
 
 </script>

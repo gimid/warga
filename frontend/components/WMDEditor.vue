@@ -86,6 +86,7 @@
       @on-change="onChange"
       :class="editorclass"
       :scroll-auto="false"
+      :show-code-row-number="false"
       >
       <template #defToolbars>
         <NormalToolbar title="bold" @onClick="boldButtonHandler">
@@ -214,9 +215,6 @@ const iframeoptions = {
 config({
   markdownItConfig: (mdit) => {
     mdit.use(videoplugin);
-  },
-  codeMirrorExtensions(_theme, extensions) {
-    return [...extensions, lineNumbers()];
   }
 })
 
