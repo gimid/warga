@@ -56,7 +56,7 @@ app.post('/home', async (req, res) => {
     let payload = req.body;
     
     if (payload.cursor_after){
-      queries.push(sdk.Query.cursorAfter(payload.cursorAfter));
+      queries.push(sdk.Query.cursorAfter(payload.cursor_after));
     }
   }
 

@@ -358,25 +358,28 @@ export default class PostsService {
   }
 
 
-  async getHomepagePosts() {
+  async getHomepagePosts(cursorAfter) {
     try {
-      // let result = await databases.listDocuments(
-      //   process.env.FORUM_DATABASE_ID,
-      //   process.env.POST_HOMEPAGE_COLLECTION_ID
-      //   );        
-      // return result;
-
-      // let result = await this.loopCallFunction(functions.createExecution(process.env.GET_HOME_POST_FUNCTION_ID));
-      // return result;
+      console.log("AFTER" + cursorAfter);
 
       let axiosConfig = {
         headers: {
           'Content-Type' : 'application/json;charset=UTF-8'
         }
       }
-
-      let result = await axios.post(process.env.WARGA_ENDPOINT+'/home',{},axiosConfig);
-      return result.data;
+      
+      if (!cursorAfter) {
+        let result = await axios.post(process.env.WARGA_ENDPOINT+'/home',{},axiosConfig);
+        return result.data;
+      }else{
+        let result = await axios.post(
+          process.env.WARGA_ENDPOINT+'/home',
+          {
+            'cursor_after': cursorAfter
+          },
+          axiosConfig);
+        return result.data;
+      }
     }catch (e){ 
       console.log(e);
       throw(e);

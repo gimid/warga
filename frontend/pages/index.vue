@@ -10,6 +10,9 @@
             <div v-for="userPost in posts">
               <PostPreview :data="userPost"></PostPreview>
             </div>
+            <div>
+              <v-btn color="var(--gim-teal)"  @click="loadMore" block>Muat lagi</v-btn>
+            </div>
           </v-col>
           <v-col cols="3" class="d-none d-sm-block">
           </v-col>
@@ -36,6 +39,7 @@ const postsService = new PostsService();
 
 let posts = ref([]);
 const windowWidth = ref(0);
+const lastPost = ref();
 
 onMounted(async () => {
   window.addEventListener("resize", onResize);
@@ -44,9 +48,21 @@ onMounted(async () => {
   
   if (homepagePosts) {
     posts.value = homepagePosts;
+    lastPost.value = homepagePosts[homepagePosts.length-1];
   }
 
 });
+
+const loadMore = async () => {
+  console.log("----more ----");
+  console.log(lastPost.value)
+  let morePosts = await postsService.getHomepagePosts(lastPost.value.$id)
+
+
+  posts.value = posts.value.concat(morePosts);
+
+  lastPost.value = morePosts[morePosts.length-1];
+}
 
 onUnmounted(()=>{
   window.removeEventListener("resize", onResize);
