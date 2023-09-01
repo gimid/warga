@@ -16,5 +16,6 @@ jobs:
 
         script: |
           cd ~/warga/backend/api
+          git pull
           docker compose up --build -d
           echo "apii build"
