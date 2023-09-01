@@ -163,6 +163,7 @@ useHead({
 })
 
 import {NormalToolbar, MdEditor, config} from 'md-editor-v3';
+import { lineNumbers } from '@codemirror/view';
 import 'md-editor-v3/lib/style.css';
 import ImageBucketService from '~/service/ImageBucketService';
 
@@ -171,7 +172,7 @@ import {marked} from '../libraries/marked.js'
 import {markedEmojiBoldPatch} from '../libraries/markedEmojiBoldPatch.js'
 
 const props = defineProps(['editTextModel', 'showPreview', 'resizeEditorToWindow', 'height', 'isEditingTextModel'])
-const emits = defineEmits(['update:editTextModelValue', 'uploadError', 'update:isEditingTextModelValue'])
+const emits = defineEmits(['onChange', 'update:editTextModelValue', 'uploadError', 'update:isEditingTextModelValue'])
 
 
 const windowHeight = ref(700);
@@ -213,6 +214,9 @@ const iframeoptions = {
 config({
   markdownItConfig: (mdit) => {
     mdit.use(videoplugin);
+  },
+  codeMirrorExtensions(_theme, extensions) {
+    return [...extensions, lineNumbers()];
   }
 })
 
@@ -249,6 +253,7 @@ onUnmounted(()=>{
 
 const onChange = () => {
   emits('update:editTextModelValue', editText.value);
+  emits('onChange', editText.value)
 }
 
 const boldButtonHandler = () => {

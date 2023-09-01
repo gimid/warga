@@ -21,7 +21,6 @@ onMounted(async ()=>{
 
   const authService = new AuthService();
   let currentUser = await authService.getUserSession();
-  console.log(currentUser);
 
   if(props.data.$id){
     let ownedpost = await postService.getOwnedPostByIdDirect(props.data.$id)

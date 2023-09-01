@@ -30,41 +30,22 @@
       </v-row>
 
       <ClientOnly>
-
+        <!-- Comments -->
         <v-row>
           <hr/>
         </v-row>
         <v-row>
           <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
           </v-col>
-          <v-col rounded="lg" :cols="windowWidth > 600?6:12">
-
-            <div v-if="!commenting" id="pre-comment-editor-container" class="pa-2 comment-container">
-              <div style="outline: solid 1px #e0e0e0; height: 80px;" class="pa-3 text-black rounded" @click="startCommenting">
-                Gabung diskusi...
-              </div>
-            </div>
-
-            <div v-if="commenting" id="comment-editor-container" class="pa-2 comment-container">
-              <WMDEditor
-                ref="editorRef"
-                v-model:edit-text-model-value="editText"
-                :edit-text-model="editText"
-                
-                :resize-editor-to-window="false"
-                :show-preview="false"
-                height="230"
-                
-                v-model:is-editing-text-model-value="isEditMode"
-                :is-editing-text-model="isEditMode">
-              </WMDEditor>
-
-              <v-btn class="" color="var(--gim-teal)">Post</v-btn>
-              <v-btn v-if="isEditMode" class="ma-3" variant="outlined" color="grey" @click="showPreviewMode">Pratinjau</v-btn>
-              <v-btn v-if="!isEditMode" class="ma-3" variant="outlined" color="grey" @click="showEditMode">Edit</v-btn>
-
-              <v-btn class="my-3 float-right" variant="outlined" color="grey" @click="commenting = false">Batal</v-btn>
-            </div>
+          <v-col rounded="lg" :cols="windowWidth > 1000?6:12">
+            <CommentList ref="commentListRef" :target-post="currentPost"></CommentList>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
+          </v-col>
+          <v-col rounded="lg" :cols="windowWidth > 1000?6:12">
+            <CommentEditor :target-post="currentPost" @on-data-updated="onCommentDataUpdated"></CommentEditor>
           </v-col>
         </v-row>
       </ClientOnly>
@@ -106,8 +87,9 @@ const {data: currentWriter, refresh: refreshCurrentWriter} = await useAsyncData(
 
 const windowWidth = ref(0);
 const editText = ref("")
-const commenting = ref(false);
+
 const isEditMode = ref(true);
+const commentListRef = ref();
 
 onMounted(() => {
   window.addEventListener("resize", onResize);
@@ -129,26 +111,16 @@ const resizeEditorToWindow = () => {
   windowWidth.value = window.innerWidth;
 }
 
-const startCommenting = async () => {
-  commenting.value = true;
-
-  await wait(100);
-  editorRef.value?.focus();
-}
-
-const showPreviewMode = () => {
-  editorRef.value?.showPreviewMode();
-}
-
-const showEditMode = () => {
-  editorRef.value?.showEditMode();
-}
-
 
 function wait(milliseconds){
   return new Promise(resolve => {
       setTimeout(resolve, milliseconds);
   });
+}
+
+const onCommentDataUpdated = async () => {
+  console.log("on data updated in post view")
+  await commentListRef.value?.loadComments();
 }
 
 </script>

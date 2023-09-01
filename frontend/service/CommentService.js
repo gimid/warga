@@ -1,4 +1,4 @@
-import { ID, Account, Permission, Role } from "appwrite"
+import { ID, Account, Permission, Role, Query } from "appwrite"
 import { client, databases } from "./Backend"
 
 const account = new Account(client);
@@ -36,13 +36,37 @@ export default class CommentService {
     }
   }
 
+  async getCommentsFromPost(post_id) {
+    try {
+      let result = await databases.listDocuments(
+        process.env.FORUM_DATABASE_ID,
+        process.env.POST_COMMENTS_COLLECTION_ID,
+        [
+          Query.equal("post_id", post_id)
+        ]
+      )
+
+      console.log(result);
+
+      return result;
+    }catch(e) {
+      console.log(e);
+      throw(e);
+    }
+  }
+
   async updateComment(id, content) {
     try {
+
+      let data = {
+        content: content
+      }
+
       let result = await databases.updateDocument(
         process.env.FORUM_DATABASE_ID,
         process.env.POST_COMMENTS_COLLECTION_ID,
         id,
-        content
+        data
       );
 
       return result;
@@ -50,5 +74,5 @@ export default class CommentService {
       console.log(e);
       throw(e);
     }
-  }
+  } 
 }

@@ -12,9 +12,6 @@
         </v-row>
       </div>
       <div class="postcontainer">
-
-        
-
         <h1>{{data.title}}</h1>
         <div>
           <div v-if="writer.contact_name || writer.handle">
@@ -61,6 +58,7 @@ useHead({
 
 
 import {MdPreview, MdCatalog, config} from 'md-editor-v3';
+import { lineNumbers } from '@codemirror/view';
 import {videoplugin} from '~/libraries/markdownitvideo'
 import 'md-editor-v3/lib/style.css';
 
@@ -82,6 +80,9 @@ const parsedText = ref("");
 config({
   markdownItConfig: (mdit) => {
     mdit.use(videoplugin);
+  },
+  codeMirrorExtensions(_theme, extensions) {
+    return [...extensions, lineNumbers()];
   }
 })
 
@@ -237,7 +238,7 @@ iframe {
 
 code {
   width: 100% !important;
-  background-color: transparent !important;
+  /* background-color: transparent !important; */
 }
 
 </style>
