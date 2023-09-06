@@ -4,9 +4,7 @@
       <v-container class="page-width">
         <v-row>
           <v-col>
-            <NuxtLink to="/">
-              <img src="../assets/gimid2.png" width="150">
-            </NuxtLink>
+            <img src="../assets/gimid2.png" width="150" @click="goHome">
           </v-col>
 
           <v-spacer></v-spacer>
@@ -131,6 +129,8 @@ const profilesService = new ProfileService();
 
 const userSession = ref();
 
+const router = useRouter();
+
 const profileStore = useProfileStore();
 const { profile } = storeToRefs(profileStore);
 
@@ -143,6 +143,11 @@ onMounted(async () => {
   userSession.value = await authService.getUserSession();
   fetched.value = true;
 })
+
+const goHome = () => {
+  console.log("home");
+  router.push("/");
+}
 
 </script>
 

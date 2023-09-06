@@ -1,7 +1,9 @@
 <template>
-  <div v-for="comment in comments">
-    <div :class="currentHighlightId == comment.$id?'highlighted':''">
-      <CommentView :comment-data="comment" v-on:start-reply-called="onStartReply" @navigateReplyCalled="onNavigateReplyCalled"></CommentView>
+  <div>
+    <div v-for="comment in comments" class="w-100">
+      <div :class="currentHighlightId == comment.$id?'highlighted':''" >
+        <CommentView :comment-data="comment" v-on:start-reply-called="onStartReply" @navigateReplyCalled="onNavigateReplyCalled"></CommentView>
+      </div>
     </div>
   </div>
 

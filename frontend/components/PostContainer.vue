@@ -1,7 +1,6 @@
 <template>
   <v-sheet            
       rounded="lg"
-      style="word-wrap: break-word;"
       class="fill-height postmaincontainer"
       v-if="data"
     >
@@ -11,11 +10,17 @@
           </div>
         </v-row>
       </div>
-      <div class="postcontainer">
-        <h1>{{data.title}}</h1>
-        <div>
+      <div class="postcontainer" id="post-content">
+        <h1 class="post-title">{{data.title}}</h1>
+        <div class="writer-info">
           <div v-if="writer.contact_name || writer.handle">
-            <b>{{ writer.contact_name }}</b> - @{{ writer.handle }}
+            <div class="writer-avatar">
+  
+            </div>
+            <div>
+              <b>{{ writer.contact_name }}</b> - <NuxtLink :href="'/@'+writer.handle">@{{ writer.handle }}</NuxtLink>
+
+            </div>
           </div>
         </div>
 
@@ -33,11 +38,19 @@
         
         <div class="my-4"></div>
         
-        <SeriesContainer :seriesId="data.series_id" :currentRoute="currentRoute" :showSeries="showSeries"></SeriesContainer>
+        <ClientOnly>
+          <SeriesContainer :seriesId="data.series_id" :currentRoute="currentRoute" :showSeries="showSeries"></SeriesContainer>
+        </ClientOnly>
         
         <!-- {{ parsedText }}
         <hr/> -->
-        <MdPreview  :show-code-row-number="true" id="md-content" :modelValue="rawText" codeTheme="github" language="en-US"></MdPreview>
+        <div>
+          <MdPreview :show-code-row-number="true" id="md-content" :modelValue="rawText" codeTheme="github" language="en-US"></MdPreview>
+        </div>
+
+        <ClientOnly>
+          <SeriesContainer v-if="contentHeight > 1000" :seriesId="data.series_id" :currentRoute="currentRoute" :showSeries="showSeries"></SeriesContainer>
+        </ClientOnly>
       </div>
       
 
@@ -77,6 +90,8 @@ import { compileScript } from 'vue/compiler-sfc';
 const rawText = ref("");
 const parsedText = ref("");
 
+const contentHeight = ref(0);
+
 config({
   markdownItConfig: (mdit) => {
     mdit.use(videoplugin);
@@ -112,7 +127,28 @@ onMounted(()=>{
 
   // if (rawText.value.)
   // nodeScriptReplace(document.getElementById("md-content"));
+
+  window.addEventListener("resize", onResize);
+  updateWindowHeight();
+
+  
+
 })
+
+onUnmounted(()=>{
+  window.removeEventListener("resize", onResize);
+});
+
+const onResize = (e) => {
+  updateWindowHeight();
+}
+
+const updateWindowHeight = () => {
+  let postContent = document.getElementById('post-content');
+  if(postContent != null){
+    contentHeight.value = postContent.offsetHeight;
+  }
+}
 
 function nodeScriptReplace(node) {
   
@@ -159,10 +195,6 @@ function nodeScriptIs(node) {
 }
 
 
-code{
-  color: aliceblue;
-}
-
 code[class*="language-"], pre[class*="language-"]{  
   text-shadow: none;
 }
@@ -201,15 +233,18 @@ img{
   margin-right: 2.5em; */
 
   font-family: var(--ff-sans-serif);
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+
+  padding: 1.5em;
 }
 
 .postmaincontainer{
   padding-bottom: 1em;
-  padding-left: 1em;
-  padding-right: 1em;
+  padding-left: 2em;
+  padding-right: 2em;
   overflow: hidden;
   margin-bottom: 1.5em;
+  border: 1px #d3d3d3 solid;
 }
 
 .postimage{
@@ -233,9 +268,29 @@ iframe {
   min-width: 100%;
 }
 
-code {
-  width: 100% !important;
-  /* background-color: transparent !important; */
+.md-editor-preview{
+  font-size: 0.85em;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+}
+
+.md-editor-preview-wrapper {
+  padding: 0 0;
+}
+
+.md-content{
+  width: 100%;
+}
+
+.post-title{
+  font-size: 3rem;
+  font-weight: 800;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+.writer-info{
+  margin: 1rem 0;
+  font-size: 1rem;
 }
 
 </style>

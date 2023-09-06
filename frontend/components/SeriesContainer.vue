@@ -99,13 +99,20 @@
   border: solid var(--gim-teal) 1px;
   padding: 15px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 500px;
+  font-size: 20px;
 }
 
 .series-link{
   width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  
   list-style-type: none;
   text-decoration: none;
   color: black;
+  text-overflow: ellipsis;
 }
 
 .number-display{
@@ -135,9 +142,12 @@
   text-decoration: none;
 }
 
+.series-item{
+  margin: 5px 0px;
+}
 
 .series-item:hover{
-  font-weight: bolder;
+  font-weight: 500;
   background-color: var(--gim-teal);;
   border-radius: 5px;
 }

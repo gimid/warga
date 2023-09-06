@@ -236,7 +236,7 @@ const tokenizeVideo = (md, options) => {
       
 
       if (match && match.length > 0) {
-        return `<code data-gist-id="${match[1]}"></code>`;
+        return `<code class='gist-container' data-gist-id="${match[1]}"></code>`;
       }
 
     }

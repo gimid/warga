@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { ref } from 'vue';
 import AuthService from '~/service/AuthService';
 import ProfilesService from '~/service/ProfilesService'
+import PostsService from '~/service/PostsService';
 
 definePageMeta({
   middleware: ["loggedin"]
@@ -15,6 +16,9 @@ const profileExist = ref(true);
 const profileData = ref();
 const authService = new AuthService();
 const profilesService = new ProfilesService();
+const postService = new PostsService();
+
+const userPosts = ref();
 
 onMounted(async ()=>{
   const handle = route.params.username;
@@ -33,7 +37,9 @@ onMounted(async ()=>{
     userFetched.value = true;
     profileExist.value = false;
   }
+
   
+  userPosts.value = await postService.getPostFromUserHandle(handle);
 
 
 });
@@ -44,29 +50,43 @@ onMounted(async ()=>{
 
 <template>
 
-<div>
-
-  <UserProfileValid></UserProfileValid>
+<div class="page">
   <Header></Header>
 
-  <h1>Profile</h1>
-
-  <div v-if="userFetched">
-    <div v-if="!profileExist">
-      This page does not exist
-    </div>
+  <v-container class="page-width">
+    <v-row>
   
-    <div v-else>
-      Hello this is profile for {{ profileData.contact_name }}
-    </div>
-  </div>
+      <v-col>
+        <div v-if="userFetched">
+          <div v-if="!profileExist">
+            This page does not exist
+          </div>
+        
+          <div v-else>
+            Hello this is profile for {{ profileData.contact_name }}
+          </div>
+        </div>
 
-  <div v-else>
-    Loading...
-  </div>
+        <div v-else>
+        </div>
 
-  <Footer></Footer>
+      </v-col>
 
+    </v-row>
+    <v-row>
+      <v-col>
+        <!-- {{ userPosts }} -->
+        <ul v-for="post in userPosts">
+          <li>
+            <NuxtLink :href="'@'+profileData.handle + '/'+ post.$id ">
+              {{ post.title }}
+            </NuxtLink>
+          </li>
+        </ul>
+      </v-col>
+
+    </v-row>
+  </v-container>
 </div>
 
 

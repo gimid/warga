@@ -8,37 +8,32 @@
 
     <v-container class="page-width">
       <v-row>
-
-        <v-col cols="3">
-        </v-col>
-
-        <v-col :cols="windowWidth > 1000?6:12" v-cloak>
+    
+        <v-col :cols="windowWidth > 1000?8:12" v-cloak>
           <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
         </v-col>
 
-
-        <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
+        <v-col>
+          Info penulis
         </v-col>
+
       </v-row>
 
       <ClientOnly>
         <!-- Comments -->
         <v-row>
-          <hr/>
-        </v-row>
-        <v-row>
-          <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
+          <v-col :cols="windowWidth > 1000?8:12" >
+            <hr/>
           </v-col>
+        </v-row>
+
+        <v-row>
           <v-col rounded="lg" :cols="windowWidth > 1000?6:12">
             <CommentList ref="commentListRef" :target-post="currentPost" @start-reply-called="onStartReply"></CommentList>
           </v-col>
         </v-row>
+
         <v-row>
-          <hr/>
-        </v-row>
-        <v-row>
-          <v-col cols="3" :class="windowWidth < 600 ?'d-none':'d-md-block'">
-          </v-col>
           <v-col rounded="lg" :cols="windowWidth > 1000?6:12">
             <div v-if="currentTargetReply">
               <h1>Membalas ke :</h1>
@@ -48,6 +43,7 @@
           </v-col>
           <div id="BottomCommentEditor"></div>
         </v-row>
+
       </ClientOnly>
     </v-container>
 

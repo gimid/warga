@@ -7,7 +7,11 @@
         <v-container  class="rounded py-5" style="background-color: #fff;">
           <v-row>
             <v-col class="py-6 px-6" align-self="start">
-              <span class="font-weight-bold mr-3" v-if="userData">{{ userData.contact_name }}</span>
+              <NuxtLink v-if="userData" :href="'/@'+userData.handle">
+                <span class="font-weight-bold mr-3" v-if="userData">
+                  {{ userData.contact_name }}
+                </span>
+              </NuxtLink>
               •
               <span class="ml-3" style="color:#a1a1a1">{{ formatDate(commentModel.$updatedAt) }}</span>
   
