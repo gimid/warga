@@ -7,10 +7,13 @@
           <v-col cols="3" class="d-none d-sm-block">
           </v-col>
           <v-col :cols="windowWidth > 1000?6:12">
-            <div v-for="userPost in posts">
+            <div v-if="posts.length <= 0" v-for="i in 10">
+              <v-skeleton-loader type="article" class="mb-3"></v-skeleton-loader>
+            </div>
+            <div v-else v-for="userPost in posts">
               <PostPreview :data="userPost"></PostPreview>
             </div>
-            <div>
+            <div v-if="posts.length > 0">
               <v-btn color="var(--gim-teal)"  @click="loadMore" block>Muat lagi</v-btn>
             </div>
           </v-col>
@@ -55,13 +58,17 @@ onMounted(async () => {
 
 const loadMore = async () => {
   console.log("----more ----");
+
   console.log(lastPost.value)
-  let morePosts = await postsService.getHomepagePosts(lastPost.value.$id)
-
-
-  posts.value = posts.value.concat(morePosts);
-
-  lastPost.value = morePosts[morePosts.length-1];
+  if(lastPost.value){
+    let morePosts = await postsService.getHomepagePosts(lastPost.value.$id)
+    posts.value = posts.value.concat(morePosts);
+    lastPost.value = morePosts[morePosts.length-1];
+  }else{
+    let morePosts = await postsService.getHomepagePosts()
+    posts.value = posts.value.concat(morePosts);
+    lastPost.value = morePosts[morePosts.length-1];
+  }
 }
 
 onUnmounted(()=>{

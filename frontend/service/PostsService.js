@@ -259,24 +259,38 @@ export default class PostsService {
   async getPostFromUserHandle(userHandle) {
     try {
     
-      let profiles = await profilesService.getProfileFromHandle(userHandle);
+      // let profiles = await profilesService.getProfileFromHandle(userHandle);
 
 
-      let user_ID = profiles.$id
+      // let user_ID = profiles.$id
 
-      let result = await databases.listDocuments(
-        process.env.FORUM_DATABASE_ID,
-        process.env.POSTS_COLLECTION_ID,
-        [
-          Query.equal("user_id", [user_ID])
-        ]
-      )
+      // let result = await databases.listDocuments(
+      //   process.env.FORUM_DATABASE_ID,
+      //   process.env.POSTS_COLLECTION_ID,
+      //   [
+      //     Query.equal("user_id", [user_ID])
+      //   ]
+      // )
 
-      result.documents.map(x => x.user_handle = userHandle);
+      // result.documents.map(x => x.user_handle = userHandle);
 
-      console.log(result);
+      // console.log(result);
 
-      return result;
+
+      let axiosConfig = {
+        headers: {
+          'Content-Type' : 'application/json;charset=UTF-8'
+        }
+      }
+      
+      let result = await axios.post(
+        process.env.WARGA_ENDPOINT+'/postfrom',
+        {
+          'handle': userHandle
+        },
+        axiosConfig);
+      return result.data;
+      
     }catch(e){
       console.log(e);
       throw(e);

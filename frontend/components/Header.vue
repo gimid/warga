@@ -3,10 +3,8 @@
     <v-app-bar :elevation="2" color="black">
       <v-container class="page-width">
         <v-row>
-          <v-col>
-            <NuxtLink to="/">
-              <img src="../assets/gimid2.png" width="150">
-            </NuxtLink>
+          <v-col id="logo-top">
+            <img src="../assets/gimid6.png" height="50" width="50" @click="goHome" class="float-left">
           </v-col>
 
           <v-spacer></v-spacer>
@@ -73,14 +71,11 @@
                     Dashboard
                   </div>
                 </NuxtLink>
-                <NuxtLink v-if="userSession" to="/gallery">
+                <!-- <NuxtLink v-if="userSession" to="/gallery">
                   <div>
                     Galeri
                   </div>
-                </NuxtLink>
-
-                
-
+                </NuxtLink> -->            
                 <NuxtLink to="/admin" v-if="profileStore.profile.isAdmin">
                   <div>
                     Admin
@@ -131,6 +126,8 @@ const profilesService = new ProfileService();
 
 const userSession = ref();
 
+const router = useRouter();
+
 const profileStore = useProfileStore();
 const { profile } = storeToRefs(profileStore);
 
@@ -143,6 +140,11 @@ onMounted(async () => {
   userSession.value = await authService.getUserSession();
   fetched.value = true;
 })
+
+const goHome = () => {
+  console.log("home");
+  router.push("/");
+}
 
 </script>
 
@@ -175,5 +177,9 @@ onMounted(async () => {
   text-decoration: none;
   color: black;
   background-color: var(--gim-teal);
+}
+
+#logo-top:hover{
+  cursor: pointer;
 }
 </style>

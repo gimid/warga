@@ -13,14 +13,16 @@
           <h1>Settings</h1>
 
           <v-text-field label="nama kamu" v-model="realname"></v-text-field>
-          <v-text-field label="username" v-model="handlename" @input="checkUsernameExist" ></v-text-field>
-
+          <v-text-field label="username" v-model="handlename" @input="checkUsernameExist"></v-text-field>
+                    
           <v-alert v-if="usernameValidMessage" :text="usernameValidMessage" color="success"></v-alert>
           <v-alert v-if="usernameErrorMessage" :text="usernameErrorMessage" color="error"></v-alert>
           
+          <v-textarea rows="2" auto-grow label="status" v-model="status"></v-textarea>
+
           <!-- <v-btn v-if="!usernameValidMessage" @click="checkUsernameExist">Check username exist</v-btn> -->
 
-          <v-btn @click="setupUsername">Update profile</v-btn>
+          <v-btn @click="updateProfile">Update profile</v-btn>
         </v-col>
         <v-col cols="3" class="d-none d-sm-block">
         </v-col>
@@ -42,8 +44,11 @@ definePageMeta({
 })
 
 const router = useRouter();
+
 const realname = ref("");
 const handlename = ref("");
+const status = ref("");
+
 const usernameErrorMessage = ref("");
 const usernameValidMessage = ref("");
 const profilesService = new ProfilesService();
@@ -58,6 +63,18 @@ onMounted(async () => {
     
     realname.value = profile.contact_name;
     handlename.value = profile.handle; 
+
+
+    try{
+      let metadata = JSON.parse(profile.metadata);
+
+      if ('status' in metadata) {
+        status.value = metadata.status;
+      }
+    }catch(e){
+      console.log(e);
+    }
+
   }
 
 });
@@ -91,13 +108,18 @@ const showInvalidInfo = (msg) => {
   usernameErrorMessage.value = "Nama tidak valid"
 }
 
-const setupUsername = async (msg) => {
+const updateProfile = async (msg) => {
 
   await checkUsernameExist();
 
   if(usernameErrorMessage.value === "") {
     usernameValidMessage.value = ""
-    var profile = await profilesService.updateProfile(realname.value, handlename.value);
+
+    let metadata = {
+      "status":status.value
+    }
+
+    var profile = await profilesService.updateProfile(realname.value, handlename.value, JSON.stringify(metadata) );
 
   }
 }

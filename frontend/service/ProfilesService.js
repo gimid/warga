@@ -74,7 +74,7 @@ export default class ProfilesService {
     }
   }
 
-  async updateProfile(contact_name, handle) {
+  async updateProfile(contact_name, handle, metadata) {
     
     const authService = new AuthService();
     let currentUser = await authService.getUserSession();
@@ -87,7 +87,8 @@ export default class ProfilesService {
   
       let model = {
         contact_name: contact_name,
-        handle: handle
+        handle: handle,
+        metadata: metadata
       }
   
       let data = await databases.updateDocument(

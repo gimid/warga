@@ -37,7 +37,6 @@
 
             <v-sheet            
               rounded="lg"
-            style="word-wrap: break-word;"
               class="fill-height"
               :class="editorclass"
             >

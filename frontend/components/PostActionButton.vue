@@ -19,22 +19,26 @@ let canEdit = ref(false);
 onMounted(async ()=>{
   // check can edit
 
-  const authService = new AuthService();
-  let currentUser = await authService.getUserSession();
-
-  if(props.data.$id){
-    let ownedpost = await postService.getOwnedPostByIdDirect(props.data.$id)
+  try{
+    const authService = new AuthService();
+    let currentUser = await authService.getUserSession();
   
-    if (ownedpost != null) {
-      if (currentUser.$id == ownedpost.user_id){
-        canEdit.value = true;
+    if(props.data.$id){
+      let ownedpost = await postService.getOwnedPostByIdDirect(props.data.$id)
+    
+      if (ownedpost != null) {
+        if (currentUser.$id == ownedpost.user_id){
+          canEdit.value = true;
+        }else{
+          canEdit.value = false;
+        }
+  
       }else{
         canEdit.value = false;
       }
-
-    }else{
-      canEdit.value = false;
     }
+  }catch(e){
+    console.log(e);
   }
 
 

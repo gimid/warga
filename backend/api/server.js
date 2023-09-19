@@ -2,7 +2,6 @@
 
 require('dotenv').config();
 const express = require('express')
-const sdk = require("node-appwrite")
 const cors = require('cors');
 const bodyParser = require('body-parser')
 const axios = require('axios')
@@ -11,18 +10,9 @@ const PORT = 443
 const HOST = '0.0.0.0';
 
 
-const client = new sdk.Client();
-const database = new sdk.Databases(client);
+const profilesService = require("./service/ProfilesService")
 
-try{
-  client
-    .setEndpoint(process.env.ENDPOINT)
-    .setProject(process.env.PROJECT_ID)
-    .setKey(process.env.API_KEY)
-    .setSelfSigned(true)
-}catch(e){
-  console.log(e);
-}
+const {sdk, client, database} = require('./service/AppwriteClientConfig')
 
 //App
 const app = express();
@@ -32,6 +22,8 @@ app.use(cors({
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
+
+app.use("/postfrom", profilesService);
 
 app.get('/', (req, res) => {
   res.send('Hello world testing dong ah ' + process.env.ENDPOINT);
@@ -73,30 +65,6 @@ app.post('/home', async (req, res) => {
   for  (let i = 0; i < homepageResult.documents.length; i++) {
     let post = homepageResult.documents[i];
 
-    // try{
-    //   let post = await database.getDocument(
-    //     process.env.DATABASE_ID, 
-    //     process.env.POSTS_COLLECTION_ID, 
-    //     element.post_id);
-
-  
-    //     let previewData = {
-    //       "$id" : post.$id,
-    //       post_id: post.$id,
-    //       series_id : post.series_id,
-    //       user_id: post.user_id,
-    //       published: post.published,
-    //       tags: post.tags,
-    //       title: post.title,
-    //       cover_image: post.cover_image
-    //     }
-    
-    //     detailArr.push(previewData);    
-        
-    //     element.preview = previewData;
-    // }catch(e){
-    //   console.log(e);
-    // }
 
     let previewData = {
       "$id" : post.$id,
@@ -114,20 +82,6 @@ app.post('/home', async (req, res) => {
   };
   res.json(detailArr);
 
-  // let resultArr = [];
-  // for (let i = 0; i < homepageResult.documents.length; i++) resultArr.push({});
-
-  // for (let i = 0; i < homepageResult.documents.length; i++) {
-  //   let detailIndex = detailArr.findIndex(x => x.$id == homepageResult.documents[i].$id);
-  //   resultArr[i] = detailArr[detailIndex];
-  // }
-  
-  // let homePost = {
-  //   posts: resultArr
-  // }
-
-
-  // res.json(homePost);
 });
 
 
