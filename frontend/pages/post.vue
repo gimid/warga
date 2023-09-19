@@ -107,7 +107,10 @@ useSeoMeta({
   ogTitle: currentPost.value.title,
   description: currentPost.value.content,
   ogImage: currentPost.value.cover_image,
-  ogImageSecureUrl: currentPost.value.cover_image
+  ogImageSecureUrl: currentPost.value.cover_image,
+  ogImageType: 'image/jpeg',
+  ogImageWidth: 1200,
+  ogImageHeight: 630
 })
 
 onMounted(async () => {
