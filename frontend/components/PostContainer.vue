@@ -195,7 +195,7 @@ function nodeScriptIs(node) {
 
 
 code[class*="language-"], pre[class*="language-"]{  
-  text-shadow: none;
+  text-shadow: none !important;
 }
 
 
