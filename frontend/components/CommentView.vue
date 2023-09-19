@@ -44,13 +44,13 @@
             </v-row>
           </div>
 
-          <v-row class="mx-2 py-2 rounded" style="border: 1px solid #e0e0e0; background-color: white; font-size: 0.95em;">
+          <v-row class="mx-2 py-2 rounded" style="background-color: white; font-size: 0.95em;">
             <v-col>
               <div v-if="minimalist" class="pa-3">
                 {{ commentModel.content.substring(0,200) }}...
               </div>
               <div v-else>
-                <MdPreview :show-code-row-number="true" class="md-content" :modelValue="commentModel.content" codeTheme="github" language="en-US"></MdPreview>
+                <MdPreview :show-code-row-number="true" class="md-content comment-content" :modelValue="commentModel.content" codeTheme="github" language="en-US"></MdPreview>
               </div>
             </v-col>
           </v-row>
@@ -215,6 +215,10 @@ const navigateReply = (replyId) => {
 }
 
 .md-content{
-  width: 100% !important;
+  width: 100% !important; 
+}
+
+.comment-content {
+  font-size: 1.2em;
 }
 </style>

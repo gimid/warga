@@ -13,8 +13,19 @@
           <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
         </v-col>
 
-        <v-col>
-          Info penulis
+        <v-col style="max-width: 400px; overflow-wrap: break-word; word-break: keep-all;">
+          <ClientOnly>
+            <div class="writer-card" v-if="writerInfo">
+              <div class="mb-3">
+                <span v-if="writerInfo.contact_name" class="text-h5 writer-card-title">{{ writerInfo.contact_name }}</span>
+                <span v-if="writerInfo.handle" class="text-h5 writer-card-title">(@{{ writerInfo.handle }})</span>
+
+              </div>
+              <div v-if="writerMetadata">
+                <span>{{ writerMetadata.status }}</span>
+              </div>
+            </div>
+          </ClientOnly>
         </v-col>
 
       </v-row>
@@ -33,7 +44,7 @@
           </v-col>
         </v-row>
 
-        <v-row>
+        <v-row v-if="currentUser">
           <v-col rounded="lg" :cols="windowWidth > 1000?6:12">
             <div v-if="currentTargetReply">
               <h1>Membalas ke :</h1>
@@ -46,8 +57,6 @@
 
       </ClientOnly>
     </v-container>
-
-
     
     <Footer></Footer>
 
@@ -64,7 +73,7 @@
 import {useRoute} from 'vue-router'
 import { storeToRefs } from 'pinia';
 
-
+import AuthService from '~/service/AuthService';
 import PostsService from '~/service/PostsService';
 import ProfilesService from '~/service/ProfilesService';
 
@@ -88,12 +97,27 @@ const commentListRef = ref();
 
 const currentTargetReply = ref(null);
 
-onMounted(() => {
+const currentUser = ref();
+
+const writerInfo = ref();
+const writerMetadata = ref();
+
+useSeoMeta({
+  title: currentPost.value.title,
+  ogTitle: currentPost.value.title,
+  description: currentPost.value.content,
+  ogImage: currentPost.value.cover_image
+})
+
+onMounted(async () => {
   window.addEventListener("resize", onResize);
   resizeEditorToWindow();
 
   var elements = document.getElementsByTagName("pre");
   console.log(elements);
+
+  checkLoggedIn();
+  fetchWriterInfo();
 });
 
 onUnmounted(()=>{
@@ -137,6 +161,28 @@ const onCancelComment = () => {
   currentTargetReply.value = null;
 }
 
+const checkLoggedIn = async() => {
+
+  try{
+    const authService = new AuthService();
+    currentUser.value = await authService.getUserSession();
+  }catch(e){
+    currentUser.value = null;
+    console.log(e);
+  }
+  
+}
+
+const fetchWriterInfo = async() => {
+  let profile = await profileService.getProfileFromHandle(route.params.username);
+  writerInfo.value = profile;
+  try{
+    writerMetadata.value = JSON.parse(profile.metadata);
+  }catch(e){
+    console.log(e);
+  }
+}
+
 </script>
 
 <style>
@@ -147,5 +193,19 @@ const onCancelComment = () => {
 }
 
 [v-cloak] { display: none; }
+
+
+.writer-card{
+  background-color: #fff;
+  min-height: 150px;
+  border-radius: 8px;
+  border: 1px #d3d3d3 solid;
+  padding: 2rem;
+}
+
+.writer-card-title{
+  font-weight: bold;
+  font-family: var(--ff-sans-serif) !important;
+}
 
 </style>

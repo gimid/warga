@@ -18,8 +18,7 @@
   
             </div>
             <div>
-              <b>{{ writer.contact_name }}</b> - <NuxtLink :href="'/@'+writer.handle">@{{ writer.handle }}</NuxtLink>
-
+                <NuxtLink class="writer-link" :href="'/@'+writer.handle"> <b>{{ writer.contact_name }}</b> @{{ writer.handle }}</NuxtLink>
             </div>
           </div>
         </div>
@@ -283,14 +282,19 @@ iframe {
 }
 
 .post-title{
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 800;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--ff-sans-serif);
 }
 
 .writer-info{
   margin: 1rem 0;
   font-size: 1rem;
+}
+
+.writer-link{
+  text-decoration: none;
+  color: #000;
 }
 
 </style>
