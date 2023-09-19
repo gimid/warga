@@ -72,6 +72,7 @@ useHead({
 import {MdPreview, MdCatalog, config} from 'md-editor-v3';
 import { lineNumbers } from '@codemirror/view';
 import {videoplugin} from '~/libraries/markdownitvideo'
+import lazy_loading from "markdown-it-image-lazy-loading"
 import 'md-editor-v3/lib/style.css';
 
 
@@ -94,6 +95,23 @@ const contentHeight = ref(0);
 config({
   markdownItConfig: (mdit) => {
     mdit.use(videoplugin);
+    mdit.use(lazy_loading);
+  },
+  markdownItPlugins(plugins) {
+      return plugins.map((p) => {
+        console.log(p);
+        if (p.type === 'image') {
+          return {
+            ...p,
+            options:{
+              ...p.options,
+              classes: 'my-class'
+            }
+          };
+        }
+
+        return p;
+      })
   }
 })
 
@@ -189,16 +207,9 @@ function nodeScriptIs(node) {
 
 <style>
 
-:root{
-
-}
-
-
 code[class*="language-"], pre[class*="language-"]{  
   text-shadow: none !important;
 }
-
-
 
 .clearfix::after {
   content: "";

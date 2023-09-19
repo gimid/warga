@@ -8,6 +8,16 @@ export default defineNuxtConfig({
   //   debug: process.env.NODE_ENV === 'development',
   //   mode: 'init'
   // },  
+  app: {
+    head: {
+      link:[
+        {rel: 'stylesheet', type: 'text/css', href:"https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css"},
+        {rel: 'preconnect', href: JSON.stringify(process.env.APPWRITE_ENDPOINT)},
+        {rel: 'preconnect', href: JSON.stringify(process.env.WARGA_ENDPOINT)},
+        {rel: 'preconnect', href:"https://cdnjs.cloudflare.com"},
+      ],
+    }
+  },
   plugins: [
     {src: '~/plugins/iframe-resize', mode: 'client'}
   ],
@@ -22,7 +32,7 @@ export default defineNuxtConfig({
     dirs: ['stores']
   },
   css: ['vuetify/lib/styles/main.sass',
-        '@mdi/font/css/materialdesignicons.min.css',
+        // '@mdi/font/css/materialdesignicons.min.css',
         'prismjs/themes/prism.css',
         'prismjs/themes/prism-tomorrow.css'],        
   build: {
