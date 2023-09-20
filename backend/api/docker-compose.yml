@@ -14,5 +14,5 @@ services:
 
 networks:
   gateway:
-    name: npm_gateway
+    name: gateway
     external: true
