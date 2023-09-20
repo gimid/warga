@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       link:[
-        {rel: 'stylesheet', type: 'text/css', href:"https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css"},
+        {rel: 'preload', type: 'text/css', href:"https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css", },
         {rel: 'preconnect', href: JSON.stringify(process.env.APPWRITE_ENDPOINT)},
         {rel: 'preconnect', href: JSON.stringify(process.env.WARGA_ENDPOINT)},
         {rel: 'preconnect', href:"https://cdnjs.cloudflare.com"},
