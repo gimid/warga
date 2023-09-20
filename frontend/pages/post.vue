@@ -105,12 +105,17 @@ const writerMetadata = ref();
 useSeoMeta({
   title: currentPost.value.title,
   ogTitle: currentPost.value.title,
-  description: currentPost.value.content,
+  description: currentPost.value.content.substring(0, 255),
   ogImage: currentPost.value.cover_image,
   ogImageSecureUrl: currentPost.value.cover_image,
   ogImageType: 'image/jpeg',
   ogImageWidth: 1200,
-  ogImageHeight: 630
+  ogImageHeight: 630,
+  twitterCard: 'summary_large_image',
+  twitterSite: '@gimiddev',
+  twitterTitle: currentPost.value.title,
+  twitterDescription: currentPost.value.content.substring(0, 255),
+  twitterImage: currentPost.value.cover_image
 })
 
 onMounted(async () => {
