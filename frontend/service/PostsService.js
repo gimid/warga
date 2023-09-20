@@ -243,7 +243,8 @@ export default class PostsService {
         process.env.FORUM_DATABASE_ID,
         process.env.POSTS_COLLECTION_ID,
         [
-          Query.equal("user_id", user_ID)
+          Query.equal("user_id", user_ID),
+          Query.orderDesc("$updatedAt")
         ]
       )
 

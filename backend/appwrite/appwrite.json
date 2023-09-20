@@ -1,496 +1,496 @@
 {
-    "projectId": "6494dc2f01d8060d6659",
+    "projectId": "650a5fd39128065af739",
     "projectName": "gimidpro",
     "collections": [
-      {
-        "$id": "6494dc6d6766324c8a17",
-        "$createdAt": "2023-06-22T23:42:37.423+00:00",
-        "$updatedAt": "2023-08-05T12:58:07.390+00:00",
-        "$permissions": [
-          "create(\"team:649e0dff0f414e2137d2\")",
-          "read(\"team:649e0dff0f414e2137d2\")",
-          "update(\"team:649e0dff0f414e2137d2\")",
-          "delete(\"team:649e0dff0f414e2137d2\")",
-          "create(\"users\")"
-        ],
-        "databaseId": "6494dc5cbc7dee15d89c",
-        "name": "posts",
-        "enabled": true,
-        "documentSecurity": true,
-        "attributes": [
-          {
-            "key": "content",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 1073741824,
-            "default": null
-          },
-          {
-            "key": "title",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 500,
-            "default": null
-          },
-          {
-            "key": "tags",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": true,
-            "size": 50,
-            "default": null
-          },
-          {
-            "key": "preview_key",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "size": 500,
-            "default": null
-          },
-          {
-            "key": "published",
-            "type": "boolean",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "default": false
-          },
-          {
-            "key": "slug",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "size": 255,
-            "default": null
-          },
-          {
-            "key": "user_id",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 255,
-            "default": null
-          },
-          {
-            "key": "cover_image",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "size": 500,
-            "default": null
-          },
-          {
-            "key": "timestamp",
-            "type": "datetime",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "format": "",
-            "default": null
-          },
-          {
-            "key": "series_id",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "size": 255,
-            "default": null
-          }
-        ],
-        "indexes": [
-          {
-            "key": "user_id",
-            "type": "key",
-            "status": "available",
-            "attributes": [
-              "user_id"
+        {
+            "$id": "6494dc6d6766324c8a17",
+            "$createdAt": "2023-06-22T23:42:37.423+00:00",
+            "$updatedAt": "2023-08-05T12:58:07.390+00:00",
+            "$permissions": [
+                "create(\"team:649e0dff0f414e2137d2\")",
+                "read(\"team:649e0dff0f414e2137d2\")",
+                "update(\"team:649e0dff0f414e2137d2\")",
+                "delete(\"team:649e0dff0f414e2137d2\")",
+                "create(\"users\")"
             ],
-            "orders": [
-              "ASC"
-            ]
-          },
-          {
-            "key": "series_id",
-            "type": "key",
-            "status": "available",
+            "databaseId": "6494dc5cbc7dee15d89c",
+            "name": "posts",
+            "enabled": true,
+            "documentSecurity": true,
             "attributes": [
-              "series_id"
+                {
+                    "key": "content",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 1073741824,
+                    "default": null
+                },
+                {
+                    "key": "title",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 500,
+                    "default": null
+                },
+                {
+                    "key": "tags",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": true,
+                    "size": 50,
+                    "default": null
+                },
+                {
+                    "key": "preview_key",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 500,
+                    "default": null
+                },
+                {
+                    "key": "published",
+                    "type": "boolean",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "default": false
+                },
+                {
+                    "key": "slug",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 255,
+                    "default": null
+                },
+                {
+                    "key": "user_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 255,
+                    "default": null
+                },
+                {
+                    "key": "cover_image",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 500,
+                    "default": null
+                },
+                {
+                    "key": "timestamp",
+                    "type": "datetime",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                },
+                {
+                    "key": "series_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 255,
+                    "default": null
+                }
             ],
-            "orders": [
-              "ASC"
+            "indexes": [
+                {
+                    "key": "user_id",
+                    "type": "key",
+                    "status": "available",
+                    "attributes": [
+                        "user_id"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "series_id",
+                    "type": "key",
+                    "status": "available",
+                    "attributes": [
+                        "series_id"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "post_content",
+                    "type": "fulltext",
+                    "status": "available",
+                    "attributes": [
+                        "content"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "post_title",
+                    "type": "fulltext",
+                    "status": "available",
+                    "attributes": [
+                        "title"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                }
             ]
-          },
-          {
-            "key": "post_content",
-            "type": "fulltext",
-            "status": "available",
+        },
+        {
+            "$id": "6494deeda92bdecec271",
+            "$createdAt": "2023-06-22T23:53:17.693+00:00",
+            "$updatedAt": "2023-06-22T23:53:17.693+00:00",
+            "$permissions": [],
+            "databaseId": "6494dc5cbc7dee15d89c",
+            "name": "post_reactions",
+            "enabled": true,
+            "documentSecurity": false,
             "attributes": [
-              "content"
+                {
+                    "key": "post_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 500,
+                    "default": null
+                },
+                {
+                    "key": "reaction_type",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 500,
+                    "default": null
+                },
+                {
+                    "key": "user_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 500,
+                    "default": null
+                }
             ],
-            "orders": [
-              "ASC"
-            ]
-          },
-          {
-            "key": "post_title",
-            "type": "fulltext",
-            "status": "available",
+            "indexes": []
+        },
+        {
+            "$id": "649c05b5eccd329551f7",
+            "$createdAt": "2023-06-28T10:04:37.971+00:00",
+            "$updatedAt": "2023-06-28T10:18:59.821+00:00",
+            "$permissions": [
+                "read(\"any\")"
+            ],
+            "databaseId": "6494dc5cbc7dee15d89c",
+            "name": "config",
+            "enabled": true,
+            "documentSecurity": false,
             "attributes": [
-              "title"
+                {
+                    "key": "key",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 250,
+                    "default": null
+                },
+                {
+                    "key": "news",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 10000,
+                    "default": null
+                }
             ],
-            "orders": [
-              "ASC"
+            "indexes": [
+                {
+                    "key": "index_key",
+                    "type": "key",
+                    "status": "available",
+                    "attributes": [
+                        "key"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                }
             ]
-          }
-        ]
-      },
-      {
-        "$id": "6494deeda92bdecec271",
-        "$createdAt": "2023-06-22T23:53:17.693+00:00",
-        "$updatedAt": "2023-06-22T23:53:17.693+00:00",
-        "$permissions": [],
-        "databaseId": "6494dc5cbc7dee15d89c",
-        "name": "post_reactions",
-        "enabled": true,
-        "documentSecurity": false,
-        "attributes": [
-          {
-            "key": "post_id",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 500,
-            "default": null
-          },
-          {
-            "key": "reaction_type",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 500,
-            "default": null
-          },
-          {
-            "key": "user_id",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "size": 500,
-            "default": null
-          }
-        ],
-        "indexes": []
-      },
-      {
-        "$id": "649c05b5eccd329551f7",
-        "$createdAt": "2023-06-28T10:04:37.971+00:00",
-        "$updatedAt": "2023-06-28T10:18:59.821+00:00",
-        "$permissions": [
-          "read(\"any\")"
-        ],
-        "databaseId": "6494dc5cbc7dee15d89c",
-        "name": "config",
-        "enabled": true,
-        "documentSecurity": false,
-        "attributes": [
-          {
-            "key": "key",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "size": 250,
-            "default": null
-          },
-          {
-            "key": "news",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "size": 10000,
-            "default": null
-          }
-        ],
-        "indexes": [
-          {
-            "key": "index_key",
-            "type": "key",
-            "status": "available",
+        },
+        {
+            "$id": "649e0fc5d9d6155b223c",
+            "$createdAt": "2023-06-29T23:12:05.892+00:00",
+            "$updatedAt": "2023-08-05T20:04:23.269+00:00",
+            "$permissions": [
+                "read(\"any\")",
+                "create(\"users\")",
+                "create(\"team:649e0dff0f414e2137d2\")",
+                "read(\"team:649e0dff0f414e2137d2\")",
+                "update(\"team:649e0dff0f414e2137d2\")",
+                "delete(\"team:649e0dff0f414e2137d2\")"
+            ],
+            "databaseId": "6494dc5cbc7dee15d89c",
+            "name": "profiles",
+            "enabled": true,
+            "documentSecurity": true,
             "attributes": [
-              "key"
+                {
+                    "key": "contact_name",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 255,
+                    "default": null
+                },
+                {
+                    "key": "handle",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 255,
+                    "default": null
+                },
+                {
+                    "key": "metadata",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 10000,
+                    "default": null
+                }
             ],
-            "orders": [
-              "ASC"
+            "indexes": [
+                {
+                    "key": "index_handle",
+                    "type": "key",
+                    "status": "available",
+                    "attributes": [
+                        "handle"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "index_handle_unique",
+                    "type": "unique",
+                    "status": "available",
+                    "attributes": [
+                        "handle"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                }
             ]
-          }
-        ]
-      },
-      {
-        "$id": "649e0fc5d9d6155b223c",
-        "$createdAt": "2023-06-29T23:12:05.892+00:00",
-        "$updatedAt": "2023-08-05T20:04:23.269+00:00",
-        "$permissions": [
-          "read(\"any\")",
-          "create(\"users\")",
-          "create(\"team:649e0dff0f414e2137d2\")",
-          "read(\"team:649e0dff0f414e2137d2\")",
-          "update(\"team:649e0dff0f414e2137d2\")",
-          "delete(\"team:649e0dff0f414e2137d2\")"
-        ],
-        "databaseId": "6494dc5cbc7dee15d89c",
-        "name": "profiles",
-        "enabled": true,
-        "documentSecurity": true,
-        "attributes": [
-          {
-            "key": "contact_name",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 255,
-            "default": null
-          },
-          {
-            "key": "handle",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 255,
-            "default": null
-          },
-          {
-            "key": "metadata",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "size": 10000,
-            "default": null
-          }
-        ],
-        "indexes": [
-          {
-            "key": "index_handle",
-            "type": "key",
-            "status": "available",
+        },
+        {
+            "$id": "64a66d7f457c62ee0fef",
+            "$createdAt": "2023-07-06T07:30:07.285+00:00",
+            "$updatedAt": "2023-07-06T07:30:07.285+00:00",
+            "$permissions": [],
+            "databaseId": "6494dc5cbc7dee15d89c",
+            "name": "post_comments",
+            "enabled": true,
+            "documentSecurity": false,
             "attributes": [
-              "handle"
+                {
+                    "key": "comments_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 255,
+                    "default": null
+                },
+                {
+                    "key": "user_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 255,
+                    "default": null
+                },
+                {
+                    "key": "post_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 255,
+                    "default": null
+                },
+                {
+                    "key": "parent_comment_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 255,
+                    "default": null
+                }
             ],
-            "orders": [
-              "ASC"
-            ]
-          },
-          {
-            "key": "index_handle_unique",
-            "type": "unique",
-            "status": "available",
+            "indexes": []
+        },
+        {
+            "$id": "64ac045c47559db7936c",
+            "$createdAt": "2023-07-10T13:15:08.292+00:00",
+            "$updatedAt": "2023-07-10T13:15:08.292+00:00",
+            "$permissions": [],
+            "databaseId": "6494dc5cbc7dee15d89c",
+            "name": "comments",
+            "enabled": true,
+            "documentSecurity": false,
             "attributes": [
-              "handle"
+                {
+                    "key": "content",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 10000,
+                    "default": null
+                }
             ],
-            "orders": [
-              "ASC"
-            ]
-          }
-        ]
-      },
-      {
-        "$id": "64a66d7f457c62ee0fef",
-        "$createdAt": "2023-07-06T07:30:07.285+00:00",
-        "$updatedAt": "2023-07-06T07:30:07.285+00:00",
-        "$permissions": [],
-        "databaseId": "6494dc5cbc7dee15d89c",
-        "name": "post_comments",
-        "enabled": true,
-        "documentSecurity": false,
-        "attributes": [
-          {
-            "key": "comments_id",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 255,
-            "default": null
-          },
-          {
-            "key": "user_id",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 255,
-            "default": null
-          },
-          {
-            "key": "post_id",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 255,
-            "default": null
-          },
-          {
-            "key": "parent_comment_id",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": false,
-            "size": 255,
-            "default": null
-          }
-        ],
-        "indexes": []
-      },
-      {
-        "$id": "64ac045c47559db7936c",
-        "$createdAt": "2023-07-10T13:15:08.292+00:00",
-        "$updatedAt": "2023-07-10T13:15:08.292+00:00",
-        "$permissions": [],
-        "databaseId": "6494dc5cbc7dee15d89c",
-        "name": "comments",
-        "enabled": true,
-        "documentSecurity": false,
-        "attributes": [
-          {
-            "key": "content",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 10000,
-            "default": null
-          }
-        ],
-        "indexes": []
-      },
-      {
-        "$id": "64ad66fb6d3c2bc10084",
-        "$createdAt": "2023-07-11T14:28:11.447+00:00",
-        "$updatedAt": "2023-08-08T09:27:11.376+00:00",
-        "$permissions": [
-          "read(\"any\")",
-          "create(\"users\")",
-          "read(\"users\")"
-        ],
-        "databaseId": "6494dc5cbc7dee15d89c",
-        "name": "series",
-        "enabled": true,
-        "documentSecurity": false,
-        "attributes": [
-          {
-            "key": "title",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 500,
-            "default": null
-          },
-          {
-            "key": "user_id",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 500,
-            "default": null
-          },
-          {
-            "key": "post_ids",
-            "type": "string",
-            "status": "available",
-            "required": false,
-            "array": true,
-            "size": 500,
-            "default": null
-          }
-        ],
-        "indexes": []
-      },
-      {
-        "$id": "64bcea43e8f9945600ef",
-        "$createdAt": "2023-07-23T08:52:19.954+00:00",
-        "$updatedAt": "2023-08-04T12:10:05.557+00:00",
-        "$permissions": [
-          "create(\"team:649e0dff0f414e2137d2\")",
-          "read(\"team:649e0dff0f414e2137d2\")",
-          "update(\"team:649e0dff0f414e2137d2\")",
-          "delete(\"team:649e0dff0f414e2137d2\")",
-          "read(\"guests\")",
-          "create(\"users\")",
-          "update(\"users\")",
-          "read(\"any\")"
-        ],
-        "databaseId": "6494dc5cbc7dee15d89c",
-        "name": "post_homepage",
-        "enabled": true,
-        "documentSecurity": false,
-        "attributes": [
-          {
-            "key": "post_id",
-            "type": "string",
-            "status": "available",
-            "required": true,
-            "array": false,
-            "size": 500,
-            "default": null
-          }
-        ],
-        "indexes": [
-          {
-            "key": "index_postId",
-            "type": "unique",
-            "status": "available",
+            "indexes": []
+        },
+        {
+            "$id": "64ad66fb6d3c2bc10084",
+            "$createdAt": "2023-07-11T14:28:11.447+00:00",
+            "$updatedAt": "2023-08-08T09:27:11.376+00:00",
+            "$permissions": [
+                "read(\"any\")",
+                "create(\"users\")",
+                "read(\"users\")"
+            ],
+            "databaseId": "6494dc5cbc7dee15d89c",
+            "name": "series",
+            "enabled": true,
+            "documentSecurity": false,
             "attributes": [
-              "post_id"
+                {
+                    "key": "title",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 500,
+                    "default": null
+                },
+                {
+                    "key": "user_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 500,
+                    "default": null
+                },
+                {
+                    "key": "post_ids",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": true,
+                    "size": 500,
+                    "default": null
+                }
             ],
-            "orders": [
-              "ASC"
+            "indexes": []
+        },
+        {
+            "$id": "64bcea43e8f9945600ef",
+            "$createdAt": "2023-07-23T08:52:19.954+00:00",
+            "$updatedAt": "2023-08-04T12:10:05.557+00:00",
+            "$permissions": [
+                "create(\"team:649e0dff0f414e2137d2\")",
+                "read(\"team:649e0dff0f414e2137d2\")",
+                "update(\"team:649e0dff0f414e2137d2\")",
+                "delete(\"team:649e0dff0f414e2137d2\")",
+                "read(\"guests\")",
+                "create(\"users\")",
+                "update(\"users\")",
+                "read(\"any\")"
+            ],
+            "databaseId": "6494dc5cbc7dee15d89c",
+            "name": "post_homepage",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "post_id",
+                    "type": "string",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "size": 500,
+                    "default": null
+                }
+            ],
+            "indexes": [
+                {
+                    "key": "index_postId",
+                    "type": "unique",
+                    "status": "available",
+                    "attributes": [
+                        "post_id"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                }
             ]
-          }
-        ]
-      }
-  ],
-  "buckets": [
-    {
-      "$id": "649d956cf2a0a0da9d9f",
-      "$createdAt": "2023-06-29T14:30:04.994+00:00",
-      "$updatedAt": "2023-08-01T10:39:02.858+00:00",
-      "$permissions": [
-        "read(\"guests\")",
-        "create(\"users\")"
-      ],
-      "fileSecurity": true,
-      "name": "images",
-      "enabled": true,
-      "maximumFileSize": 5242880,
-      "allowedFileExtensions": [
-        "jpg",
-        "png",
-        "gif",
-        "jpeg"
-      ],
-      "compression": "none",
-      "encryption": true,
-      "antivirus": true
-    }
-  ]
+        }
+    ],
+    "buckets": [
+        {
+            "$id": "649d956cf2a0a0da9d9f",
+            "$createdAt": "2023-06-29T14:30:04.994+00:00",
+            "$updatedAt": "2023-08-01T10:39:02.858+00:00",
+            "$permissions": [
+                "read(\"guests\")",
+                "create(\"users\")"
+            ],
+            "fileSecurity": true,
+            "name": "images",
+            "enabled": true,
+            "maximumFileSize": 5242880,
+            "allowedFileExtensions": [
+                "jpg",
+                "png",
+                "gif",
+                "jpeg"
+            ],
+            "compression": "none",
+            "encryption": true,
+            "antivirus": true
+        }
+    ]
 }
