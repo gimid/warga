@@ -78,3 +78,7 @@ table tr td {
 .gist-container{
   width: 100%;
 }
+
+.default-theme code, .default-theme pre{
+  font-size: 18px !important;
+}
