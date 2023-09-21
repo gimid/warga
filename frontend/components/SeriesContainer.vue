@@ -6,7 +6,7 @@
       <div class="series-item-container">
         <div class="series-item" v-for="post in seriesModel.posts">
           <div v-if="hide">
-            <NuxtLink :href="post.full_url" v-if="post.i == 1 || post.i == seriesModel.posts.length">
+            <NuxtLink :href="post.relative_url" v-if="post.i == 1 || post.i == seriesModel.posts.length">
               <div class="series-link">              
                 <div class="number-container">
                   <div class="number-display" :class="currentRoute.path== post.url?'selected':'normal'"><span>{{ post.i }}</span></div> 
@@ -26,7 +26,7 @@
             </div>     
           </div>
           <div v-else>
-            <NuxtLink :href="post.full_url">
+            <NuxtLink :href="post.relative_url">
               <div class="series-link">
                 
                 <div class="number-container">
@@ -80,7 +80,8 @@
     let i = 1;
     if (seriesInfo.posts){
       seriesInfo.posts = seriesInfo.posts.map ( x =>{
-        x.full_url = process.env.WEBSITE_URL + x.url
+        x.full_url = process.env.WEBSITE_URL + x.url;
+        x.relative_url = x.url;
         x.i = i++;
         return x;
       } );

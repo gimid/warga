@@ -17,7 +17,7 @@ const {sdk, client, database} = require('./service/AppwriteClientConfig')
 //App
 const app = express();
 app.use(cors({
-  origin: [process.env.CLIENT_ENDPOINT]
+  origin: [process.env.CLIENT_ENDPOINT, process.env.DEBUG_CLIENT_ENDPOINT]
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

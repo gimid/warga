@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-app-bar :elevation="2" color="black">
+    <v-app-bar :elevation="2" color="black" >
       <v-container class="page-width">
         <v-row>
           <v-col id="logo-top">

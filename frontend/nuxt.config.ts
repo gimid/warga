@@ -64,7 +64,7 @@ export default defineNuxtConfig({
   routeRules: {
     '/*': {cors: true},
     '/@*': {ssr: true},
-    '/@*/*': {ssr: true},
+    '/@*/*': {isr: true},
     '/@*/*/edit': {ssr: false},
     '/new': {ssr: false},
     '/onboard': {ssr: false},
