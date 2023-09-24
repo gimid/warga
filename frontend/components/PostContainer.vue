@@ -243,15 +243,13 @@ img{
   margin-right: 2.5em; */
 
   font-family: var(--ff-sans-serif);
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 
-  padding: 1.5em;
+  padding: 0.75em;
 }
 
 .postmaincontainer{
   padding-bottom: 1em;
-  padding-left: 2em;
-  padding-right: 2em;
   overflow: hidden;
   margin-bottom: 1.5em;
   border: 1px #d3d3d3 solid;

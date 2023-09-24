@@ -8,8 +8,6 @@
     <v-container fill-height fluid >
       <v-row>
         <v-col
-        offset="4"
-        cols="4"
           class="text-center"
           >
           Selamat datang di Gimid.dev!

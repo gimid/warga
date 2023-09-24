@@ -22,7 +22,7 @@
               </span>
             </v-col>
             <v-col align-self="end" cols="1"  v-if="!minimalist">
-              <v-menu>
+              <v-menu v-if="isUserComment">
                 <template v-slot:activator="{ props }">
                   <v-btn icon="mdi-dots-vertical" v-bind="props" variant="text"></v-btn>
                 </template>
@@ -103,6 +103,7 @@ const commentEditorRef = ref();
 const editTextModel = ref("")
 const commentModel = ref();
 const isUserComment = ref(false);
+const router = useRouter();
 
 const emits = defineEmits(['startReplyCalled','navigateReplyCalled'])
 
@@ -187,10 +188,20 @@ const onDataUpdated = async (x) => {
   GistEmbed.init();
 }
 
-const startReply = () =>{
-  console.log("start reply to:")
-  console.log(commentModel.value);
-  emits('startReplyCalled', commentModel.value);
+const startReply = async () =>{
+  let currentUser = await authService.getUserSession();
+
+  if (currentUser) {
+    console.log("start reply to:")
+    console.log(commentModel.value);
+    emits('startReplyCalled', commentModel.value);
+  }else{
+    router.push("/enter");
+  }
+
+
+
+  
 }
 
 const navigateReply = (replyId) => {

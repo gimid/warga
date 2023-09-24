@@ -13,7 +13,7 @@
           <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
         </v-col>
 
-        <v-col style="max-width: 400px; overflow-wrap: break-word; word-break: keep-all;">
+        <v-col style="overflow-wrap: break-word; word-break: keep-all;"  :cols="windowWidth > 1000?4:12">
           <ClientOnly>
             <div class="writer-card" v-if="writerInfo">
               <div class="mb-3">
@@ -105,7 +105,7 @@ const writerMetadata = ref();
 useSeoMeta({
   title: currentPost.value.title,
   ogTitle: currentPost.value.title,
-  description: currentPost.value.content.substring(0, 255),
+  description: currentPost.value.content?currentPost.value.content.substring(0, 255):"",
   ogImage: currentPost.value.cover_image,
   ogImageSecureUrl: currentPost.value.cover_image,
   ogImageType: 'image/jpeg',
@@ -114,7 +114,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterSite: '@gimiddev',
   twitterTitle: currentPost.value.title,
-  twitterDescription: currentPost.value.content.substring(0, 255),
+  twitterDescription: currentPost.value.content?currentPost.value.content.substring(0, 255):"",
   twitterImage: currentPost.value.cover_image
 })
 
@@ -201,7 +201,7 @@ const fetchWriterInfo = async() => {
   border-radius: 5px;
 }
 
-[v-cloak] { display: none; }
+
 
 
 .writer-card{
