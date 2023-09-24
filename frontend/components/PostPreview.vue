@@ -2,7 +2,7 @@
   <div>
 
     <NuxtLink class="post-link" :href="link">
-      <v-card class="link-card my-2 mx-2 px-10 py-2 post-preview-container">
+      <v-card class="link-card my-2 px-10 py-2 post-preview-container">
         <div v-if="isFetching">
             <v-progress-circular
             indeterminate
