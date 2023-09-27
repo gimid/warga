@@ -37,6 +37,7 @@
     "@nuxt/devtools": "latest",
     "@types/node": "^18",
     "nuxt": "^3.6.1",
-    "nuxt-delay-hydration": "^1.2.1"
+    "nuxt-delay-hydration": "^1.2.1",
+    "nuxt-svgo": "^3.5.4"
   }
 }
