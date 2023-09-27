@@ -12,7 +12,7 @@
     </v-container>
   </div>
 
-  <div v-if="!isCommenting" id="pre-comment-editor-container" class="pa-2 comment-container">
+  <div v-if="!isCommenting && !isImmediateEditMode" id="pre-comment-editor-container" class="pa-2 comment-container">
     <div style="outline: solid 1px #e0e0e0; height: 80px;" class="pa-3 text-black rounded" @click="startEditComment">
       Gabung diskusi...
     </div>
@@ -88,8 +88,8 @@ const isEditMode = ref(true);
 const isUploading = ref(false);
 const editorRef = ref();
 
-const props = defineProps(['previousCommentData', 'editTextModel','targetPost', 'targetCommentParentId','isEditPreviousCommentMode']);
-const emits = defineEmits(['update:editTextModelValue', 'cancelEdit', 'onDataUpdated' ])
+const props = defineProps(['previousCommentData', 'editTextModel','targetPost', 'targetCommentParentId','isEditPreviousCommentMode', 'isImmediateEditMode']);
+const emits = defineEmits(['update:editTextModelValue', 'cancelEdit', 'onDataUpdated', 'onNewCommentPosted' ])
 
 onMounted(() => {
   window.addEventListener("resize", onResize);
@@ -130,16 +130,17 @@ const showEditMode = async () => {
 
 const startEditComment = async () => {
   editText.value = props.editTextModel;
-  isCommenting.value = true;
   await wait(100);
+  isCommenting.value = true;
   editorRef.value?.focus();
 }
 
 const startNewComment = async () => {
   editText.value = "";
-  isCommenting.value = true;
   await wait(100);
+  isCommenting.value = true;
   editorRef.value?.focus();
+  console.log("startNewComment invoked");
 }
 
 function wait(milliseconds){
@@ -163,6 +164,8 @@ const postComment = async () => {
     onDataUpdated(result);
   }
 
+  onNewCommentPosted();
+
   editText.value = "";
   isCommenting.value = false;
 
@@ -182,6 +185,10 @@ const onDataUpdated = async (result) => {
   emits('onDataUpdated', result);
   await wait(100)
   GistEmbed.init();
+}
+
+const onNewCommentPosted = async () => {
+  emits('onNewCommentPosted');
 }
 
 const deleteComment = async () => {
