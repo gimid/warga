@@ -174,7 +174,7 @@
           </template>
         </v-btn>
 
-        <v-btn @click="seriesoverlay = !seriesoverlay">
+        <v-btn @click="showSettings">
           PENGATURAN
           <template v-slot:prepend>
             <v-icon icon="mdi-nut"></v-icon>
@@ -799,6 +799,12 @@ const onUploading = (x) => {
 
 const onUploadError = (x) => {
   uploadErrorMessage.value = x;
+}
+
+const showSettings = () => {
+  seriesoverlay.value = !seriesoverlay.value;
+
+  fetchUserSeries();
 }
 
 </script>

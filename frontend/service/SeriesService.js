@@ -137,7 +137,7 @@ export default class SeriesService {
   }
 
   async getUserSeries() {
-
+    console.log("GET USER SERIES");
     try{
 
       let currentUser = await account.get();
@@ -151,6 +151,7 @@ export default class SeriesService {
 
       let seriesStore = useSeriesStore();
       for(let i = 0; i < result.documents.length; i++) {
+        console.log(result.documents[i]);
         seriesStore.addSeries(result.documents[i]);        
       }
 
@@ -158,7 +159,8 @@ export default class SeriesService {
       return result;
 
     }catch(e){
-
+      console.log(e);
+      throw(e);
     }
 
   }
