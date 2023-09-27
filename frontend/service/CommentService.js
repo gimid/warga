@@ -36,6 +36,44 @@ export default class CommentService {
     }
   }
 
+
+  async getBaseCommentsFromPost(post_id) {
+    try {
+      let result = await databases.listDocuments(
+        process.env.FORUM_DATABASE_ID,
+        process.env.POST_COMMENTS_COLLECTION_ID,
+        [
+          Query.equal("post_id", post_id),
+          Query.equal("parent_comment_id", "")
+        ]
+      )
+
+      console.log(result);
+
+      return result;
+    }catch(e) {
+      console.log(e);
+      throw(e);
+    }
+  }
+
+  async getCommentReply(parent_comment_id) {
+    try {
+      let result = await databases.listDocuments(
+        process.env.FORUM_DATABASE_ID,
+        process.env.POST_COMMENTS_COLLECTION_ID,
+        [
+          Query.equal("parent_comment_id", parent_comment_id)
+        ]
+      )
+
+      return result;
+    }catch(e){
+      console.log(e);
+      throw(e);
+    }
+  }
+
   async getCommentsFromPost(post_id) {
     try {
       let result = await databases.listDocuments(
@@ -53,6 +91,10 @@ export default class CommentService {
       console.log(e);
       throw(e);
     }
+  }
+
+  async getRepliesFromComment(comment_Id){
+    
   }
 
   async updateComment(id, content) {

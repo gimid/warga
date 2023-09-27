@@ -40,7 +40,8 @@
 
         <v-row>
           <v-col rounded="lg" :cols="windowWidth > 1000?6:12">
-            <CommentList ref="commentListRef" :target-post="currentPost" @start-reply-called="onStartReply"></CommentList>
+            <!-- <CommentList ref="commentListRef" :target-post="currentPost" @start-reply-called="onStartReply"></CommentList> -->
+            <CommentList ref="commentListRef" :target-post="currentPost" @start-reply-called=""></CommentList>
           </v-col>
         </v-row>
 

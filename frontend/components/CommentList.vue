@@ -2,7 +2,7 @@
   <div>
     <div v-for="comment in comments" class="w-100">
       <div :class="currentHighlightId == comment.$id?'highlighted':''" >
-        <CommentView :comment-data="comment" v-on:start-reply-called="onStartReply" @navigateReplyCalled="onNavigateReplyCalled"></CommentView>
+        <CommentView :target-post="targetPost" :comment-data="comment" v-on:start-reply-called="onStartReply" @navigateReplyCalled="onNavigateReplyCalled" v-on:new-comment-posted="onNewCommentPosted"></CommentView>
       </div>
     </div>
   </div>
@@ -20,14 +20,17 @@ const commentService = new CommentService();
 
 const currentHighlightId = ref("");
 
+
 onMounted(()=>{
   loadComments();
 });
 
 const loadComments = async() => {
-  let fetchedComments = await commentService.getCommentsFromPost(props.targetPost.$id);
+  let fetchedComments = await commentService.getBaseCommentsFromPost(props.targetPost.$id);
+  
   comments.value = fetchedComments.documents;
 }
+
 
 const onStartReply = (x) => {
   emits('startReplyCalled', x);
@@ -35,6 +38,10 @@ const onStartReply = (x) => {
 
 const onNavigateReplyCalled = (x) => {
   currentHighlightId.value = x;
+}
+
+const onNewCommentPosted = () => {
+  loadComments();
 }
 
 

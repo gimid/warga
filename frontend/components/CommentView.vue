@@ -4,9 +4,9 @@
     <div v-if="commentModel" class="my-2" :id="'commentview-'+commentModel.$id">
 
       <div v-if="!isEditing">
-        <v-container  class="rounded py-5" style="background-color: #fff;">
-          <v-row>
-            <v-col class="py-6 px-6" align-self="start">
+        <v-container  class="rounded py-2" style="background-color: #fff;">
+          <div>
+            <div class="py-1 d-inline-block" align-self="start">
               <NuxtLink v-if="userData" :href="'/@'+userData.handle">
                 <span class="font-weight-bold mr-3" v-if="userData">
                   {{ userData.contact_name }}
@@ -20,8 +20,8 @@
                 • 
                 <span>edited</span>
               </span>
-            </v-col>
-            <v-col align-self="end" cols="1"  v-if="!minimalist">
+            </div>
+            <div v-if="!minimalist" class="d-inline-block float-right">
               <v-menu v-if="isUserComment">
                 <template v-slot:activator="{ props }">
                   <v-btn icon="mdi-dots-vertical" v-bind="props" variant="text"></v-btn>
@@ -33,32 +33,51 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
-            </v-col>
-          </v-row>
+            </div>
+          </div>
           
           <div v-if="commentModel.parent_comment_id">
             <v-row >
-              <v-col class="ml-10 mb-6" style="border-left: 4px solid var(--gim-teal); font-size: small;">
-                <v-btn @click="navigateReply(commentModel.parent_comment_id)">Balasan untuk {{ commentModel.parent_comment_id }}</v-btn>
+              <v-col>
+                <!-- <v-btn variant="flat" @click="navigateReply(commentModel.parent_comment_id)">>>{{ commentModel.parent_comment_id }}</v-btn> -->
               </v-col>
             </v-row>
           </div>
 
-          <v-row class="mx-2 py-2 rounded" style="background-color: white; font-size: 0.95em;">
-            <v-col>
-              <div v-if="minimalist" class="pa-3">
-                {{ commentModel.content.substring(0,200) }}...
-              </div>
-              <div v-else>
-                <MdPreview :show-code-row-number="true" class="md-content comment-content" :modelValue="commentModel.content" codeTheme="github" language="en-US"></MdPreview>
-              </div>
-            </v-col>
-          </v-row>
-          <v-row v-if="!minimalist">
-            <v-btn class="ma-2" prepend-icon="mdi-message-outline" variant="text" @click="startReply">
+          <div class="rounded" style="background-color: white; font-size: 0.95em;">
+
+            <div v-if="minimalist" class="pa-1">
+              {{ commentModel.content.substring(0,200) }}...
+            </div>
+            <div v-else>
+              <MdPreview :show-code-row-number="true" class="md-content comment-content" :modelValue="commentModel.content" codeTheme="github" language="en-US"></MdPreview>
+            </div>
+          </div>
+
+          <div v-if="!minimalist">
+            <v-btn prepend-icon="mdi-message-outline" variant="text" @click="startReply" style="font-size: 0.7em; padding: 0;">
               Balas
             </v-btn>
-          </v-row>
+
+            <div v-if="isReplying">
+              <CommentEditor
+                :previous-comment-data="commentModel"
+                is-immediate-edit-mode="true"
+                ref="replyEditorRef"
+                :edit-text-model="replyTextModel"
+                :target-post="targetPost"
+                :target-comment-parent-id="commentModel.$id"
+                @on-new-comment-posted="onNewCommentPosted"
+                >
+              </CommentEditor>
+            </div>
+
+          </div>
+
+          <div v-for="comment in commentReplies" style="border-left: solid 1px #e0e0e0;">
+            <!-- {{ commentReplies }} -->
+            <CommentView :comment-data="comment" :target-post="targetPost"></CommentView>
+          </div>
 
         </v-container>
   
@@ -76,6 +95,8 @@
         </CommentEditor>
       </div>
 
+      
+
     </div>
   </div>
   
@@ -87,23 +108,30 @@ import { lineNumbers } from '@codemirror/view';
 import {videoplugin} from '~/libraries/markdownitvideo'
 
 import ProfilesService from '~/service/ProfilesService';
+import CommentService from "~/service/CommentService"
 import AuthService from '~/service/AuthService';
 import { emit } from 'process';
 
-const props = defineProps(['commentData','minimalist']);
+const props = defineProps(['commentData','minimalist', 'targetPost']);
 const userData = ref();
 
 const editMenu = ref(false);
 
 const profilesService = new ProfilesService();
+const commentService = new CommentService();
 const authService = new AuthService();
 
 const isEditing = ref(false);
 const commentEditorRef = ref();
+const replyEditorRef = ref();
 const editTextModel = ref("")
+const replyTextModel = ref("")
 const commentModel = ref();
 const isUserComment = ref(false);
+const isReplying = ref(false);
 const router = useRouter();
+
+const commentReplies = ref();
 
 const emits = defineEmits(['startReplyCalled','navigateReplyCalled'])
 
@@ -124,7 +152,19 @@ onMounted(async()=>{
 
   await wait(100)
   GistEmbed.init();
+
+  // load replies
+  loadReplies();
 })
+
+const loadReplies = async () => {
+  let fetchedReplies = await commentService.getCommentReply(commentModel.value.$id);
+
+  if (fetchedReplies.total > 0) {
+    commentReplies.value = fetchedReplies.documents;
+  }
+}
+
 
 const checkIsUserComment = async () => {
   console.log("is user comment?")
@@ -178,6 +218,10 @@ const onUpdate = (x) => {
   editTextModel.value = x;
 }
 
+const onNewCommentPosted = () => {
+  loadReplies();
+}
+
 const onDataUpdated = async (x) => {
   commentModel.value = x;
   isEditing.value = false;
@@ -192,8 +236,13 @@ const startReply = async () =>{
   let currentUser = await authService.getUserSession();
 
   if (currentUser) {
+    isReplying.value = true;
     console.log("start reply to:")
     console.log(commentModel.value);
+
+    await wait(100);
+    replyEditorRef.value?.startNewComment();
+
     emits('startReplyCalled', commentModel.value);
   }else{
     router.push("/enter");
