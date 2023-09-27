@@ -135,7 +135,7 @@ const lastPost = ref();
 const postListType = ref("all");
 const route = useRoute();
 
-const dataAvailable = ref(false);
+const dataAvailable = ref(true);
 
 useSeoMeta(
   {
