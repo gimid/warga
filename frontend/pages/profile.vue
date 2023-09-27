@@ -1,3 +1,62 @@
+<template>
+
+  <div class="page">
+    <Header></Header>
+  
+    <v-container class="page-width">
+      <v-row>
+    
+        <v-col>
+          <div v-if="userFetched">
+            <div v-if="!profileExist">
+              This page does not exist
+            </div>
+          
+            <div v-else>
+              <div>
+                <h1>
+                  {{ profileData.contact_name }}
+                </h1>
+                <h4>
+                  @{{ profileData.handle }}
+                </h4>
+
+                <div v-if="profileData.metadata"  class="pa-3 my-2" style="max-width: 500px; background-color: white; border-radius: 5px; box-shadow: 0px 0px 3px rgba(0,0,0,0.5);">
+                 {{ JSON.parse(profileData.metadata).status }}
+                </div>
+
+              </div>
+            </div>
+          </div>
+  
+          <div v-else>
+          </div>
+  
+        </v-col>
+  
+      </v-row>
+      <v-row>
+        <v-col>
+          <!-- {{ userPosts }} -->
+          <ul v-for="post in userPosts">
+            <li>
+              <NuxtLink :href="'@'+profileData.handle + '/'+ post.$id ">
+                {{ post.title }}
+              </NuxtLink>
+            </li>
+          </ul>
+        </v-col>
+  
+      </v-row>
+    </v-container>
+  </div>
+  
+  
+  
+  
+</template>
+
+
 <script setup>
 
 import { useRoute } from 'vue-router'
@@ -48,48 +107,3 @@ onMounted(async ()=>{
 
 </script>
 
-<template>
-
-<div class="page">
-  <Header></Header>
-
-  <v-container class="page-width">
-    <v-row>
-  
-      <v-col>
-        <div v-if="userFetched">
-          <div v-if="!profileExist">
-            This page does not exist
-          </div>
-        
-          <div v-else>
-            Hello this is profile for {{ profileData.contact_name }}
-          </div>
-        </div>
-
-        <div v-else>
-        </div>
-
-      </v-col>
-
-    </v-row>
-    <v-row>
-      <v-col>
-        <!-- {{ userPosts }} -->
-        <ul v-for="post in userPosts">
-          <li>
-            <NuxtLink :href="'@'+profileData.handle + '/'+ post.$id ">
-              {{ post.title }}
-            </NuxtLink>
-          </li>
-        </ul>
-      </v-col>
-
-    </v-row>
-  </v-container>
-</div>
-
-
-
-
-</template>

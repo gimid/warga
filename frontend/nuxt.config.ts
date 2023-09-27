@@ -26,7 +26,8 @@ export default defineNuxtConfig({
       {
         autoImports: ['defineStore', 'acceptHMRUpdate']
       }
-    ]
+    ],
+    'nuxt-svgo'
   ],
   imports: {
     dirs: ['stores']
