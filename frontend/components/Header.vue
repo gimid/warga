@@ -4,7 +4,8 @@
       <v-container class="page-width">
         <v-row>
           <v-col id="logo-top">
-            <img src="../assets/gimid6.png" height="50" width="50" @click="goHome" class="float-left">
+            <gimidico style="width: 50px; height: 50px;" class="float-left gimico" @click="goHome"></gimidico>
+            <!-- <img src="../assets/gimid6.png" height="50" width="50" @click="goHome" class="float-left"> -->
           </v-col>
 
           <v-spacer></v-spacer>
@@ -116,6 +117,9 @@
 
 </template>
 <script setup>
+
+import gimidico from "~/assets/gimid.svg";
+
 import AuthService from '~/service/AuthService';
 import ProfileService from '~/service/ProfilesService';
 import {teams} from "~/service/Backend"
@@ -181,5 +185,9 @@ const goHome = () => {
 
 #logo-top:hover{
   cursor: pointer;
+}
+
+.gimico{
+  color: var(--gim-teal);
 }
 </style>

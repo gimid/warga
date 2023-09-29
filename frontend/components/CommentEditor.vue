@@ -57,7 +57,7 @@
         <v-container>
           <v-row>
             <v-col>
-              <v-btn color="var(--gim-teal)" @click="confirmDeleteComment">Ya, yakin hapus</v-btn>
+              <v-btn @click="confirmDeleteComment">Ya, yakin hapus</v-btn>
             </v-col>
           </v-row>
           <v-row>

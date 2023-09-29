@@ -44,7 +44,7 @@
 
                 <NuxtLink href="/@gimid">
                   <div class="d-inline-block mr-2" style="vertical-align: top;">
-                    <gimidico style="width: 30px; height: 30px;"></gimidico>
+                    <gimidico style="width: 30px; height: 30px; filter: brightness(0%);"></gimidico>
                   </div>  
                 </NuxtLink>
 
@@ -87,7 +87,7 @@
                 <PostPreview :data="userPost"></PostPreview>
               </div>
               <div v-if="posts.length > 0">
-                <v-btn color="var(--gim-teal)"  @click="loadMore" block>Muat lagi</v-btn>
+                <v-btn  @click="loadMore" block>Muat lagi</v-btn>
               </div>
             </div>
             <div v-else>

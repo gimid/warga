@@ -27,8 +27,12 @@ export default defineNuxtConfig({
         autoImports: ['defineStore', 'acceptHMRUpdate']
       }
     ],
-    'nuxt-svgo'
+    'nuxt-svgo',
+    ['nuxt-gtag']
   ],
+  gtag: {
+    id: JSON.stringify(process.env.GOOGLE_ANALYTICS_ID)
+  },
   imports: {
     dirs: ['stores']
   },
@@ -58,9 +62,14 @@ export default defineNuxtConfig({
       'process.env.GET_SERIES_FUNCTION_ID': JSON.stringify(process.env.GET_SERIES_FUNCTION_ID),
       'process.env.GET_HOME_POST_FUNCTION_ID' : JSON.stringify(process.env.GET_HOME_POST_FUNCTION_ID),
       'process.env.WARGA_ENDPOINT' : JSON.stringify(process.env.WARGA_ENDPOINT),
-      'process.env.POST_COMMENTS_COLLECTION_ID' : JSON.stringify(process.env.POST_COMMENTS_COLLECTION_ID)
+      'process.env.POST_COMMENTS_COLLECTION_ID' : JSON.stringify(process.env.POST_COMMENTS_COLLECTION_ID),
+      'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_ID)
     },
   },
+  // runtimeConfig: {
+  //   public: {
+  //   }
+  // },
   devtools: { enabled: true },
   routeRules: {
     '/*': {cors: true},
