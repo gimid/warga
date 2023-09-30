@@ -45,7 +45,7 @@
         <!-- {{ parsedText }}
         <hr/> -->
         <div>
-          <MdPreview :show-code-row-number="true" id="md-content" :modelValue="rawText" codeTheme="github" language="en-US"></MdPreview>
+          <MdPreview :show-code-row-number="true" id="md-content" :modelValue="rawText" codeTheme="github" language="en-US" :no-img-zoom-in="true"></MdPreview>
         </div>
 
         <ClientOnly>

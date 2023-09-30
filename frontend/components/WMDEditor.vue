@@ -146,7 +146,7 @@
     <div id="preview" v-if="!isEditMode" style="background-color: #f1f1f1; border-radius: 5px;" class="px-2 py-1 mt-1">
       <!-- <div id="parsedtext" v-html="parsedText"></div> -->
 
-      <MdPreview id="md-content" :modelValue="editText" codeTheme="github" language="en-US"></MdPreview>
+      <MdPreview id="md-content" :modelValue="editText" codeTheme="github" language="en-US" :no-img-zoom-in="true"></MdPreview>
     </div>
 
   </div>

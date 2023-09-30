@@ -38,11 +38,8 @@ let route = useRoute();
 
 
 const fetchPosts = async () => {
-  console.log("FETCH DONG");
   let postValue = await pageService.getPage(route.params.pageid);
   
-  console.log(postValue)
-
   let model = {
     key: postValue.key,
     tags: [],
