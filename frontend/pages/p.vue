@@ -1,56 +1,50 @@
 <template>
   <div class="page">
     <Header></Header>
-    <div v-if="currentPostFetched">
 
       <v-container class="page-width">
         <v-row>
-          <v-col cols="3" class="d-none d-md-block">
+          <v-col cols="1" class="d-none d-md-block">
           </v-col>
 
-          <v-col cols="6" class="d-none d-md-block">
+          
+          <v-col cols="10" class="d-none d-md-block">
             <PostContainer :data="pageData" :writer="writer"></PostContainer>
           </v-col>
-
+          
           <v-col cols="12" class="d-md-none">
             <PostContainer :data="pageData" :writer="writer"></PostContainer>
           </v-col>
-
-
-
+          
+          
+          
           <v-col cols="3" class="d-none d-md-block">
           </v-col>
         </v-row>
       </v-container>
-    </div>
+    <v-col>
+      <!-- {{ pageData }}
+      {{ writer }} -->
+    </v-col>
     <Footer></Footer>
   </div>
 </template>
 <script setup>
 
 import PageService from '~/service/PageService';
-
-let pageData = ref({
-      title: "",
-      tags: [],
-      content: "",
-      cover_image : null
-    });
-
-let writer = ref({
-  contact_name: "",
-  handle: ""
-})
 let pageService = new PageService();
 
 let route = useRoute();
-let currentPostFetched = ref(false);
+
 
 const fetchPosts = async () => {
+  console.log("FETCH DONG");
   let postValue = await pageService.getPage(route.params.pageid);
   
+  console.log(postValue)
+
   let model = {
-    title: '',
+    key: postValue.key,
     tags: [],
     content: postValue.news,
     cover_image : null
@@ -58,10 +52,17 @@ const fetchPosts = async () => {
   return model;
 }
 
-useAsyncData(async ()=>{
-  let model = await fetchPosts();
-  pageData.value = model;
-  currentPostFetched.value = true;
-});
+let writer = ref({
+  contact_name: "",
+  handle: ""
+})
 
-</script>service/PageService
+const {data: pageData, refresh: refreshCurrentPage} = await useAsyncData('page', async () => await fetchPosts());
+
+useSeoMeta({
+  title: pageData.value.key
+})
+
+
+
+</script>

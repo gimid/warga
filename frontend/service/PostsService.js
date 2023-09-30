@@ -236,19 +236,26 @@ export default class PostsService {
     throw("BELUM DIBIKIN");
   }
 
-  async getPostsFromUserID(user_ID){
+  async getPostsFromUserID(user_ID, cursor_after){
     try {
+
+
+      let queries = [
+        Query.equal("user_id", user_ID),
+        Query.orderDesc("$updatedAt")
+      ]
+
+      if (cursor_after != null) {
+        queries.push(Query.cursorAfter(cursor_after));
+      }
 
       let userPosts = await databases.listDocuments(
         process.env.FORUM_DATABASE_ID,
         process.env.POSTS_COLLECTION_ID,
-        [
-          Query.equal("user_id", user_ID),
-          Query.orderDesc("$updatedAt")
-        ]
+        queries
       )
 
-      return userPosts
+      return userPosts;
 
 
       // return result;

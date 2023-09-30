@@ -1,4 +1,5 @@
 <template>
+  
   <v-sheet            
       rounded="lg"
       class="fill-height postmaincontainer"
@@ -99,7 +100,6 @@ config({
   },
   markdownItPlugins(plugins) {
       return plugins.map((p) => {
-        console.log(p);
         if (p.type === 'image') {
           return {
             ...p,
@@ -239,8 +239,8 @@ img{
 }
 
 .postcontainer{
-  /* margin-left: 2.5em;
-  margin-right: 2.5em; */
+  /* margin-left: 1em;
+  margin-right: 1em; */
 
   font-family: var(--ff-sans-serif);
   font-size: 1.3rem;
@@ -249,6 +249,8 @@ img{
 }
 
 .postmaincontainer{
+  padding-left: 0.75em;
+  padding-right: 0.75em;
   padding-bottom: 1em;
   overflow: hidden;
   margin-bottom: 1.5em;
@@ -278,8 +280,13 @@ iframe {
 
 .md-editor-preview{
   font-size: 0.85em;
-  overflow-wrap: break-word;
-  word-break: keep-all;
+  overflow-wrap: break-word !important;
+  word-break: keep-all !important;
+}
+
+h1, h2, h3, h4, h5{
+  overflow-wrap: break-word !important;
+  word-break: keep-all !important;
 }
 
 .md-editor-preview-wrapper {

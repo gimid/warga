@@ -205,24 +205,26 @@ app.post('/series', async (req, res) => {
       for (let i = 0; i < fetchPosts.documents.length; i++) {
         let postDocument = fetchPosts.documents[i];
 
-
-
-        // writer
-        let fetchProfile = await database.getDocument(
-          process.env.DATABASE_ID,
-          process.env.PROFILES_COLLECTION_ID,
-          postDocument.user_id
-        );
-
-        let url = "/" + "@" + fetchProfile.handle + "/" + postDocument.$id;
-
-        let postData = {
-          title: postDocument.title,
-          id: postDocument.$id,
-          url: url
+        if (postDocument.published) {
+          // writer
+          let fetchProfile = await database.getDocument(
+            process.env.DATABASE_ID,
+            process.env.PROFILES_COLLECTION_ID,
+            postDocument.user_id
+          );
+  
+          let url = "/" + "@" + fetchProfile.handle + "/" + postDocument.$id;
+  
+          let postData = {
+            title: postDocument.title,
+            id: postDocument.$id,
+            url: url
+          }
+  
+          postMembers.push(postData);
         }
 
-        postMembers.push(postData);
+        
       }
 
 

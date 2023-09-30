@@ -8,17 +8,22 @@
 
     <v-container class="page-width">
       <v-row>
-        <v-col cols="3" class="d-none d-sm-block">
-        </v-col>
-        <v-col cols="6">
-          Postingan dari kamu
-          {{ fetchingInfo }}
+        <v-col cols="12">
 
+          <div>
+            <h1>
+              Postingan dari kamu
+            </h1>
+            {{ fetchingInfo }}
+          </div>
 
           <div v-for="post in posts">
             <DashboardPostPreview :post="post"></DashboardPostPreview>
           </div>
 
+          <div class="ma-1" v-if="!noMore">
+            <v-btn block @click="loadMore">Muat lagi</v-btn>
+          </div>
 
         </v-col>
         <v-col cols="3" class="d-none d-sm-block">
@@ -44,6 +49,12 @@ definePageMeta({
   middleware: ["loggedin"]
 })
 
+useSeoMeta(
+  {
+    title: "Dashboard"
+  }
+)
+
 const postsService = new PostsService();
 const profilesService = new ProfilesService();
 const authService = new AuthService();
@@ -56,44 +67,15 @@ const fetchingInfo = ref("Fetching data")
 
 const profileStore = useProfileStore();
 const { profile } = storeToRefs(profileStore);
-
+const lastCursor = ref();
+const noMore = ref(false);
 
 onMounted(async ()=>{
 
+  await loadMore();
 
-
-  let currentSession = await authService.getUserSession();
-
-  if (currentSession) {
-
-
-    try{
-      let myPosts = (await postsService.getPostsFromUserID(currentSession.$id)).documents;
-  
-
-      await Promise.all(myPosts.map(async (x) => {
   
   
-        if (x !== null) {
-          let profile = await getProfile(x.user_id);      
-          x.user_handle = profile.handle;          
-        }
-  
-      }));
-  
-  
-      fetchingInfo.value = "";
-  
-      posts.value = myPosts;
-
-    }catch(e){
-      console.log("current session failed")
-      console.log(e);
-    }
-  }
-
-
-
 })
 
 const getProfile = async (user_id) => {
@@ -110,7 +92,48 @@ const getProfile = async (user_id) => {
 }
 
 
+const loadMore = async () => {
+  let currentSession = await authService.getUserSession();
 
+  if (currentSession) {
+    try{
+
+      let myPosts = (await postsService.getPostsFromUserID(currentSession.$id, lastCursor.value)).documents;
+      
+      
+      if  (myPosts.length <= 0) {
+        noMore.value = true;
+      }else{
+        let lastId =  myPosts[myPosts.length - 1].$id;
+        lastCursor.value = lastId;
+      
+      
+        await Promise.all(myPosts.map(async (x) => {
+      
+      
+          if (x !== null) {
+            let profile = await getProfile(x.user_id);      
+            x.user_handle = profile.handle;          
+          }
+      
+        }));
+      
+        fetchingInfo.value = "";
+        
+        for (let i = 0; i < myPosts.length; i++){
+          let post = myPosts[i];
+          posts.value.push(post);
+        }
+
+      }
+
+
+    }catch(e){
+      console.log(e);
+    }
+  }
+
+}
 
 
 

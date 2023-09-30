@@ -15,6 +15,7 @@ export default defineNuxtConfig({
         {rel: 'preconnect', href: JSON.stringify(process.env.APPWRITE_ENDPOINT)},
         {rel: 'preconnect', href: JSON.stringify(process.env.WARGA_ENDPOINT)},
         {rel: 'preconnect', href:"https://cdnjs.cloudflare.com"},
+        {rel: 'icon', type: 'image/x-icon', href:'/assets/favicon.ico'}
       ],
     }
   },

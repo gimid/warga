@@ -55,6 +55,8 @@
             </v-card>
           </v-col>
 
+      
+
         </ClientOnly>
       
         <v-col :cols="windowWidth > 1000?6:12">

@@ -27,7 +27,6 @@ const props = defineProps(['post']);
 const linkUrl = ref("");
 
 onMounted(async ()=>{
-  console.log('asdadas')
   await getLink(props.post);
 })
 

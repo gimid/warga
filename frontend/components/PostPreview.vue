@@ -100,7 +100,7 @@ const getUser = async (userId)=>{
 }
 
 .post-title-link{
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 800;
   font-family: var(--ff-sans-serif);
 }
