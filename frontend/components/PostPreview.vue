@@ -2,7 +2,7 @@
   <div>
 
     <NuxtLink class="post-link" :href="link">
-      <v-card class="link-card my-2 px-10 py-2 post-preview-container">
+      <v-card class="link-card my-2 post-preview-container">
         <div v-if="isFetching">
             <v-progress-circular
             indeterminate
@@ -10,23 +10,31 @@
           ></v-progress-circular>
         </div>
         <div v-else-if="!isFetching && !dataFetchError">
-          <div v-if="userInfo && userInfo.handle">
-            <b>@{{ userInfo.handle }}</b>
+
+          <div v-if="data.cover_image" :style="'background-image: url('+data.cover_image+')'" style="height: 110px; background-size: cover; background-position-y: center;">
+
           </div>
-          
-          <h1 :class="link !== ''?'post-title-link':'post-title-disabled'">{{ title }}</h1>
-          
-          <div class="tagscontainer">
-            <v-chip
-                v-for="(chip, index) in data.tags"
-                :key="index"
-                label
-                class="chip-tag float-left"
-              >
-                #{{ chip }}
-            </v-chip>
+
+          <div class="px-4 py-4">
+            <div v-if="userInfo && userInfo.handle">
+              <b>@{{ userInfo.handle }}</b>
+            </div>
+            
+            <h1 :class="link !== ''?'post-title-link':'post-title-disabled'">{{ title }}</h1>
+            
+            <div class="tagscontainer">
+              <v-chip
+                  v-for="(chip, index) in data.tags"
+                  :key="index"
+                  label
+                  class="chip-tag float-left"
+                >
+                  #{{ chip }}
+              </v-chip>
+            </div>
+            <div class="clearfix"></div>
           </div>
-          <div class="clearfix"></div>
+
     
         </div>
         <div v-else>        
@@ -91,9 +99,17 @@ const getUser = async (userId)=>{
 .post-link {
   text-decoration: none;
   font-family: var(--ff-sans-serif);
-  color: black;
 }
 
+.link-card{
+  color: #292929;
+}
+
+.link-card:hover{
+  text-decoration: none;
+  font-family: var(--ff-sans-serif);
+  color: var(--gim-teal-dark);
+}
 
 .post-title-disabled {
   color: #e0e0e0;
@@ -106,9 +122,9 @@ const getUser = async (userId)=>{
 }
 
 .post-title-link:hover {
-  text-decoration: none;
+  /* text-decoration: none;
   font-family: var(--ff-sans-serif);
-  color: var(--gim-teal-dark);
+  color: var(--gim-teal-dark); */
 
 }
 

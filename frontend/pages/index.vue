@@ -11,13 +11,19 @@
               <div>
                 <ul class="sidebar-menu">
                   <li>
-                    <NuxtLink to="p/privacy" class="text-h6">
+                    <NuxtLink to="p/about" class="text-h7">
+                      <v-icon icon="mdi-information-outline" class="mr-2"/>
+                      Tentang
+                    </NuxtLink>
+                  </li>
+                  <li>
+                    <NuxtLink to="p/privacy" class="text-h7">
                       <v-icon icon="mdi-glasses" class="mr-2"/>
                       Kebijakan Privasi
                     </NuxtLink>
                   </li>
                   <li>
-                    <NuxtLink to="p/terms" class="text-h6">
+                    <NuxtLink to="p/terms" class="text-h7">
                       <v-icon icon="mdi-tie" class="mr-2"/>
                       Ketentuan
                     </NuxtLink>
@@ -88,8 +94,8 @@
               <div v-else v-for="userPost in posts">
                 <PostPreview :data="userPost"></PostPreview>
               </div>
-              <div v-if="posts.length > 0">
-                <v-btn  @click="loadMore" block>Muat lagi</v-btn>
+              <div v-if="posts.length > 0 && moreAvailable">
+                <v-btn @click="loadMore" block>Muat lagi</v-btn>
               </div>
             </div>
             <div v-else>
@@ -138,6 +144,8 @@ const postListType = ref("all");
 const route = useRoute();
 
 const dataAvailable = ref(true);
+
+const moreAvailable = ref(true);
 
 useSeoMeta(
   {
@@ -189,12 +197,17 @@ const loadMore = async () => {
   console.log("----more ----");
 
   console.log(lastPost.value)
+
+  let morePosts = null;
   if(lastPost.value){
-    let morePosts = await postsService.getHomepagePosts(lastPost.value.$id)
-    posts.value = posts.value.concat(morePosts);
-    lastPost.value = morePosts[morePosts.length-1];
+    morePosts = await postsService.getHomepagePosts(lastPost.value.$id)
   }else{
-    let morePosts = await postsService.getHomepagePosts()
+    morePosts = await postsService.getHomepagePosts()
+  }
+
+  if (morePosts.length <= 0) {
+    moreAvailable.value = false;
+  }else{
     posts.value = posts.value.concat(morePosts);
     lastPost.value = morePosts[morePosts.length-1];
   }
