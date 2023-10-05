@@ -29,7 +29,7 @@ export default defineNuxtConfig({
       }
     ],
     'nuxt-svgo',
-    ['nuxt-gtag']
+    'nuxt-gtag'
   ],
   gtag: {
     id: JSON.stringify(process.env.GOOGLE_ANALYTICS_ID)
