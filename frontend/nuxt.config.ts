@@ -12,8 +12,8 @@ export default defineNuxtConfig({
     head: {
       link:[
         // {rel: 'stylesheet', href:"https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css"},
-        {rel: 'preconnect', href: JSON.stringify(process.env.APPWRITE_ENDPOINT)},
-        {rel: 'preconnect', href: JSON.stringify(process.env.WARGA_ENDPOINT)},
+        {rel: 'preconnect', href: process.env.APPWRITE_ENDPOINT},
+        {rel: 'preconnect', href: process.env.WARGA_ENDPOINT},
         {rel: 'preconnect', href:"https://cdnjs.cloudflare.com"},
         {rel: 'icon', type: 'image/x-icon', href:'/favicon.ico'}
       ],
@@ -32,7 +32,7 @@ export default defineNuxtConfig({
     'nuxt-gtag'
   ],
   gtag: {
-    id: JSON.stringify(process.env.GOOGLE_ANALYTICS_ID)
+    id: process.env.GOOGLE_ANALYTICS_ID
   },
   imports: {
     dirs: ['stores']
