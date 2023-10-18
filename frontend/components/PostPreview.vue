@@ -16,8 +16,8 @@
           </div>
 
           <div class="px-4 py-4">
-            <div v-if="userInfo && userInfo.handle">
-              <b>@{{ userInfo.handle }}</b>
+            <div v-if="data.user_profile && data.user_profile.handle">
+              <b>@{{ data.user_profile.handle }}</b>
             </div>
             
             <h1 :class="link !== ''?'post-title-link':'post-title-disabled'">{{ title }}</h1>
@@ -72,19 +72,20 @@ onMounted(async ()=> {
 
     title.value = props.data.title;
 
-    getUser(props.data.user_id);
+    // getUser(props.data.user_id);
     
+    link.value = '/@' + props.data.user_profile.handle + "/" + props.data.$id;
 
     isFetching.value = false;
 
 });
 
 
-const getUser = async (userId)=>{
-  const returnData = await profileService.getProfileFromUserID(userId);  
-  userInfo.value = returnData;
-  link.value = '/@' + returnData.handle + "/" + props.data.$id;
-}
+// const getUser = async (userId)=>{
+//   const returnData = await profileService.getProfileFromUserID(userId);  
+//   userInfo.value = returnData;
+//   link.value = '/@' + returnData.handle + "/" + props.data.$id;
+// }
 
 
 

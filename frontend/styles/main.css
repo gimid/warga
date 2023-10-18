@@ -22,8 +22,13 @@ iframe{
   max-width: 1300px;
 }
 
+.chip-tag{
+  margin-right: 5px;
+  margin-top: 5px;
+}
 
-.chip-tag:first-child{
+
+/* .chip-tag:first-child{
   margin-left: 0px;
   margin-right: 0px;
 }
@@ -35,7 +40,7 @@ iframe{
 .chip-tag:last-child:not(:first-child){
   margin-left: 5px;
   margin-right: 5px;
-}
+} */
 
 .tagscontainer {
   margin-top: 5px;

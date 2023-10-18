@@ -10,19 +10,19 @@
       <v-row>
     
         <v-col :cols="windowWidth > 1000?8:12" v-cloak>
-          <PostContainer :data="currentPost" :writer="currentWriter" :current-route="route" show-series="true"></PostContainer>
+          <PostContainer :data="currentPost" :writer="currentPost.user_profile" :current-route="route" show-series="true"></PostContainer>
         </v-col>
 
         <v-col style="overflow-wrap: break-word; word-break: keep-all;"  :cols="windowWidth > 1000?4:12">
           <ClientOnly>
-            <div class="writer-card" v-if="writerInfo">
+            <div class="writer-card" v-if="currentPost.user_profile">
               <div class="mb-3">
-                <span v-if="writerInfo.contact_name" class="text-h5 writer-card-title">{{ writerInfo.contact_name }}</span>
-                <span v-if="writerInfo.handle" class="text-h5 writer-card-title">(@{{ writerInfo.handle }})</span>
+                <span v-if="currentPost.user_profile.contact_name" class="text-h5 writer-card-title">{{ currentPost.user_profile.contact_name }}</span>
+                <span v-if="currentPost.user_profile.handle" class="text-h5 writer-card-title">(@{{ currentPost.user_profile.handle }})</span>
 
               </div>
-              <div v-if="writerMetadata">
-                <span>{{ writerMetadata.status }}</span>
+              <div v-if="currentPost.user_profile.metadata">
+                <span>{{ JSON.parse(currentPost.user_profile.metadata).status }}</span>
               </div>
             </div>
           </ClientOnly>
@@ -88,7 +88,7 @@ const profileStore = useProfileStore();
 const { profile } = storeToRefs(profileStore);
 
 const {data: currentPost, refresh: refreshCurrentPost} = await useAsyncData('post', async ()=> await postsService.getPostById(route.params.postid, route.query.preview_key))
-const {data: currentWriter, refresh: refreshCurrentWriter} = await useAsyncData('writer', async ()=> await profileService.getProfileFromHandle(route.params.username));
+// const {data: currentWriter, refresh: refreshCurrentWriter} = await useAsyncData('writer', async ()=> await profileService.getProfileFromHandle(route.params.username));
 
 const windowWidth = ref(0);
 const editText = ref("")
@@ -100,8 +100,8 @@ const currentTargetReply = ref(null);
 
 const currentUser = ref();
 
-const writerInfo = ref();
-const writerMetadata = ref();
+// const writerInfo = ref();
+// const writerMetadata = ref();
 
 useSeoMeta({
   title: currentPost.value.title,
@@ -128,6 +128,8 @@ onMounted(async () => {
 
   checkLoggedIn();
   fetchWriterInfo();
+
+  // writerInfo.value = currentPost.user_profile;
 });
 
 onUnmounted(()=>{
@@ -184,13 +186,18 @@ const checkLoggedIn = async() => {
 }
 
 const fetchWriterInfo = async() => {
-  let profile = await profileService.getProfileFromHandle(route.params.username);
-  writerInfo.value = profile;
-  try{
-    writerMetadata.value = JSON.parse(profile.metadata);
-  }catch(e){
-    console.log(e);
+
+  if (route.params.username != currentPost.value.user_profile.handle){
+    navigateTo("/@"+currentPost.value.user_profile.handle + "/" + route.params.postid);
   }
+
+  // let profile = await profileService.getProfileFromHandle(route.params.username);
+  // writerInfo.value = profile;
+  // try{
+  //   writerMetadata.value = JSON.parse(profile.metadata);
+  // }catch(e){
+  //   console.log(e);
+  // }
 }
 
 </script>

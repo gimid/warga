@@ -65,6 +65,12 @@ app.post('/home', async (req, res) => {
   for  (let i = 0; i < homepageResult.documents.length; i++) {
     let post = homepageResult.documents[i];
 
+    let user_profile = await database.getDocument(
+      process.env.DATABASE_ID,
+      process.env.PROFILES_COLLECTION_ID,
+      post.user_id
+    )
+
 
     let previewData = {
       "$id" : post.$id,
@@ -74,7 +80,8 @@ app.post('/home', async (req, res) => {
       published: post.published,
       tags: post.tags,
       title: post.title,
-      cover_image: post.cover_image
+      cover_image: post.cover_image,
+      user_profile: user_profile
     }
 
 
@@ -111,6 +118,17 @@ app.post('/post', async (req, res) => {
                           process.env.DATABASE_ID, 
                           process.env.POSTS_COLLECTION_ID, 
                           payload.post_id);
+
+
+
+
+    let user_profile = await database.getDocument(
+      process.env.DATABASE_ID,
+      process.env.PROFILES_COLLECTION_ID,
+      document.user_id
+    )
+
+    document.user_profile = user_profile;
     
     returnPost(res, payload, document);      
 
