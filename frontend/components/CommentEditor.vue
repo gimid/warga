@@ -88,7 +88,7 @@ const isEditMode = ref(true);
 const isUploading = ref(false);
 const editorRef = ref();
 
-const props = defineProps(['previousCommentData', 'editTextModel','targetPost', 'targetCommentParentId','isEditPreviousCommentMode', 'isImmediateEditMode']);
+const props = defineProps(['previousCommentData', 'editTextModel','targetPostId', 'targetCommentParentId','isEditPreviousCommentMode', 'isImmediateEditMode']);
 const emits = defineEmits(['update:editTextModelValue', 'cancelEdit', 'onDataUpdated', 'onNewCommentPosted' ])
 
 onMounted(() => {
@@ -154,12 +154,13 @@ const postComment = async () => {
 
   isUploading.value = true;
 
+  console.log(props.targetPostId);
   if(props.targetCommentParentId != null) {
-    let result = await commentService.createComment(props.targetPost.$id, props.targetCommentParentId, editText.value);
+    let result = await commentService.createComment(props.targetPostId, props.targetCommentParentId, editText.value);
     isUploading.value = false;
     onDataUpdated(result);
   }else{
-    let result = await commentService.createComment(props.targetPost.$id, null, editText.value);
+    let result = await commentService.createComment(props.targetPostId, null, editText.value);
     isUploading.value = false;
     onDataUpdated(result);
   }

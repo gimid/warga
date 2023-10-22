@@ -107,6 +107,11 @@ export default <RouterConfig> {
     {
       path: "/:pathMatch(.*)*",
       component: () => import('~/pages/404.vue')
+    },
+    {
+      name: 'comment',
+      path: '/comment/:commentid',
+      component: () => import('~/pages/comment.vue')
     }
   ].map(route => withMeta(_routes, route)),
 }

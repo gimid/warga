@@ -3,108 +3,24 @@
     "projectName": "gimidpro",
     "functions": [
         {
-            "$id": "64a67148a201cdb70bb2",
-            "name": "post_user_id",
+            "$id": "6532418c57bc10ad7601",
+            "name": "notification",
             "runtime": "node-16.0",
-            "path": "functions/post_user_id",
-            "entrypoint": "src/index.js",
-            "ignore": [
-                "node_modules",
-                ".npm"
-            ],
-            "execute": [
-                "users"
-            ],
-            "events": [
-                "databases.6494dc5cbc7dee15d89c.collections.6494dc6d6766324c8a17.documents.*.create"
-            ],
-            "schedule": "",
-            "timeout": 15
-        },
-        {
-            "$id": "64ce402833cd0f724e9a",
-            "name": "get_post",
-            "runtime": "node-16.0",
-            "path": "functions/get_post",
-            "entrypoint": "src/index.js",
-            "ignore": [
-                "node_modules",
-                ".npm"
-            ],
-            "execute": [
-                "any"
-            ],
-            "events": [],
-            "schedule": "*/30 * * * *",
-            "timeout": 15
-        },
-        {
-            "$id": "64ce86240da2c26da75f",
-            "name": "delete_post",
-            "runtime": "node-16.0",
-            "path": "functions/delete_post",
-            "entrypoint": "src/index.js",
-            "ignore": [
-                "node_modules",
-                ".npm"
-            ],
             "execute": [],
             "events": [
-                "databases.6494dc5cbc7dee15d89c.collections.6494dc6d6766324c8a17.documents.*.delete"
+                "databases.*.collections.64a66d7f457c62ee0fef.documents.*.create"
             ],
             "schedule": "",
-            "timeout": 15
-        },
-        {
-            "$id": "64ce8922ca356a2cecdf",
-            "name": "unpublish_post",
-            "runtime": "node-16.0",
-            "path": "functions/unpublish_post",
-            "entrypoint": "src/index.js",
+            "timeout": 15,
+            "enabled": true,
+            "logging": true,
+            "entrypoint": "src/main.js",
+            "commands": "npm install",
             "ignore": [
                 "node_modules",
                 ".npm"
             ],
-            "execute": [],
-            "events": [
-                "databases.6494dc5cbc7dee15d89c.collections.6494dc6d6766324c8a17.documents.*.update"
-            ],
-            "schedule": "",
-            "timeout": 15
-        },
-        {
-            "$id": "64d20fb37874db849124",
-            "name": "get_series",
-            "runtime": "node-16.0",
-            "path": "functions/get_series",
-            "entrypoint": "src/index.js",
-            "ignore": [
-                "node_modules",
-                ".npm"
-            ],
-            "execute": [
-                "any"
-            ],
-            "events": [],
-            "schedule": "*/30 * * * *",
-            "timeout": 15
-        },
-        {
-            "$id": "64d2359e52b527169c24",
-            "name": "get_home_post",
-            "runtime": "node-16.0",
-            "path": "functions/get_home_post",
-            "entrypoint": "src/index.js",
-            "ignore": [
-                "node_modules",
-                ".npm"
-            ],
-            "execute": [
-                "any"
-            ],
-            "events": [],
-            "schedule": "*/30 * * * *",
-            "timeout": 15
+            "path": "functions/notification"
         }
     ]
 }

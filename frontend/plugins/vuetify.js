@@ -29,7 +29,9 @@ import {
   VBottomNavigation,
   VCombobox,
   VMain,
-  VApp
+  VApp,
+  VTooltip,
+  VBadge
  } from "vuetify/components";
 
 import { VSkeletonLoader } from "vuetify/labs/components";
@@ -69,7 +71,9 @@ export default defineNuxtPlugin(nuxtApp => {
       VBottomNavigation,
       VCombobox,
       VMain,
-      VApp
+      VApp,
+      VTooltip,
+      VBadge
     },
     directives
   })

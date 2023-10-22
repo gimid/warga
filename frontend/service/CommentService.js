@@ -37,15 +37,22 @@ export default class CommentService {
   }
 
 
-  async getBaseCommentsFromPost(post_id) {
+  async getBaseCommentsFromPost(post_id, cursor_after) {
     try {
+
+      let queries = [
+        Query.equal("post_id", post_id),
+        Query.equal("parent_comment_id", "")
+      ];
+
+      if (cursor_after !== null && cursor_after !== undefined) {
+        queries.push(Query.cursorAfter(cursor_after));
+      }
+
       let result = await databases.listDocuments(
         process.env.FORUM_DATABASE_ID,
         process.env.POST_COMMENTS_COLLECTION_ID,
-        [
-          Query.equal("post_id", post_id),
-          Query.equal("parent_comment_id", "")
-        ]
+        queries     
       )
 
       console.log(result);
@@ -57,15 +64,36 @@ export default class CommentService {
     }
   }
 
-  async getCommentReply(parent_comment_id) {
+  async getCommentReply(parent_comment_id, cursor_after) {
     try {
+      let queries = [
+        Query.equal("parent_comment_id", parent_comment_id)
+      ];
+
+      if (cursor_after !== null && cursor_after !== undefined) {
+        queries.push(Query.cursorAfter(cursor_after));
+      }
+
       let result = await databases.listDocuments(
         process.env.FORUM_DATABASE_ID,
         process.env.POST_COMMENTS_COLLECTION_ID,
-        [
-          Query.equal("parent_comment_id", parent_comment_id)
-        ]
+        queries
       )
+
+      return result;
+    }catch(e){
+      console.log(e);
+      throw(e);
+    }
+  }
+
+  async getComment(comment_id) {
+    try {
+      let result = await databases.getDocument(
+        process.env.FORUM_DATABASE_ID,
+        process.env.POST_COMMENTS_COLLECTION_ID,
+        comment_id
+      );
 
       return result;
     }catch(e){
@@ -91,10 +119,6 @@ export default class CommentService {
       console.log(e);
       throw(e);
     }
-  }
-
-  async getRepliesFromComment(comment_Id){
-    
   }
 
   async updateComment(id, content) {

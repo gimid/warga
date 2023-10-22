@@ -656,6 +656,7 @@ services:
     <<: *x-logging
     stop_signal: SIGINT
     image: openruntimes/executor:0.4.1
+    restart: unless-stopped
     networks:
       - appwrite
       - runtimes

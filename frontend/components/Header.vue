@@ -20,8 +20,15 @@
               NULIS
             </v-btn>
 
-            
-            
+            <div v-if="userSession" class="d-inline-block" style="vertical-align: middle;">
+              <NuxtLink to="/notifications">
+                <v-badge color="red" :content="notifications.filter(x => !x.seen).length" :model-value="notifications.filter(x => !x.seen).length > 0" offset-y="20" offset-x="5">
+                  <v-icon icon="mdi-bell"  style="color: var(--gim-teal);" class="mx-2">    
+                  </v-icon>
+                </v-badge>
+
+              </NuxtLink>
+            </div>
 
             <div class="d-none d-md-inline-block">
               <v-btn v-if="!userSession && fetched" to="/enter" prepend-icon="mdi-account" variant="outlined" v-cloak>
@@ -127,6 +134,9 @@ import { storeToRefs } from 'pinia';
 
 const authService = new AuthService();
 const profilesService = new ProfileService();
+import NotificationService from '~/service/NotificationService';
+
+const notificationService = new NotificationService();
 
 const userSession = ref();
 
@@ -139,15 +149,21 @@ const drawer = ref(true);
 const rail = ref(true);
 
 const fetched = ref(false);
+const notifications = ref([]);
 
 onMounted(async () => {
   userSession.value = await authService.getUserSession();
   fetched.value = true;
+  loadNotifications();
 })
 
 const goHome = () => {
   console.log("home");
   router.push("/");
+}
+
+const loadNotifications = async()=>{
+  notifications.value = await notificationService.fetchUserNotification();
 }
 
 </script>

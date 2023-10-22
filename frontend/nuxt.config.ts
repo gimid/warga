@@ -64,7 +64,8 @@ export default defineNuxtConfig({
       'process.env.GET_HOME_POST_FUNCTION_ID' : JSON.stringify(process.env.GET_HOME_POST_FUNCTION_ID),
       'process.env.WARGA_ENDPOINT' : JSON.stringify(process.env.WARGA_ENDPOINT),
       'process.env.POST_COMMENTS_COLLECTION_ID' : JSON.stringify(process.env.POST_COMMENTS_COLLECTION_ID),
-      'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_ID)
+      'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_ID),
+      'process.env.NOTIFICATIONS_COLLECTION_ID': JSON.stringify(process.env.NOTIFICATIONS_COLLECTION_ID)
     },
   },
   // runtimeConfig: {

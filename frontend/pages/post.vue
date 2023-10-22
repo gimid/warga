@@ -40,8 +40,7 @@
 
         <v-row>
           <v-col rounded="lg" :cols="windowWidth > 1000?6:12">
-            <!-- <CommentList ref="commentListRef" :target-post="currentPost" @start-reply-called="onStartReply"></CommentList> -->
-            <CommentList ref="commentListRef" :target-post="currentPost" @start-reply-called=""></CommentList>
+            <CommentList ref="commentListRef" :target-post-id="currentPost.$id" @start-reply-called=""></CommentList>
           </v-col>
         </v-row>
 
@@ -51,7 +50,7 @@
               <h1>Membalas ke :</h1>
               <CommentView class="ml-10" :comment-data="currentTargetReply" minimalist="true"></CommentView>
             </div>
-            <CommentEditor ref="cmEditorRef" :target-comment-parent-id="currentTargetReply?currentTargetReply.$id:''" :target-post="currentPost" @on-data-updated="onCommentDataUpdated" @cancel-edit="onCancelComment"></CommentEditor>
+            <CommentEditor ref="cmEditorRef" :target-comment-parent-id="currentTargetReply?currentTargetReply.$id:''" :target-post-id="currentPost.$id" @on-data-updated="onCommentDataUpdated" @cancel-edit="onCancelComment"></CommentEditor>
           </v-col>
           <div id="BottomCommentEditor"></div>
         </v-row>

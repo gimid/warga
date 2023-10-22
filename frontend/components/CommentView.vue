@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div >
     
-    <div v-if="commentModel" class="my-2" :id="'commentview-'+commentModel.$id">
+    <div v-if="commentModel" class="my-2" >
 
-      <div v-if="!isEditing">
-        <v-container  class="rounded py-2" style="background-color: #fff;">
-          <div>
+      <div v-if="!isEditing" >
+        <v-container class="rounded py-2" style="background-color: #fff;" :id="'commentview-'+commentModel.$id">
+          <div >
             <div class="py-1 d-inline-block" align-self="start">
               <NuxtLink v-if="userData" :href="'/@'+userData.handle">
                 <span class="font-weight-bold mr-3" v-if="userData">
@@ -13,7 +13,19 @@
                 </span>
               </NuxtLink>
               •
-              <span class="ml-3" style="color:#a1a1a1">{{ formatDate(commentModel.$updatedAt) }}</span>
+              <NuxtLink :href="'/comment/' + commentModel.$id" style="text-decoration: none;">
+                <span class="ml-3" style="color:#a1a1a1; font-size: 0.8rem;">
+                  {{ getTimeAgo(commentModel.$updatedAt) }}
+
+                  <v-tooltip
+                    activator="parent"
+                    location="bottom"
+                  >
+                    {{ commentModel.$updatedAt }}
+                  </v-tooltip>
+                </span>
+
+              </NuxtLink>
   
               <span v-if="commentModel.$updatedAt != commentModel.$createdAt" style="color:#a1a1a1">
                 <span class="ml-1"></span>
@@ -45,7 +57,6 @@
           </div>
 
           <div class="rounded" style="background-color: white; font-size: 0.95em;">
-
             <div v-if="minimalist" class="pa-1">
               {{ commentModel.content.substring(0,200) }}...
             </div>
@@ -65,7 +76,7 @@
                 is-immediate-edit-mode="true"
                 ref="replyEditorRef"
                 :edit-text-model="replyTextModel"
-                :target-post="targetPost"
+                :target-post-id="targetPostId"
                 :target-comment-parent-id="commentModel.$id"
                 @on-new-comment-posted="onNewCommentPosted"
                 >
@@ -76,7 +87,11 @@
 
           <div v-for="comment in commentReplies" style="border-left: solid 1px #e0e0e0;">
             <!-- {{ commentReplies }} -->
-            <CommentView :comment-data="comment" :target-post="targetPost"></CommentView>
+            <CommentView :comment-data="comment" :target-post-id="targetPostId"></CommentView>
+          </div>
+
+          <div v-if="commentReplies.length < totalReplies">
+            <v-btn block @click="loadMore">Muat lagi</v-btn>
           </div>
 
         </v-container>
@@ -95,8 +110,6 @@
         </CommentEditor>
       </div>
 
-      
-
     </div>
   </div>
   
@@ -106,13 +119,14 @@
 import {MdPreview, MdCatalog, config} from 'md-editor-v3';
 import { lineNumbers } from '@codemirror/view';
 import {videoplugin} from '~/libraries/markdownitvideo'
+import { getTimeAgo } from '~/libraries/timeutil';
 
 import ProfilesService from '~/service/ProfilesService';
 import CommentService from "~/service/CommentService"
 import AuthService from '~/service/AuthService';
 import { emit } from 'process';
 
-const props = defineProps(['commentData','minimalist', 'targetPost']);
+const props = defineProps(['commentData','minimalist', 'targetPostId']);
 const userData = ref();
 
 const editMenu = ref(false);
@@ -131,7 +145,12 @@ const isUserComment = ref(false);
 const isReplying = ref(false);
 const router = useRouter();
 
-const commentReplies = ref();
+const commentReplies = ref([]);
+
+const lastCursor = ref();
+const totalReplies = ref(0);
+const isLoadingReplies = ref(false);
+
 
 const emits = defineEmits(['startReplyCalled','navigateReplyCalled'])
 
@@ -158,12 +177,33 @@ onMounted(async()=>{
 })
 
 const loadReplies = async () => {
+  isLoadingReplies.value = true;
   let fetchedReplies = await commentService.getCommentReply(commentModel.value.$id);
+  totalReplies.value = fetchedReplies.total;
 
+  if (fetchedReplies.documents.length > 0) {
+    lastCursor.value = fetchedReplies.documents[fetchedReplies.documents.length-1].$id;
+  }
+  
   if (fetchedReplies.total > 0) {
     commentReplies.value = fetchedReplies.documents;
   }
+  isLoadingReplies.value = false;
 }
+
+const loadMore = async() => {
+  let fetchedReplies = await commentService.getCommentReply(commentModel.value.$id, lastCursor.value);
+  totalReplies.value = fetchedReplies.total;
+  
+  if (fetchedReplies.documents.length > 0) {
+    lastCursor.value = fetchedReplies.documents[fetchedReplies.documents.length-1].$id;
+  }
+
+  for (let i = 0; i < fetchedReplies.documents.length; i++) {
+    commentReplies.value.push(fetchedReplies.documents[i]);
+  }
+}
+
 
 
 const checkIsUserComment = async () => {
@@ -240,7 +280,7 @@ const startReply = async () =>{
     console.log("start reply to:")
     console.log(commentModel.value);
 
-    await wait(100);
+    await wait(10);
     replyEditorRef.value?.startNewComment();
 
     emits('startReplyCalled', commentModel.value);
@@ -258,6 +298,12 @@ const navigateReply = (replyId) => {
   document.getElementById(targetItemId).scrollIntoView({behavior:'smooth'});
   emits('navigateReplyCalled', replyId);
 }
+
+const checkIsLoadingReplies = () => {
+  return isLoadingReplies.value;
+}
+
+defineExpose({loadMore, checkIsLoadingReplies})
 
 </script>
 
