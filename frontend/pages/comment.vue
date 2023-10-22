@@ -4,7 +4,12 @@
 
     <v-container class="page-width">
       <v-row v-if="originPostData != null">
-        <v-col :cols="windowWidth > 900?6:12" v-cloak>
+
+        <v-col :v-if="windowWidth > 1000" cols="2" >
+          
+        </v-col>
+        
+        <v-col :cols="windowWidth > 1000?8:12" v-cloak>
           <!-- <CommentList ref="commentListRef" :target-post-id="chatData.post_id" @start-reply-called=""></CommentList> -->
           <!-- {{ originPostData }} -->
 
@@ -62,9 +67,10 @@ const commentListRef = ref();
 const originPostData = ref();
 
 const baseCommentView = ref();
+const windowWidth = ref(0);
 
 onMounted(async ()=>{
-  
+  window.addEventListener("resize", onResize);
   if (route.params.commentid) {
     let commentid = route.params.commentid;
 
@@ -100,7 +106,21 @@ onMounted(async ()=>{
 
   // targetel.scrollIntoView({behavior:'smooth'});
 
+  resizeEditorToWindow();
+
 })
+
+onUnmounted(()=>{
+  window.removeEventListener("resize", onResize);
+});
+
+const onResize = (e) => {
+  resizeEditorToWindow();
+}
+
+const resizeEditorToWindow = () => {
+  windowWidth.value = window.innerWidth;
+}
 
 function wait(milliseconds){
   return new Promise(resolve => {
