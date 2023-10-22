@@ -9,7 +9,7 @@
       <v-row>
         <v-col cols="3" class="d-none d-sm-block">
         </v-col>
-        <v-col cols="6">
+        <v-col :cols="windowWidth > 670?6:12" v-cloak>
           <h1>Settings</h1>
 
           <v-text-field label="nama kamu" v-model="realname"></v-text-field>
@@ -54,8 +54,10 @@ const usernameValidMessage = ref("");
 const profilesService = new ProfilesService();
 const authService = new AuthService();
 
-onMounted(async () => {
+const windowWidth = ref(0);
 
+onMounted(async () => {
+  window.addEventListener("resize", onResize);
   let userSession = await authService.getUserSession();
   
   if (userSession) {
@@ -78,6 +80,18 @@ onMounted(async () => {
   }
 
 });
+
+onUnmounted(()=>{
+  window.removeEventListener("resize", onResize);
+});
+
+const onResize = (e) => {
+  resizeEditorToWindow();
+}
+
+const resizeEditorToWindow = () => {
+  windowWidth.value = window.innerWidth;
+}
 
 async function checkUsernameExist() {
 
