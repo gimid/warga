@@ -9,7 +9,7 @@
           </v-col>
 
           <v-spacer></v-spacer>
-          <v-col cols="3" class="text-right">
+          <v-col cols="4" class="text-right">
 
             <v-btn v-if="userSession" to="/new"
               prepend-icon="mdi-plus" variant="outlined" style="color: var(--gim-teal);"
