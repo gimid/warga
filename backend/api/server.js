@@ -41,7 +41,7 @@ app.post('/home', async (req, res) => {
 
   let queries = [];
   queries.push(sdk.Query.limit(25));
-  queries.push(sdk.Query.orderDesc("timestamp"));
+  queries.push(sdk.Query.orderDesc("$updatedAt"));
   queries.push(sdk.Query.equal("published", true));
 
   if (req.body) {
