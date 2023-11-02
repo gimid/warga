@@ -14,7 +14,7 @@
       <div class="postcontainer" id="post-content">
         <h1 class="post-title">{{data.title}}</h1>
         <div class="writer-info">
-          <div v-if="writer.contact_name || writer.handle">
+          <div v-if="writer && (writer.contact_name || writer.handle)">
             <div class="writer-avatar">
   
             </div>

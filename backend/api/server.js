@@ -43,6 +43,7 @@ app.post('/home', async (req, res) => {
   queries.push(sdk.Query.limit(25));
   queries.push(sdk.Query.orderDesc("$updatedAt"));
   queries.push(sdk.Query.equal("published", true));
+  queries.push(sdk.Query.equal("visibility", "public"));
 
   if (req.body) {
     let payload = req.body;
@@ -81,11 +82,13 @@ app.post('/home', async (req, res) => {
       tags: post.tags,
       title: post.title,
       cover_image: post.cover_image,
-      user_profile: user_profile
+      user_profile: user_profile,
+      locked: post.passkey !== null && post.passkey !== ""
     }
 
 
     detailArr.push(previewData);
+
   };
   res.json(detailArr);
 
@@ -159,8 +162,29 @@ function sanitizeColumns(payload, data) {
 function returnPost(res, payload, document) {
 
   if (document.published) {
-    sanitizeColumns(payload, document)
-    res.json(document)
+
+    if (document.passkey !== undefined && document.passkey !== "") {
+      // it has passkey
+
+      console.log(payload.passkey +"=="+ document.passkey)
+
+      if (payload.passkey == document.passkey) {
+        sanitizeColumns(payload, document)
+        res.json(document)
+      }else{
+        res.json({
+          title: document.title,
+          user_profile: document.user_profile,
+          "requirement":"passkey",
+          "error": "passkey wrong"
+        })
+      }
+
+    }else{
+      sanitizeColumns(payload, document)
+      res.json(document)
+    }
+
   }else{
     if (payload.preview_key){
 
@@ -267,3 +291,98 @@ app.post('/series', async (req, res) => {
     })
   }
 });
+
+app.post('/backfillupgradeddata', async (req, res) => {
+  
+
+  var dbversion = await database.getDocument(
+    process.env.DATABASE_ID,
+    process.env.META_COLLECTION_ID,
+    "dbversion");
+
+
+  
+  if (dbversion.intval == 1) {
+    
+
+
+    // Backfill default data
+    // type, passkey, visibility
+    let totalPost = -999;
+    let currentFetchedCount = 0;
+    let lastCursor = null;
+    
+    do {
+      let posts = await listPosts(lastCursor);
+      if (posts.total > totalPost) totalPost = posts.total;
+      currentFetchedCount += posts.documents.length;
+      lastCursor = posts.documents[posts.documents.length-1].$id;
+
+
+      for (let i = 0; i < posts.documents.length; i++) {
+        let document = posts.documents[i];
+        
+        let changed = false; 
+
+        if (document.type == null) {
+          document.type = "long";
+          changed = true;
+        }
+
+        if (document.visibility == null) {
+          document.visibility = "public";
+          changed = true;
+        }
+
+        if(changed) {
+          console.log("Update " + document.$id);
+          await database.updateDocument(
+            process.env.DATABASE_ID,
+            process.env.POSTS_COLLECTION_ID,
+            document.$id,
+            {
+              type:document.type,
+              visibility:document.visibility
+            }
+          )
+        }
+
+      }
+
+      console.log("currentFetchedCount:" + currentFetchedCount + " < totalPost:" + totalPost)
+
+
+    }while (currentFetchedCount < totalPost);
+
+    var dbversion = await database.updateDocument(
+      process.env.DATABASE_ID,
+      process.env.META_COLLECTION_ID,
+      "dbversion",
+      {
+        intval:2
+      });
+
+  }
+  
+  res.json({
+    "complete": "enjoy your day"
+  })
+
+
+})
+
+const listPosts = async(cursor) => {
+
+  var query = [];
+  if (cursor !== undefined && cursor !== null) {
+    query.push(sdk.Query.cursorAfter(cursor))
+  }
+
+  var lists = await database.listDocuments(
+    process.env.DATABASE_ID, 
+    process.env.POSTS_COLLECTION_ID, 
+    query
+  );
+
+  return lists;
+}

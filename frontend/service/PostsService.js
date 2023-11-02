@@ -242,7 +242,7 @@ export default class PostsService {
 
       let queries = [
         Query.equal("user_id", user_ID),
-        Query.orderDesc("$updatedAt")
+        Query.orderDesc("$createdAt")
       ]
 
       if (cursor_after != null) {
@@ -343,7 +343,7 @@ export default class PostsService {
     }
   }
 
-  async getPostById(id, preview_key) {
+  async getPostById(id, preview_key, passkey) {
 
     try {
       // let result = await databases.getDocument(
@@ -356,7 +356,8 @@ export default class PostsService {
 
       let requestData = {
         post_id: id,
-        preview_key: preview_key
+        preview_key: preview_key,
+        passkey: passkey
       };
       
       let axiosConfig = {
@@ -392,6 +393,7 @@ export default class PostsService {
       
       if (!cursorAfter) {
         let result = await axios.post(process.env.WARGA_ENDPOINT+'/home',{},axiosConfig);
+        console.log(result);
         return result.data;
       }else{
         let result = await axios.post(

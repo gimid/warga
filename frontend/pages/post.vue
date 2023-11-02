@@ -10,7 +10,41 @@
       <v-row>
     
         <v-col :cols="windowWidth > 1000?8:12" v-cloak>
-          <PostContainer :data="currentPost" :writer="currentPost.user_profile" :current-route="route" show-series="true"></PostContainer>
+
+          <div v-if="requirePasskey">
+            <v-sheet            
+              rounded="lg"
+              class="fill-height postmaincontainer pa-5"
+            >
+
+            <h1 class="post-title">{{currentPost.title}}</h1>
+
+              <div class="text-center ma-3">
+                <v-icon icon="mdi-lock">
+                </v-icon>
+
+              </div>
+
+              <div>
+                <v-text-field v-model="passkeyInput">
+                  <template #append>
+                    <v-btn icon="mdi-key" @click="unlockPost">
+
+                    </v-btn>
+                  </template>
+                </v-text-field>
+              </div>
+
+              <div class="text-caption">
+                artikel ini dikunci oleh penulisnya (<NuxtLink :href="'/@'+currentPost.user_profile.handle">@{{currentPost.user_profile.handle}}</NuxtLink>). silahkan masukkan kode rahasia dari penulis tersebut untuk membaca isinya
+              </div>
+
+            </v-sheet>
+          </div>
+          <div v-else>
+            <PostContainer :data="currentPost" :writer="currentPost.user_profile" :current-route="route" show-series="true"></PostContainer>
+          </div>
+
         </v-col>
 
         <v-col style="overflow-wrap: break-word; word-break: keep-all;"  :cols="windowWidth > 1000?4:12">
@@ -99,6 +133,9 @@ const currentTargetReply = ref(null);
 
 const currentUser = ref();
 
+const requirePasskey = ref(false);
+const passkeyInput = ref(null);
+
 // const writerInfo = ref();
 // const writerMetadata = ref();
 
@@ -129,6 +166,8 @@ onMounted(async () => {
   fetchWriterInfo();
 
   // writerInfo.value = currentPost.user_profile;
+  checkRequireKey();
+  
 });
 
 onUnmounted(()=>{
@@ -186,17 +225,38 @@ const checkLoggedIn = async() => {
 
 const fetchWriterInfo = async() => {
 
-  if (route.params.username != currentPost.value.user_profile.handle){
-    navigateTo("/@"+currentPost.value.user_profile.handle + "/" + route.params.postid);
+  if(currentPost.value.user_profile) {
+    if (route.params.username != currentPost.value.user_profile.handle){
+      navigateTo("/@"+currentPost.value.user_profile.handle + "/" + route.params.postid);
+    }
+  
+    // let profile = await profileService.getProfileFromHandle(route.params.username);
+    // writerInfo.value = profile;
+    // try{
+    //   writerMetadata.value = JSON.parse(profile.metadata);
+    // }catch(e){
+    //   console.log(e);
+    // }
   }
 
-  // let profile = await profileService.getProfileFromHandle(route.params.username);
-  // writerInfo.value = profile;
-  // try{
-  //   writerMetadata.value = JSON.parse(profile.metadata);
-  // }catch(e){
-  //   console.log(e);
-  // }
+}
+
+const unlockPost = async() => {
+  currentPost.value = await postsService.getPostById(route.params.postid, route.query.preview_key, passkeyInput.value);
+  checkRequireKey();
+}
+
+const checkRequireKey = () => {
+  if (currentPost.value.requirement) {
+
+    if (currentPost.value.requirement == "passkey"){
+      requirePasskey.value = true;
+    }else{
+      requirePasskey.value = true;
+    }
+  }else{
+    requirePasskey.value = false;
+  }
 }
 
 </script>

@@ -275,7 +275,7 @@
               <div v-else>
                 <v-row>
                   <v-col>
-                    <div>
+                    <div class="text-caption">
                       Apakah postingan ini bagian dari sebuah rangkaian? Berikan nama unik untuk rangkaian ini
                     </div>
                     <v-combobox
@@ -333,15 +333,32 @@
 
 
               </div>
+              
+              
+              <v-row>
+                <v-col>                  
+                  <h3>Visibility</h3>
+                  <v-combobox :items="['public', 'private']" v-model="postVisibility">
+                    <template #append>
+                      <v-btn icon="mdi-sync" variant="elevated" @click="saveVisibility"></v-btn>
+                    </template>
+                  </v-combobox>
+                </v-col>
+              </v-row>
+
 
               <v-row>
                 <v-col>
-                  <hr/>
+                  <h3>Kata kunci</h3>
+                  <span class="text-caption">Tambahkan akses kata kunci jika ingin membuka postingan ini</span>
+                  <v-text-field v-model="postPasskey">
+                    <template #append>
+                      <v-btn icon="mdi-sync" variant="elevated" @click="savePasskey"></v-btn>
+                    </template>
+                  </v-text-field>
                 </v-col>
               </v-row>
-              <!-- <v-btn width="100%" @click="console.log(seriesInputName)"></v-btn> -->
-              <!-- <v-btn width="100%" @click="seriesoverlay = !seriesoverlay">Selesai</v-btn> -->
-              
+
 
               
               <div class="mb-5"></div>
@@ -390,7 +407,9 @@ const MAX_CHIPS = 4;
 const title = ref('');
 const tags = ref([]);
 const newTag = ref('');
-const published = ref(false)
+const published = ref(false);
+const postVisibility = ref('public');
+const postPasskey = ref('');
 const currentId = ref('');
 const currentCoverImageURL = ref("");
 
@@ -470,6 +489,8 @@ const fetchPost = async (postId) => {
   published.value = postData.published;
   currentPreviewKey.value = postData.preview_key
   currentCoverImageURL.value = postData.cover_image;
+  postVisibility.value = postData.visibility;
+  postPasskey.value = postData.passkey;
 
   updatePreviewURL();
   await fetchUserSeries();
@@ -625,7 +646,9 @@ const savePost = async () => {
       tags: tags.value,
       published: published.value,
       user_id: profileStore.profile.data.$id,
-      cover_image: currentCoverImageURL.value
+      cover_image: currentCoverImageURL.value,
+      visibility: postVisibility.value,
+      passkey: postPasskey.value
     }
   
     var post = await postsService.createPost(data);
@@ -643,7 +666,9 @@ const savePost = async () => {
       $id: currentId.value,
       published: published.value,      
       // user_id: profileStore.profile.data.$id,
-      cover_image: currentCoverImageURL.value
+      cover_image: currentCoverImageURL.value,
+      visibility: postVisibility.value,
+      passkey: postPasskey.value
     }
     
     
@@ -807,6 +832,14 @@ const showSettings = () => {
   fetchUserSeries();
 }
 
+const saveVisibility = async () => {
+  await savePost();
+}
+
+const savePasskey = async () => {
+  console.log("Value" + postPasskey.value)
+  await savePost();
+}
 </script>
 
 <style >

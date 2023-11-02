@@ -15,6 +15,10 @@
 
           </div>
 
+          <div v-if="locked" class="float-right mr-3 mt-3">
+            <v-icon icon="mdi-lock" color="var(--gim-teal)"></v-icon>
+          </div>
+
           <div class="px-4 py-4">
             <div v-if="data.user_profile && data.user_profile.handle">
               <b>@{{ data.user_profile.handle }}</b>
@@ -61,6 +65,7 @@ const postsService = new PostsService();
 const userInfo = ref({});
 const title = ref("");
 const link = ref("");
+const locked = ref(false);
 const dataFetchError = ref(false);
 
 const isFetching = ref(true)
@@ -71,6 +76,7 @@ onMounted(async ()=> {
     isFetching.value = true;
 
     title.value = props.data.title;
+    locked.value = props.data.locked;
 
     // getUser(props.data.user_id);
     
