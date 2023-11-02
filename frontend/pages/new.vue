@@ -648,7 +648,8 @@ const savePost = async () => {
       user_id: profileStore.profile.data.$id,
       cover_image: currentCoverImageURL.value,
       visibility: postVisibility.value,
-      passkey: postPasskey.value
+      passkey: postPasskey.value,
+      type: "long"
     }
   
     var post = await postsService.createPost(data);
@@ -668,7 +669,8 @@ const savePost = async () => {
       // user_id: profileStore.profile.data.$id,
       cover_image: currentCoverImageURL.value,
       visibility: postVisibility.value,
-      passkey: postPasskey.value
+      passkey: postPasskey.value,
+      type: "long"
     }
     
     
