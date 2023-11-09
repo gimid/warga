@@ -14,7 +14,7 @@ RUN npm run build
 
 
 # Bundle app source
-COPY .output/ .
+COPY ".output" .
 
 EXPOSE 3000
 
