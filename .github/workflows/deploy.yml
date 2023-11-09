@@ -6,13 +6,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    timeout: 3600s
-    command_timeout: 60m
     steps:
      - name: Deploy nodejs function
        uses: appleboy/ssh-action@v0.1.2
        with:
+        timeout: 3600s
+        command_timeout: 60m
         host: ${{secrets.SSH_HOST}}
         key: ${{secrets.SSH_KEY}}
         username: ${{secrets.SSH_USERNAME}}
