@@ -73,6 +73,7 @@ export default defineNuxtConfig({
   //   }
   // },
   devtools: { enabled: true },
+  sourcemap: false,
   routeRules: {
     '/*': {cors: true},
     '/@*': {ssr: true},
