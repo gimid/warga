@@ -18,4 +18,8 @@ jobs:
           cd ~/warga/backend/api
           git pull
           docker compose up --build -d
-          echo "apii build"
+          echo "apii built"
+
+          cd ~/warga/frontend
+          docker compose up --build -d
+          echo "frontend built"
