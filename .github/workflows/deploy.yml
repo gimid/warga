@@ -3,9 +3,6 @@ on:
   push:
     branches: [prod]
 
-env:
-  NODE_OPTIONS: '--max_old_space_size=8000'
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
