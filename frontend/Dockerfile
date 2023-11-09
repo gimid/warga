@@ -12,6 +12,7 @@ RUN npm install
 
 RUN npm run build
 
+RUN ls -a
 
 # Bundle app source
 COPY ".output" .
