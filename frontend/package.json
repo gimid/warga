@@ -7,7 +7,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": "nuxt start"
+    "start": "cross-env HOST=0.0.0.0 node .output/server/index.mjs"
   },
   "dependencies": {
     "@codemirror/view": "^6.17.1",
