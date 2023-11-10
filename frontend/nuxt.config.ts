@@ -65,8 +65,16 @@ export default defineNuxtConfig({
       'process.env.WARGA_ENDPOINT' : JSON.stringify(process.env.WARGA_ENDPOINT),
       'process.env.POST_COMMENTS_COLLECTION_ID' : JSON.stringify(process.env.POST_COMMENTS_COLLECTION_ID),
       'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_ID),
-      'process.env.NOTIFICATIONS_COLLECTION_ID': JSON.stringify(process.env.NOTIFICATIONS_COLLECTION_ID)
+      'process.env.NOTIFICATIONS_COLLECTION_ID': JSON.stringify(process.env.NOTIFICATIONS_COLLECTION_ID),
+      'process.env.NITRO_HOST': JSON.stringify(process.env.NITRO_HOST)
     },
+    server: {
+      proxy: {
+        '/': {
+          changeOrigin: true
+        }
+      }
+    }
   },
   // runtimeConfig: {
   //   public: {

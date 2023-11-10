@@ -6,7 +6,8 @@
     "dev": "nuxt dev --dotenv .env",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "start": "nuxt start"
   },
   "dependencies": {
     "@codemirror/view": "^6.17.1",
