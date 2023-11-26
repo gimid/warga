@@ -19,6 +19,7 @@ export default defineNuxtConfig({
       ],
     }
   },
+  
   plugins: [
     {src: '~/plugins/iframe-resize', mode: 'client'}
   ],
@@ -66,7 +67,8 @@ export default defineNuxtConfig({
       'process.env.POST_COMMENTS_COLLECTION_ID' : JSON.stringify(process.env.POST_COMMENTS_COLLECTION_ID),
       'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_ID),
       'process.env.NOTIFICATIONS_COLLECTION_ID': JSON.stringify(process.env.NOTIFICATIONS_COLLECTION_ID),
-      'process.env.NITRO_HOST': JSON.stringify(process.env.NITRO_HOST)
+      'process.env.NITRO_HOST': JSON.stringify(process.env.NITRO_HOST),
+      'process.env.FILES_COLLECTION_ID': JSON.stringify(process.env.FILES_COLLECTION_ID)
     }
   },
   // runtimeConfig: {
@@ -83,5 +85,6 @@ export default defineNuxtConfig({
     '/new': {ssr: false},
     '/onboard': {ssr: false},
   },
+  
 
 })

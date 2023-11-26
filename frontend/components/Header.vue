@@ -79,11 +79,11 @@
                     Dashboard
                   </div>
                 </NuxtLink>
-                <!-- <NuxtLink v-if="userSession" to="/gallery">
+                <NuxtLink v-if="userSession" to="/gallery">
                   <div>
                     Galeri
                   </div>
-                </NuxtLink> -->            
+                </NuxtLink>            
                 <NuxtLink to="/admin" v-if="profileStore.profile.isAdmin">
                   <div>
                     Admin

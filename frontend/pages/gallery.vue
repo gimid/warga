@@ -6,23 +6,14 @@
     {{ myProfile?.handle }}
     <hr/>
     
-    Your files
-
-    {{ fetchingInfo }}
-    <v-container fluid>
-        <v-row dense>
-          <v-col
-            v-for="file in files"
-            :key="file.$id"
-          >
-            <v-card :title="file.$id" height="200">
-              <img :src="imageURLs[file.$id]" height="100"/>
-          
-              <v-btn @click="deleteImage(file.$id)">Hapus</v-btn>
-            </v-card>
-          </v-col>
-        </v-row>
-    </v-container>
+    <h1>Your files</h1>
+    <div>
+      {{ fetchingInfo }}  
+      <div v-for="file in files" :key="file.$id" class="d-inline-block" style="width: 100px; height: 100px;">
+        <img :src="imageURLs[file.$id]" height="100"/>          
+        <v-btn @click="deleteImage(file.$id)">Hapus</v-btn>
+      </div>
+    </div>
 
     <Footer></Footer>
 
@@ -36,6 +27,7 @@ import { ref, reactive } from 'vue';
 import PostsService from '~/service/PostsService';
 import ProfilesService from '~/service/ProfilesService';
 import AuthService from '~/service/AuthService';
+import FilesService from '~/service/FilesService';
 import ImageBucketService from '~/service/ImageBucketService'
 
 definePageMeta({
@@ -44,6 +36,8 @@ definePageMeta({
 
 
 const imageBucketService = new ImageBucketService();
+const filesService = new FilesService();
+const authService = new AuthService();
 
 
 const files = ref([])
@@ -52,11 +46,14 @@ const fetchingInfo = ref("Fetching data")
 let imageURLs = reactive({})
 
 onMounted(async ()=>{
-  let data = (await imageBucketService.getImageList());
-  files.value = data.files;
+  myProfile.value = await authService.getUserSession();
 
-  await data.files.forEach(async element => {
-      imageURLs[element.$id] = await imageBucketService.getImagePreview(element.$id);        
+  let data = (await filesService.getUserFiles(myProfile.value.$id));
+  console.log(data.documents);
+  files.value = data.documents;
+
+  await data.documents.forEach(async element => {
+      imageURLs[element.$id] = await imageBucketService.getImagePreview(element.$id);
   });
 
   fetchingInfo.value = "";

@@ -21,6 +21,27 @@
                 ".npm"
             ],
             "path": "functions/notification"
+        },
+        {
+            "$id": "656313446d3f631d65c2",
+            "name": "uploadlog",
+            "runtime": "node-16.0",
+            "execute": [],
+            "events": [
+                "buckets.*.files.*.create",
+                "buckets.*.files.*.delete"
+            ],
+            "schedule": "",
+            "timeout": 15,
+            "enabled": true,
+            "logging": true,
+            "entrypoint": "src/main.js",
+            "commands": "npm install",
+            "ignore": [
+                "node_modules",
+                ".npm"
+            ],
+            "path": "functions/uploadlog"
         }
     ]
 }

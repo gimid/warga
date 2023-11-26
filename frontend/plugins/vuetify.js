@@ -31,10 +31,11 @@ import {
   VMain,
   VApp,
   VTooltip,
-  VBadge
+  VBadge,
+  VSkeletonLoader
  } from "vuetify/components";
 
-import { VSkeletonLoader } from "vuetify/labs/components";
+// import { VSkeletonLoader } from "vuetify/labs";
 
 
 // import * as components from 'vuetify/components'
