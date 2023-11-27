@@ -86,7 +86,6 @@ import {marked} from '../libraries/marked.js'
 import {markedEmojiBoldPatch} from '../libraries/markedEmojiBoldPatch.js'
 import { useAsyncData } from 'nuxt/app';
 import DOMPurify from 'isomorphic-dompurify';
-import { compileScript } from 'vue/compiler-sfc';
 
 const rawText = ref("");
 const parsedText = ref("");
