@@ -316,7 +316,7 @@
                         </template>
     
                         <template v-slot:item="{ item, index, props }">
-                          <div block variant="text" class="text-left pa-3 series-dropdown-item" @click="applySeries(item.value)">
+                          <div block variant="text" class="text-left pa-3 series-dropdown-item" @click="applySeries(item.raw)">
                             {{item.title}}
     
                           </div>
@@ -761,7 +761,6 @@ const applySeries = async (value) => {
 
   await savePost();
 
-  console.log(seriesInputName);
   if (seriesInputName.value.$id){
     if (currentId.value){
       let applyPost = await seriesService.seriesAddPostMember(seriesInputName.value.$id, currentId.value);

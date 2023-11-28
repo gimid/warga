@@ -259,8 +259,9 @@ export default class SeriesService {
 
       let returnData = {};
 
+      
       if(previousData != null){
-        
+        console.log("Adding new series member")
         
         let newArray = []
 
