@@ -8,7 +8,7 @@
           <v-col :cols="windowWidth > 1000?3:0" :class="windowWidth < 1000? 'd-none':''" v-cloak>
             <v-card class="my-2 px-3 py-2 post-preview-container">
 
-              <div>asdasdasd
+              <div>
                 <ul class="sidebar-menu">
                   <li>
                     <NuxtLink to="p/about" class="text-h7">
