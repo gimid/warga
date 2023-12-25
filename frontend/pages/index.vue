@@ -88,15 +88,22 @@
             </v-row>
 
             <div v-if="dataAvailable">
-              <div v-if="posts.length <= 0" v-for="i in 10">
+              <div v-if="!postFetched" v-for="i in 10">
                 <v-skeleton-loader type="article" class="mt-3 mb-3"></v-skeleton-loader>
               </div>
-              <div v-else v-for="userPost in posts">
+              
+              <div v-else-if="posts.length > 0"  v-for="userPost in posts">
                 <PostPreview :data="userPost"></PostPreview>
               </div>
               <div v-if="posts.length > 0 && moreAvailable">
                 <v-btn @click="loadMore" block>Muat lagi</v-btn>
               </div>
+
+              <div v-if="postFetched && posts.length <= 0">
+                <h2>Belum ada postingan di sini</h2>
+              </div>
+
+
             </div>
             <div v-else>
               <div class="">
@@ -147,6 +154,8 @@ const dataAvailable = ref(true);
 
 const moreAvailable = ref(true);
 
+const postFetched = ref(false);
+
 useSeoMeta(
   {
     title: "GIMid"
@@ -168,6 +177,7 @@ onUpdated(()=>{
 
 const updateFetchedList = async () =>{
   
+  postFetched.value = false;
   moreAvailable.value = true;
 
   if (route.query.list) {
@@ -200,6 +210,8 @@ const updateFetchedList = async () =>{
       lastPost.value = homepagePosts[homepagePosts.length-1];
     }
   }
+
+  postFetched.value = true;
 }
 
 const loadMore = async () => {
