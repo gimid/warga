@@ -33,7 +33,8 @@ import {
   VTooltip,
   VBadge,
   VSkeletonLoader,
-  VCheckbox
+  VCheckbox,
+  VDatePicker
  } from "vuetify/components";
 
 // import { VSkeletonLoader } from "vuetify/labs";
@@ -76,7 +77,8 @@ export default defineNuxtPlugin(nuxtApp => {
       VApp,
       VTooltip,
       VBadge,
-      VCheckbox
+      VCheckbox,
+      VDatePicker
     },
     directives
   })

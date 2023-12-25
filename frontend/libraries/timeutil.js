@@ -34,4 +34,29 @@ const getTimeAgo = (timestamp) => {
   return Math.floor(seconds) + ' detik yang lalu';
 }
 
-export {getTimeAgo}
+
+const getTimeFormatted = (timestamp) => {
+  console.log(timestamp);
+  let date = new Date(timestamp);
+
+  let year = date.getFullYear();
+
+  let month = date.getMonth() + 1;
+  if (month < 10) {
+    month = "0" + month;
+  }
+
+  let dayDate = date.getDate();
+  if (dayDate < 10) {
+    dayDate = "0" + dayDate;
+  }
+
+
+  const stringDate = year + "-" + month + "-" + dayDate;
+
+
+  return stringDate;
+
+}
+
+export {getTimeAgo, getTimeFormatted}

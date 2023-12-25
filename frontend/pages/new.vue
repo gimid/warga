@@ -216,9 +216,9 @@
       <v-overlay
         :model-value="seriesoverlay"
         @click:outside="seriesoverlay = false"
-        class="align-center justify-center"
+        class="align-center justify-center"        
       >
-      <v-card title="Pengaturan" subtitle="Opsi tambahan untuk postingan ini" width="400">
+      <v-card title="Pengaturan" subtitle="Opsi tambahan untuk postingan ini" width="400" style="height: 500px; overflow-y:scroll">
         <v-container>
 
           <v-row v-if="seriesLoading" class="text-center">
@@ -359,6 +359,15 @@
                 </v-col>
               </v-row>
 
+              <v-row v-if="published">
+                <v-col>
+                  <h3>Tanggal dipublikasikan</h3>
+                  <span class="text-caption">Atur tanggal postingan ini terpublikasikan</span>
+                  <input type="date" v-model="publishedDate">
+                  <v-btn icon="mdi-sync" variant="elevated" @click="savePublishedDate"></v-btn>
+                </v-col>
+              </v-row>
+
               <v-row v-if="isAdmin">
                 <v-col>
                   <v-row>
@@ -417,6 +426,8 @@ import SeriesService from '~/service/SeriesService';
 import CuratedPostsService from '~/service/CuratedPostsService';
 import AuthService from '~/service/AuthService';
 
+import {getTimeFormatted} from "~/libraries/timeutil"
+
 import { storeToRefs } from 'pinia';
 
 definePageMeta({
@@ -437,6 +448,7 @@ const postPasskey = ref('');
 const currentId = ref('');
 const currentUserId = ref('');
 const currentCoverImageURL = ref("");
+const publishedDate = ref('');
 
 const editText = ref("post");
 const isEditMode = ref(true);
@@ -527,6 +539,7 @@ const fetchPost = async (postId) => {
   currentCoverImageURL.value = postData.cover_image;
   postVisibility.value = postData.visibility;
   postPasskey.value = postData.passkey;
+  publishedDate.value = getTimeFormatted(postData.published_date);
 
   updatePreviewURL();
   await fetchUserSeries();
@@ -686,6 +699,7 @@ const savePost = async () => {
       cover_image: currentCoverImageURL.value,
       visibility: postVisibility.value,
       passkey: postPasskey.value,
+      published_date: publishedDate.value,
       type: "long"
     }
   
@@ -707,12 +721,15 @@ const savePost = async () => {
       cover_image: currentCoverImageURL.value,
       visibility: postVisibility.value,
       passkey: postPasskey.value,
+      published_date: publishedDate.value,
       type: "long"
     }
     
     
     var post = await postsService.updatePost(data);   
     currentPreviewKey.value = post.preview_key;
+
+    publishedDate.value = getTimeFormatted(post.published_date);
 
     let userdata = await profilesService.getProfileFromUserID(post.user_id);
     currentUsername.value = userdata.handle;
@@ -912,6 +929,10 @@ const saveCuration = async () => {
     }
   }
 
+}
+
+const savePublishedDate = async () => {
+  await savePost();
 }
 
 const fetchIsCurated = async () => {

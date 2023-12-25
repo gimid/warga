@@ -42,6 +42,7 @@ app.post('/home', async (req, res) => {
   let queries = [];
   queries.push(sdk.Query.limit(25));
   queries.push(sdk.Query.orderDesc("$updatedAt"));
+  queries.push(sdk.Query.orderDesc("published_date"));
   queries.push(sdk.Query.equal("published", true));
   queries.push(sdk.Query.equal("visibility", "public"));
 
@@ -370,8 +371,6 @@ app.post('/backfillupgradeddata', async (req, res) => {
   
   if (dbversion.intval == 1) {
     
-
-
     // Backfill default data
     // type, passkey, visibility
     let totalPost = -999;
@@ -420,7 +419,7 @@ app.post('/backfillupgradeddata', async (req, res) => {
 
     }while (currentFetchedCount < totalPost);
 
-    var dbversion = await database.updateDocument(
+    dbversion = await database.updateDocument(
       process.env.DATABASE_ID,
       process.env.META_COLLECTION_ID,
       "dbversion",
@@ -428,7 +427,63 @@ app.post('/backfillupgradeddata', async (req, res) => {
         intval:2
       });
 
+  }else if (dbversion.intval == 2) {
+    // Backfill posts published date
+
+    // Backfill default data
+    // type, passkey, visibility
+    let totalPost = -999;
+    let currentFetchedCount = 0;
+    let lastCursor = null;
+    
+    do {
+      let posts = await listPosts(lastCursor);
+      if (posts.total > totalPost) totalPost = posts.total;
+      currentFetchedCount += posts.documents.length;
+      lastCursor = posts.documents[posts.documents.length-1].$id;
+
+
+      for (let i = 0; i < posts.documents.length; i++) {
+        let document = posts.documents[i];
+        
+        let changed = false; 
+
+        if (document.published_date == null) {
+          document.published_date = document.$updatedAt;
+          changed = true;
+        }
+
+        if(changed) {
+          console.log("Update " + document.$id);
+          await database.updateDocument(
+            process.env.DATABASE_ID,
+            process.env.POSTS_COLLECTION_ID,
+            document.$id,
+            {
+              published_date:document.published_date
+            }
+          )
+        }
+
+      }
+
+      console.log("currentFetchedCount:" + currentFetchedCount + " < totalPost:" + totalPost)
+
+
+    }while (currentFetchedCount < totalPost);
+
+    dbversion = await database.updateDocument(
+      process.env.DATABASE_ID,
+      process.env.META_COLLECTION_ID,
+      "dbversion",
+      {
+        intval:3
+      });
+
   }
+
+
+  
   
   res.json({
     "complete": "enjoy your day"
