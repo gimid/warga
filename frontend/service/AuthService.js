@@ -54,6 +54,8 @@ export default class AuthService {
             const profileStore = useProfileStore();
             let userSession = await this.getUserSession();
             
+            
+
             if(!profileStore.profile.fetched) {
     
                 this.fillProfileData(userSession);
@@ -84,7 +86,7 @@ export default class AuthService {
             let userTeams = await teams.list();
             if(userTeams.teams.find(x => x.name == "Admin")){
                 profileStore.profile.isAdmin = true;
-            }      
+            }
         }
     }
 
@@ -94,6 +96,20 @@ export default class AuthService {
 
         // Go to OAuth provider login page
         account.createOAuth2Session("google", process.env.WEBSITE_URL+"/dashboard", process.env.WEBSITE_URL+"/enter");
+    }
+
+    async checkIsAdmin() {
+        try{
+            let userTeams = await teams.list();
+            console.log(userTeams)
+            if(userTeams.teams.find(x => x.name == "Admin")){
+                return true;
+            }
+            return false;
+        }catch(e){
+            console.log(e);
+            return false;
+        }
     }
 
   }

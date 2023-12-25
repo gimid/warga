@@ -243,7 +243,7 @@
               <div v-if="currentSeriesId" >
                   <v-row v-if="!editingSeries" no-gutters>
                     <v-col class="d-flex">
-                      <h2>{{ seriesStore.getSeriesWithId(currentSeriesId).title }}</h2>
+                      <h2>{{ seriesStore.getSeriesWithId(currentSeriesId)!==undefined?seriesStore.getSeriesWithId(currentSeriesId).title:"Undefined" }}</h2>
                     </v-col>
                   </v-row>
                   <v-row v-if="!editingSeries">
@@ -359,6 +359,25 @@
                 </v-col>
               </v-row>
 
+              <v-row v-if="isAdmin">
+                <v-col>
+                  <v-row>
+                    <v-col>
+                      <v-checkbox label="Terkurasi" v-model="isCurated"></v-checkbox>
+                      
+                    </v-col>
+                    <v-col>
+                      <v-btn icon="mdi-sync" variant="elevated" @click="saveCuration"></v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      {{ curationInfo }}
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+
 
               
               <div class="mb-5"></div>
@@ -395,6 +414,9 @@ import PostsService from '~/service/PostsService';
 import ImageBucketService from '~/service/ImageBucketService';
 import ProfilesService from '~/service/ProfilesService';
 import SeriesService from '~/service/SeriesService';
+import CuratedPostsService from '~/service/CuratedPostsService';
+import AuthService from '~/service/AuthService';
+
 import { storeToRefs } from 'pinia';
 
 definePageMeta({
@@ -404,6 +426,8 @@ definePageMeta({
 const router = useRouter();
 const MAX_CHIPS = 4;
 
+const isAdmin = ref(false);
+
 const title = ref('');
 const tags = ref([]);
 const newTag = ref('');
@@ -411,6 +435,7 @@ const published = ref(false);
 const postVisibility = ref('public');
 const postPasskey = ref('');
 const currentId = ref('');
+const currentUserId = ref('');
 const currentCoverImageURL = ref("");
 
 const editText = ref("post");
@@ -430,6 +455,8 @@ const postsService = new PostsService();
 const imageBucketService = new ImageBucketService();
 const profilesService = new ProfilesService();
 const seriesService = new SeriesService();
+const curatedPostService = new CuratedPostsService();
+const authService = new AuthService();
 
 const profileStore = useProfileStore();
 const seriesStore = useSeriesStore();
@@ -447,6 +474,10 @@ const seriesInputName = ref("");
 const editingSeries = ref(false);
 const currentEditingSeriesInput = ref("");
 const seriesLoading = ref(false);
+
+// curated
+const isCurated = ref(false);
+const curationInfo = ref("");
 
 onMounted(async ()=>{
   
@@ -469,6 +500,10 @@ onMounted(async ()=>{
     editText.value = "";
   }
 
+  if (await authService.checkIsAdmin()) {
+    isAdmin.value = true;
+  }
+
 });
 
 onUnmounted(()=>{
@@ -486,6 +521,7 @@ const fetchPost = async (postId) => {
   tags.value = postData.tags;
   editText.value = postData.content;
   currentId.value = postData.$id;
+  currentUserId.value = postData.user_id;
   published.value = postData.published;
   currentPreviewKey.value = postData.preview_key
   currentCoverImageURL.value = postData.cover_image;
@@ -495,6 +531,7 @@ const fetchPost = async (postId) => {
   updatePreviewURL();
   await fetchUserSeries();
   await fetchCurrentPostSeries();
+  await fetchIsCurated();
 }
 
 const fetchCurrentPostSeries = async () => {
@@ -512,7 +549,7 @@ const fetchCurrentPostSeries = async () => {
 }
 
 const fetchUserSeries = async () => {
-  await seriesService.getUserSeries();
+  await seriesService.getUserSeries(currentUserId.value);
 }
 
 
@@ -807,7 +844,12 @@ const deleteSeries = async (series_id) => {
 
 const renameSeries = async () => {
   seriesLoading.value = true;
-  currentEditingSeriesInput.value = seriesStore.getSeriesWithId(currentSeriesId.value).title;
+
+  let seriesData = seriesStore.getSeriesWithId(currentSeriesId.value);
+
+  if(seriesData !== undefined)  currentEditingSeriesInput.value = seriesData.title;
+  else currentEditingSeriesInput.value = "undefined"
+  
   editingSeries.value = true;
   seriesLoading.value = false;
 }
@@ -841,6 +883,45 @@ const savePasskey = async () => {
   console.log("Value" + postPasskey.value)
   await savePost();
 }
+
+const saveCuration = async () => {
+
+
+  if(isCurated.value){
+    try{
+      let data = {
+        published_time: new Date(Date.now())
+      }
+      await curatedPostService.addPost(currentId.value, data)
+      isCurated.value = true;
+
+      curationInfo.value = "Kurasi berhasil ditambahkan";
+    }catch(e){
+      curationInfo.value = e;
+      console.log(e);
+    }
+  }else{
+    try{
+      await curatedPostService.deletePost(currentId.value)
+      isCurated.value = false;
+
+      curationInfo.value = "Kurasi berhasil dihapus";
+    }catch(e){
+      curationInfo.value = e;
+      console.log(e);
+    }
+  }
+
+}
+
+const fetchIsCurated = async () => {
+  try {
+    isCurated.value = await curatedPostService.isCurated(currentId.value);
+  }catch(e){
+    console.log(e);
+  }
+}
+
 </script>
 
 <style >

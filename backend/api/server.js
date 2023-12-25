@@ -292,6 +292,72 @@ app.post('/series', async (req, res) => {
   }
 });
 
+
+// get curated posts
+app.post('/curated', async (req, res) => {
+  
+
+  let queries = [];
+  queries.push(sdk.Query.limit(25));
+  queries.push(sdk.Query.orderDesc("published_time"));
+
+  if (req.body) {
+    let payload = req.body;
+    
+    if (payload.cursor_after){
+      queries.push(sdk.Query.cursorAfter(payload.cursor_after));
+    }
+  }
+
+  let curatedpageResult = await database.listDocuments(
+    process.env.DATABASE_ID,
+    process.env.CURATED_POSTS_COLLECTION_ID,
+    queries
+  );
+
+
+
+  let detailArr = [];
+
+  for  (let i = 0; i < curatedpageResult.documents.length; i++) {
+    let post_id = curatedpageResult.documents[i].$id;
+
+    let post = await database.getDocument(
+      process.env.DATABASE_ID,
+      process.env.POSTS_COLLECTION_ID,
+      post_id
+    )     
+
+    let user_profile = await database.getDocument(
+      process.env.DATABASE_ID,
+      process.env.PROFILES_COLLECTION_ID,
+      post.user_id
+    )
+
+
+    let previewData = {
+      "$id" : post.$id,
+      post_id: post.$id,
+      series_id : post.series_id,
+      user_id: post.user_id,
+      published: post.published,
+      tags: post.tags,
+      title: post.title,
+      cover_image: post.cover_image,
+      user_profile: user_profile,
+      locked: post.passkey !== null && post.passkey !== ""
+    }
+
+
+    detailArr.push(previewData);
+
+  };
+  res.json(detailArr);
+
+
+})
+
+
 app.post('/backfillupgradeddata', async (req, res) => {
   
 

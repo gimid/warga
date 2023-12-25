@@ -410,6 +410,35 @@ export default class PostsService {
     }
   }
 
+  async getCuratedPosts(cursorAfter) {
+    try {
+      console.log("AFTER" + cursorAfter);
+
+      let axiosConfig = {
+        headers: {
+          'Content-Type' : 'application/json;charset=UTF-8'
+        }
+      }
+      
+      if (!cursorAfter) {
+        let result = await axios.post(process.env.WARGA_ENDPOINT+'/curated',{},axiosConfig);
+        console.log(result);
+        return result.data;
+      }else{
+        let result = await axios.post(
+          process.env.WARGA_ENDPOINT+'/curated',
+          {
+            'cursor_after': cursorAfter
+          },
+          axiosConfig);
+        return result.data;
+      }
+    }catch (e){ 
+      console.log(e);
+      throw(e);
+    }
+  }
+
   async deleteHomepagePost(document_ID) {
     try {
 

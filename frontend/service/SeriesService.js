@@ -136,7 +136,7 @@ export default class SeriesService {
     }
   }
 
-  async getUserSeries() {
+  async getUserSeries(user_id) {
     console.log("GET USER SERIES");
     try{
 
@@ -145,7 +145,7 @@ export default class SeriesService {
         process.env.FORUM_DATABASE_ID,
         process.env.SERIES_COLLECTION_ID,
         [
-          Query.equal("user_id", currentUser.$id)
+          Query.equal("user_id", user_id)
         ]
       );
 

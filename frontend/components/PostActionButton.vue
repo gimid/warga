@@ -1,8 +1,8 @@
 <template>
   <div v-if="canEdit" class="edit-container">
     <v-btn  prepend-icon="mdi-pencil" :to="currentRoute.path+'/edit'" variant="outlined" class="mx-2 my-2 edit-btn">
-      Edit
-    </v-btn>    
+      Edit {{ isAdmin }}
+    </v-btn>
   </div>
 </template>
 
@@ -15,6 +15,7 @@ const props = defineProps(['currentRoute','data'])
 let postService = new PostsService();
 
 let canEdit = ref(false);
+let isAdmin = ref("");
 
 onMounted(async ()=>{
   // check can edit
@@ -23,7 +24,8 @@ onMounted(async ()=>{
     const authService = new AuthService();
     let currentUser = await authService.getUserSession();
   
-    if(props.data.$id){
+    // check is admin
+    if (props.data.$id){
       let ownedpost = await postService.getOwnedPostByIdDirect(props.data.$id)
     
       if (ownedpost != null) {
@@ -37,6 +39,14 @@ onMounted(async ()=>{
         canEdit.value = false;
       }
     }
+
+    if (!canEdit.value) {
+      if (await authService.checkIsAdmin()) {
+        canEdit.value = true;
+        isAdmin.value = "Admin"
+      }
+    }
+
   }catch(e){
     console.log(e);
   }
@@ -50,7 +60,7 @@ onMounted(async ()=>{
 
 .edit-container{
   background-color: var(--gim-teal);
-  width: 110px;
+  min-width: 110px;
   height: 55px;
   position: fixed;
   bottom: 0;

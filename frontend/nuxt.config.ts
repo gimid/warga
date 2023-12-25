@@ -68,7 +68,8 @@ export default defineNuxtConfig({
       'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_ID),
       'process.env.NOTIFICATIONS_COLLECTION_ID': JSON.stringify(process.env.NOTIFICATIONS_COLLECTION_ID),
       'process.env.NITRO_HOST': JSON.stringify(process.env.NITRO_HOST),
-      'process.env.FILES_COLLECTION_ID': JSON.stringify(process.env.FILES_COLLECTION_ID)
+      'process.env.FILES_COLLECTION_ID': JSON.stringify(process.env.FILES_COLLECTION_ID),
+      'process.env.CURATED_POSTS_COLLECTION_ID': JSON.stringify(process.env.CURATED_POSTS_COLLECTION_ID)
     }
   },
   // runtimeConfig: {

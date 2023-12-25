@@ -72,14 +72,14 @@
               <v-col>
                 <div>
                   <ul id="post-type-menu">
-                    <li :class="route.query.list == 'all'||!route.query.list? 'post-type-selected':''">
-                      <NuxtLink href="?list=all">
-                        Semua
-                      </NuxtLink>
-                    </li>
-                    <li :class="route.query.list == 'curated' ? 'post-type-selected':''">
+                    <li :class="route.query.list == 'curated'||!route.query.list ? 'post-type-selected':''">
                       <NuxtLink href="?list=curated">
                         Terkurasi
+                      </NuxtLink>
+                    </li>
+                    <li :class="route.query.list == 'all'? 'post-type-selected':''">
+                      <NuxtLink href="?list=all">
+                        Semua
                       </NuxtLink>
                     </li>
                   </ul>
@@ -167,6 +167,9 @@ onUpdated(()=>{
 })
 
 const updateFetchedList = async () =>{
+  
+  moreAvailable.value = true;
+
   if (route.query.list) {
     if (route.query.list == 'all') {
       dataAvailable.value = true;
@@ -177,14 +180,20 @@ const updateFetchedList = async () =>{
         lastPost.value = homepagePosts[homepagePosts.length-1];
       }
     }else if (route.query.list == 'curated') {
-      dataAvailable.value = false;
-      posts.value = [];
-      lastPost.value = [];
+      dataAvailable.value = true;
+
+      let curatedPosts = await postsService.getCuratedPosts();
+
+      if (curatedPosts) {
+        posts.value = curatedPosts;
+        lastPost.value = curatedPosts[curatedPosts.length-1]
+      }
+
     }
   }else{
     // fallback
     dataAvailable.value = true;
-    let homepagePosts = await postsService.getHomepagePosts();
+    let homepagePosts = await postsService.getCuratedPosts();
 
     if (homepagePosts) {
       posts.value = homepagePosts;
@@ -194,15 +203,32 @@ const updateFetchedList = async () =>{
 }
 
 const loadMore = async () => {
+  
   console.log("----more ----");
-
   console.log(lastPost.value)
-
   let morePosts = null;
-  if(lastPost.value){
-    morePosts = await postsService.getHomepagePosts(lastPost.value.$id)
+
+  if (route.query.list) {
+    if (route.query.list == 'all') {    
+      if(lastPost.value){
+        morePosts = await postsService.getHomepagePosts(lastPost.value.$id)
+      }else{
+        morePosts = await postsService.getHomepagePosts()
+      }
+    }else if (route.query.list == 'curated') {
+      if(lastPost.value){
+        morePosts = await postsService.getCuratedPosts(lastPost.value.$id)
+      }else{
+        morePosts = await postsService.getCuratedPosts()
+      }
+    }
   }else{
-    morePosts = await postsService.getHomepagePosts()
+    // fallback
+    if(lastPost.value){
+      morePosts = await postsService.getCuratedPosts(lastPost.value.$id)
+    }else{
+      morePosts = await postsService.getCuratedPosts()
+    }
   }
 
   if (morePosts.length <= 0) {
