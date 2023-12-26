@@ -519,12 +519,13 @@ onMounted(async ()=>{
 
     await fetchPost(postId);
 
-    await fetchUserSeries();
-
+    
   }else{
     // new post
     editText.value = "";
   }
+
+  await fetchUserSeries();
 
   if (await authService.checkIsAdmin()) {
     isAdmin.value = true;
@@ -576,7 +577,16 @@ const fetchCurrentPostSeries = async () => {
 }
 
 const fetchUserSeries = async () => {
-  await seriesService.getUserSeries(currentUserId.value);
+
+
+  if (currentUserId.value === '') {
+    let userSession = await authService.getUserSession();
+
+    await seriesService.getUserSeries(userSession.$id);
+  }else{
+    await seriesService.getUserSeries(currentUserId.value);
+  }
+
 }
 
 
