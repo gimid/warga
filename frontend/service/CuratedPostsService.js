@@ -3,14 +3,30 @@ import { databases } from "./Backend";
 
 export default class CuratedPostsService{
   async addPost(post_id, data) {
-    try{
+    try {
       let result = await databases.createDocument(
         process.env.FORUM_DATABASE_ID,
         process.env.CURATED_POSTS_COLLECTION_ID,
         post_id,
         data
       )
+      return result;
     }catch(e) {
+      console.log(e);
+      throw(e);
+    }
+  }
+
+  async updatePost(post_id, data) {
+    try {
+      let result = await databases.updateDocument(
+        process.env.FORUM_DATABASE_ID,
+        process.env.CURATED_POSTS_COLLECTION_ID,
+        post_id,
+        data
+      )
+      return result;
+    }catch(e){
       console.log(e);
       throw(e);
     }
@@ -39,13 +55,10 @@ export default class CuratedPostsService{
         post_id
       );
 
-      console.log("Curated?")
-      console.log(result);
-
-      return true;
+      return result;
     }catch(e){
       console.log(e);
-      return false;
+      return null;
     }
   }
 }

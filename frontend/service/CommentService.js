@@ -140,5 +140,5 @@ export default class CommentService {
       console.log(e);
       throw(e);
     }
-  } 
+  }
 }

@@ -384,7 +384,20 @@
                       {{ curationInfo }}
                     </v-col>
                   </v-row>
+
+                  <v-row v-if="isCurated">
+                    <v-col>
+                      <h3>Tanggal dikurasi</h3>
+                      <span class="text-caption">Atur tanggal postingan ini dikurasi</span>
+                      <input type="date" v-model="curatedDate">
+                      <v-btn icon="mdi-sync" variant="elevated" @click="saveCuration"></v-btn>
+                    </v-col>
+                  </v-row>
+                  
+
                 </v-col>
+
+                
               </v-row>
 
 
@@ -490,6 +503,7 @@ const seriesLoading = ref(false);
 // curated
 const isCurated = ref(false);
 const curationInfo = ref("");
+const curatedDate = ref('');
 
 onMounted(async ()=>{
   
@@ -685,8 +699,6 @@ const deletePost = async () =>{
 }
 
 const savePost = async () => {
-
-
   
   if (currentId.value == '') {
     // create post
@@ -906,13 +918,51 @@ const saveCuration = async () => {
 
   if(isCurated.value){
     try{
-      let data = {
-        published_time: new Date(Date.now())
-      }
-      await curatedPostService.addPost(currentId.value, data)
-      isCurated.value = true;
 
-      curationInfo.value = "Kurasi berhasil ditambahkan";
+      
+      let prevCurated = await curatedPostService.isCurated(currentId.value);
+      
+      if (prevCurated !== null) {
+
+        let data = null;
+  
+        if (curatedDate.value !== null && curatedDate.value !== "") {
+          data = {
+            published_time: new Date(curatedDate.value)
+          }
+        }else{
+          data = {
+            published_time: new Date(Date.now())
+          }
+        }
+  
+        await curatedPostService.updatePost(currentId.value, data)
+        
+
+        await fetchIsCurated();
+        curationInfo.value = "Kurasi berhasil diperbaharui";
+
+      }else{
+        let data = null;
+  
+        if (curatedDate.value !== null && curatedDate.value !== "") {
+          data = {
+            published_time: new Date(curatedDate.value)
+          }
+        }else{
+          data = {
+            published_time: new Date(Date.now())
+          }
+        }
+  
+        await curatedPostService.addPost(currentId.value, data)
+        isCurated.value = true;
+
+        await fetchIsCurated();
+        curationInfo.value = "Kurasi berhasil ditambah";
+
+      }
+      
     }catch(e){
       curationInfo.value = e;
       console.log(e);
@@ -937,7 +987,14 @@ const savePublishedDate = async () => {
 
 const fetchIsCurated = async () => {
   try {
-    isCurated.value = await curatedPostService.isCurated(currentId.value);
+
+    let prevCurated = await curatedPostService.isCurated(currentId.value);
+
+    if (prevCurated != null) {
+      isCurated.value = true;
+      curatedDate.value = getTimeFormatted(prevCurated.published_time);
+    }
+
   }catch(e){
     console.log(e);
   }

@@ -39,6 +39,12 @@
             <div class="clearfix"></div>
           </div>
 
+          <div class="px-4 py-4">
+            <span class="pr-2">
+              <v-icon icon="mdi-comment" class="mr-2"></v-icon>{{ commentCount }}
+            </span>
+          </div>
+
     
         </div>
         <div v-else>        
@@ -55,14 +61,20 @@
 <script setup>
 import ProfilesService from '../service/ProfilesService';
 import PostsService from '../service/PostsService';
+import CommentService from '~/service/CommentService';
+
 import { storeToRefs } from 'pinia';
 import { ID } from 'appwrite';
 
 
 const props = defineProps(['data'])
+
 const profileService = new ProfilesService();
 const postsService = new PostsService();
+const commentService = new CommentService();
+
 const userInfo = ref({});
+
 const title = ref("");
 const link = ref("");
 const locked = ref(false);
@@ -70,6 +82,7 @@ const dataFetchError = ref(false);
 
 const isFetching = ref(true)
 
+const commentCount = ref(0);
 
 onMounted(async ()=> {
 
@@ -84,7 +97,15 @@ onMounted(async ()=> {
 
     isFetching.value = false;
 
+    getCommentCount();
+
 });
+
+const getCommentCount = async () => {
+  let comments = await commentService.getCommentsFromPost(props.data.$id);
+
+  commentCount.value = comments.total;
+}
 
 
 // const getUser = async (userId)=>{
